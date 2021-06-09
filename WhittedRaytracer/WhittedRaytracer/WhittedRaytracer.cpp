@@ -28,19 +28,13 @@ int _tmain(int argc, _TCHAR* argv[])
     time(&rawtime);
     localtime_s(&timeinfo, &rawtime);
 
-    strftime(buffer, sizeof(buffer), "Historial\\Resultado %d-%m-%Y %H:%M:%S", &timeinfo);
+    strftime(buffer, sizeof(buffer), "Historial\\Resultado %d %m %Y %H %M %S.png", &timeinfo);
     string str(buffer);
     
     const int n = str.length();
-    char char_array[40];
+    char char_array[44];
     strcpy_s(char_array, str.c_str());
     
-    /*int dir = _mkdir(char_array);
-
-    if (dir != 0) {
-        return 1;
-    }*/
-
     RGBQUAD color;
     color.rgbRed = 255;
     color.rgbGreen = 234;

@@ -92,7 +92,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\Freeimage;C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\SDL2-2.0.12\lib\x86</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\LEGION\Documents\GitHub\raytracer\WhittedRaytracer\SDL2-2.0.12\lib\x86;C:\Users\LEGION\Documents\GitHub\raytracer\WhittedRaytracer\Freeimage</AdditionalLibraryDirectories>
       <AdditionalDependencies>FreeImage.lib;SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -143,7 +143,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Camara.cpp" />
+    <ClCompile Include="Escena.cpp" />
+    <ClCompile Include="Plano.cpp" />
+    <ClCompile Include="Rayo.cpp" />
     <ClCompile Include="WhittedRaytracer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Camara.h" />
+    <ClInclude Include="Escena.h" />
+    <ClInclude Include="Plano.h" />
+    <ClInclude Include="Rayo.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
