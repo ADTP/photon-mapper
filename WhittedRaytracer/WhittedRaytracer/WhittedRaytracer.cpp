@@ -6,6 +6,11 @@
 #include <time.h>       /* time */
 #include <direct.h>
 #include <tchar.h>
+#include "Plano.h"
+#include "Escena.h"
+#include "Pantalla.h"
+#include "Rayo.h"
+#include "Camara.h"
 
 #include <vector>
 #include <iostream>
@@ -39,6 +44,15 @@ int _tmain(int argc, _TCHAR* argv[])
     color.rgbRed = 255;
     color.rgbGreen = 234;
     color.rgbBlue = 123;
+    
+    /* Whitted */
+    Pantalla* pantalla = new Pantalla();
+    Escena* escena = new Escena();
+    Camara* camara = new Camara({300, 200, 0}, { 0, 1, 0 }, { 300, 200, 100 },0,0,60,90);
+
+
+
+
 
     for (int i = 0; i < 640; i++) {
         for (int j = 0; j < 480; j++) {

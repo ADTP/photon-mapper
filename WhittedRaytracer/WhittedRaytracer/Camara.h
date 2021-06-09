@@ -8,13 +8,18 @@ public:
 	vec3 posicion;
 	vec3 normal;
 	vec3 centro;
-	double lejos;
-	double cerca;
-	double fov_vertical;
-	double fov_horizontal;
+	vec3 derecha;
+	vec3 arriba;
+	vec3 frente;
+
+	float lejos;
+	float cerca;
+	float fov_vertical;
+	float fov_horizontal;
+	float distanciaCamaraPantalla;
 	Camara();
 	~Camara();
-	Camara(vec3 posicion, vec3 normal, vec3 centro, double lejos, double cerca, double fov_vertical, double fov_horizontal);
+	Camara(vec3 posicion, vec3 normal, vec3 centro, float lejos, float cerca, float fov_vertical, float fov_horizontal);
 
 };
 
