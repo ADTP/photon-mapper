@@ -48,17 +48,70 @@ int _tmain(int argc, _TCHAR* argv[])
     /* Whitted */
     Pantalla* pantalla = new Pantalla();
     Escena* escena = new Escena();
-    Camara* camara = new Camara({300, 200, 0}, { 0, 1, 0 }, { 300, 200, 100 },0,0,60,90);
+    Camara* camara = new Camara({300, 200, 0}, { 0, 1, 0 }, { 300, 200, 100 }, 0, 0, 60, 90);
 
 
+    for (int a = 0; a < pantalla->ancho; a++) {
+        for (int l = 0; l < pantalla->altura; l++) {
+            Rayo *rayo = new Rayo(camara->posicion, pantalla->pixelesPantalla[a][l]);
 
-
-
-    for (int i = 0; i < 640; i++) {
-        for (int j = 0; j < 480; j++) {
-            FreeImage_SetPixelColor(bitmap, i, j, &color);
         }
     }
+
+    //// Seleccionar el centro de proyección y la ventana en el plano de vista;
+    //for (cada línea de barrido en la imagen) {
+    //    for (cada píxel en la línea de barrido) {
+    //        determinar rayo por centro de proyección y píxel;
+    //        píxel = traza_RR(rayo, 1);
+    //    }
+    //}
+
+    //// Intersecar rayo con los objetos y calcular la sombra en la intersección más cercana.
+    //// La profundidad es la profundidad actual en el árbol de rayos */
+
+    //color_RR traza_RR(rayo_RR, int profundidad)
+    //{
+    //    determinar la intersección más cercana de rayo con un objeto;
+    //    if (Hay objeto intersecado) {
+    //        calcular la normal en la intersección;
+    //        return sombra_RR(obj.intersecado más cercano, rayo, intersección, normal, profundidad);
+    //    }
+    //    else {
+    //        return VALOR_FONDO
+    //    }
+    //}
+
+    //// Calcular sombra en un punto, con rayos para sombras, reflex. y refrac. */
+
+    //color_RR sombra_RR(objeto, rayo, punto, normal, int profundidad) {
+    //    color = término del ambiente;
+    //    for (cada luz) {
+    //        rayo_s = rayo desde el punto a la luz;
+    //        if (producto punto entre normal y dirección de la luz es positivo) {
+    //            Calcular cuánta luz es bloqueada por sup.opacas y transp., y
+    //                usarlo para escalar los términos difusos y especulares antes de
+    //                añadirlos a color;
+    //        }
+    //    }
+
+    //    if (profundidad < profundidad_max) { /*Regresar si la prof. es excesiva */
+    //        if (objeto es reflejante) {
+    //            rayo_r = rayo en la dirección de reflexión desde punto;
+    //            color_r = traza_RR(rayo_r, profundidad + 1);
+    //            escalar color_r por el coeficiente especular y añadir a color;
+    //        }
+    //        if (objeto es transparente) {
+    //            if (no ocurre la reflexión interna total) {
+    //                rayo_t = rayo en la dirección de refracción desde punto;
+    //                color_t = traza_RR(rayo_t, profundidad + 1);
+    //                escalar color_t por el coeficiente de transmisión y
+    //                    añadir a color;
+    //            }
+    //        }
+    //    }
+
+    //    return color; /* Devolver color del rayo. */
+    
 
     FreeImage_Save(FIF_PNG, bitmap, char_array, 0);
     FreeImage_DeInitialise();

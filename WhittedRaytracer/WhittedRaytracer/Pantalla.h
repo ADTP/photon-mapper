@@ -11,15 +11,21 @@ class Pantalla
 public:
 	Pantalla();
 	~Pantalla();
+
 	void cargarMalla(Camara camara);
+
 	int ancho;
-	int largo;
+	int altura;
+
+	vec3** pixelesPantalla;
+
 	FIBITMAP* bitmap;
-	FIBITMAP* bitmapReflexion;
-	FIBITMAP* bitmapTransmision;
+
 	FIBITMAP* bitmapAmbiente;
 	FIBITMAP* bitmapDifuso;
 	FIBITMAP* bitmapEspecular;
-	vec3** pixelesPantalla;
+
+	FIBITMAP* bitmapReflexion;
+	FIBITMAP* bitmapTransmision;
 };
 

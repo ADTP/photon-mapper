@@ -12,3 +12,5 @@ Escena::Escena() {
 	planos[3] = planoDerecha;
 	planos[4] = planoAdelante;
 }
+
+Escena::~Escena() {}

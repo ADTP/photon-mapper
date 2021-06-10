@@ -30,6 +30,9 @@
     <ClCompile Include="Rayo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Pantalla.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Escena.h">
@@ -42,6 +45,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Rayo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Pantalla.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

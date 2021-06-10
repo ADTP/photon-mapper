@@ -1,19 +1,38 @@
 #include "Plano.h"
 
 
-Plano::Plano(vec3 p1, vec3 p2, vec3 p3, float r, float g, float b) {
+Plano::Plano(vec3 p1, vec3 p2, vec3 p3, float red, float green, float blue) {
+	this->origen_normal = p1;
+
 	vec3 p1p2 = p1 - p2;
 	vec3 p1p3 = p1 - p3;
-	vec3 abc = cross(p1p2, p1p3);
-	this->a = abc.x;
-	this->b = abc.y;
-	this->c = abc.z;
+
+	this->normal = normalize(cross(p1p2, p1p3));
+
+	this->a = normal.x;
+	this->b = normal.y;
+	this->c = normal.z;
 	this->d = -(a * p1.x + b * p1.y + c * p1.z);
 
-	this->r = r;
-	this->g = g;
-	this->b = b;
+	this->red = red;
+	this->green = green;
+	this->blue = blue;
+
 	this->difusa = 1;
 	this->especular = 1;
 	this->ambiente = 1;
+}
+
+float Plano::interseccionRayo(Rayo *rayo) {
+	//bool intersectPlane(const Vec3f & n, const Vec3f & p0, const Vec3f & l0, const Vec3f & l, float& t)
+
+	// assuming vectors are all normalized
+	float denom = dot(this->normal, rayo->direccion);
+
+	if (denom > 1e-6) {
+		vec3 p0l0 = this->origen_normal - rayo->origen;
+		return dot(p0l0, this->normal) / denom;	// esto seria t, que suplantandolo en la ec de la recta da el punto de interseccion
+	}
+
+	return -1; // retorna negativo si no hay interseccion
 }

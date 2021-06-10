@@ -1,2 +1,6 @@
-﻿  WhittedRaytracer.cpp
-  WhittedRaytracer.vcxproj -> C:\Users\LEGION\Documents\GitHub\raytracer\WhittedRaytracer\Debug\WhittedRaytracer.exe
+﻿  Pantalla.cpp
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Pantalla.cpp(23,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Pantalla.cpp(24,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Pantalla.cpp(31,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Pantalla.cpp(32,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  WhittedRaytracer.vcxproj -> C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\Debug\WhittedRaytracer.exe
