@@ -1,10 +1,11 @@
 #pragma once
 #include "../glm-0.9.9.8/glm-0.9.9.8/glm/glm.hpp"
 #include "Rayo.h"
-
+#include "Elemento.h";
+#include "../Freeimage/FreeImage.h"
 using namespace glm;
 
-class Plano
+class Plano:public Elemento
 {
 private:
 	float a;
@@ -15,17 +16,11 @@ private:
 	vec3 origen_normal;
 	vec3 normal;
 
-	float red;
-	float green;
-	float blue;
-
-	float difusa;
-	float ambiente;
-	float especular;
 public:
 	Plano();
 	~Plano();
-	Plano(vec3 p1, vec3 p2, vec3 p3, float red, float green, float blue);
+	Plano(vec3 p1, vec3 p2, vec3 p3, RGBQUAD color);
 	float interseccionRayo(Rayo *r);
+	vec3 normalDelPunto(vec3 punto);
 };
 

@@ -18,6 +18,32 @@
 
 using namespace std;
 
+RGBQUAD traza_RR(Rayo* rayo_RR, int profundidad) {
+    RGBQUAD color = { 0,0,0 };
+    Escena* escena = Escena::getInstance();
+    int indiceMasCerca = -1;//elemento donde voy a guardar el mas chico
+    float distancia = 100000;//bien grandota
+    vec3 interseccionMasCercana;
+    for (int i = 0;i < escena->elementos.size();i++) {
+        float t = escena->elementos[i]->interseccionRayo(rayo_RR);
+        if (t != -1) {// intersecta
+            vec3 interseccion = rayo_RR->origen + rayo_RR->direccion * t;
+            float distanciaNueva = distance(rayo_RR->origen, interseccion);
+            if (distanciaNueva < distancia) {
+                distancia = distanciaNueva;
+                indiceMasCerca = i;
+                interseccionMasCercana = interseccion;
+            }
+        }
+    }
+    if (indiceMasCerca != -1) {//hay objeto intersectado
+        //calculamos normal de la interseccion.
+        vec3 normal = escena->elementos[indiceMasCerca]->normalDelPunto(interseccionMasCercana);
+        //LLAMO A SOMBRA.
+        color = escena->elementos[indiceMasCerca]->color;
+    }
+    return color;
+}
 int _tmain(int argc, _TCHAR* argv[])
 {
     int width = 640;
@@ -51,13 +77,15 @@ int _tmain(int argc, _TCHAR* argv[])
     Camara* camara = new Camara({300, 200, 0}, { 0, 1, 0 }, { 300, 200, 100 }, 0, 0, 60, 90);
 
 
-    for (int a = 0; a < pantalla->ancho; a++) {
-        for (int l = 0; l < pantalla->altura; l++) {
-            Rayo *rayo = new Rayo(camara->posicion, pantalla->pixelesPantalla[a][l]);
+    for (int i = 0; i < pantalla->ancho; i++) {
+        for (int j = 0; j < pantalla->altura; j++) {
+            Rayo *rayo = new Rayo(camara->posicion, pantalla->pixelesPantalla[i][j]);
+            RGBQUAD color=traza_RR(rayo, 1);
+            FreeImage_SetPixelColor(pantalla->bitmap, i, j, &color);
 
         }
     }
-
+    
     //// Seleccionar el centro de proyección y la ventana en el plano de vista;
     //for (cada línea de barrido en la imagen) {
     //    for (cada píxel en la línea de barrido) {
@@ -118,3 +146,4 @@ int _tmain(int argc, _TCHAR* argv[])
 
     return 0;
 }
+

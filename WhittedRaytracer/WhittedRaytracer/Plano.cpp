@@ -1,7 +1,7 @@
 #include "Plano.h"
 
 
-Plano::Plano(vec3 p1, vec3 p2, vec3 p3, float red, float green, float blue) {
+Plano::Plano(vec3 p1, vec3 p2, vec3 p3, RGBQUAD color) {
 	this->origen_normal = p1;
 
 	vec3 p1p2 = p1 - p2;
@@ -14,9 +14,7 @@ Plano::Plano(vec3 p1, vec3 p2, vec3 p3, float red, float green, float blue) {
 	this->c = normal.z;
 	this->d = -(a * p1.x + b * p1.y + c * p1.z);
 
-	this->red = red;
-	this->green = green;
-	this->blue = blue;
+	this->color = color;
 
 	this->difusa = 1;
 	this->especular = 1;
@@ -35,4 +33,8 @@ float Plano::interseccionRayo(Rayo *rayo) {
 	}
 
 	return -1; // retorna negativo si no hay interseccion
+}
+
+vec3 Plano::normalDelPunto(vec3 punto) {
+	return this->origen_normal;
 }
