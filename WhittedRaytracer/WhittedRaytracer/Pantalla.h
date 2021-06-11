@@ -12,7 +12,7 @@ public:
 	Pantalla();
 	~Pantalla();
 
-	void cargarMalla(Camara camara);
+	void cargarMalla(Camara *camara);
 
 	int ancho;
 	int altura;

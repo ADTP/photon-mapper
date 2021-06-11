@@ -2,14 +2,17 @@
 
 Camara::Camara() {}
 
-Camara::Camara(vec3 posicion, vec3 normal, vec3 centro, float lejos, float cerca, float fov_vertical, float fov_horizontal) {
-	this->centro = centro;
+Camara::Camara(vec3 posicion, vec3 normal, vec3 centro, float fov_vertical, float fov_horizontal, float distancia) {
 	this->posicion = posicion;
-	this->cerca = cerca;
-	this->lejos = lejos;
+
+	this->centro = centro;
 	this->normal = normal;
+	this->derecha = cross(centro, normal);
+
 	this->fov_horizontal = fov_horizontal;
 	this->fov_vertical = fov_vertical;
+
+	this->distanciaCamaraPantalla = distancia;
 }
 
 Camara::~Camara() {}

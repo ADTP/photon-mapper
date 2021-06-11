@@ -92,7 +92,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\hp\Documents\Facultad\Compgraf\Obligatorio2\WhittedRaytracer\SDL2-2.0.12\lib\x86;C:\Users\hp\Documents\Facultad\Compgraf\Obligatorio2\WhittedRaytracer\Freeimage</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\SDL2-2.0.12\lib\x86;C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\Freeimage</AdditionalLibraryDirectories>
       <AdditionalDependencies>FreeImage.lib;SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

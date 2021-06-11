@@ -24,9 +24,9 @@ RGBQUAD traza_RR(Rayo* rayo_RR, int profundidad) {
     int indiceMasCerca = -1;//elemento donde voy a guardar el mas chico
     float distancia = 100000;//bien grandota
     vec3 interseccionMasCercana;
-    for (int i = 0;i < escena->elementos.size();i++) {
+    for (int i = 0; i < escena->elementos.size(); i++) {
         float t = escena->elementos[i]->interseccionRayo(rayo_RR);
-        if (t != -1) {// intersecta
+        if (t != 0) {// intersecta
             vec3 interseccion = rayo_RR->origen + rayo_RR->direccion * t;
             float distanciaNueva = distance(rayo_RR->origen, interseccion);
             if (distanciaNueva < distancia) {
@@ -44,6 +44,7 @@ RGBQUAD traza_RR(Rayo* rayo_RR, int profundidad) {
     }
     return color;
 }
+
 int _tmain(int argc, _TCHAR* argv[])
 {
     int width = 640;
@@ -66,21 +67,17 @@ int _tmain(int argc, _TCHAR* argv[])
     char char_array[44];
     strcpy_s(char_array, str.c_str());
     
-    RGBQUAD color;
-    color.rgbRed = 255;
-    color.rgbGreen = 234;
-    color.rgbBlue = 123;
-    
     /* Whitted */
     Pantalla* pantalla = new Pantalla();
     Escena* escena = new Escena();
-    Camara* camara = new Camara({300, 200, 0}, { 0, 1, 0 }, { 300, 200, 100 }, 0, 0, 60, 90);
+    Camara* camara = new Camara({5, 5, 5}, { 0, 1, 0 }, {10, 5, 7}, 90, 120, 1);
 
+    pantalla->cargarMalla(camara);
 
     for (int i = 0; i < pantalla->ancho; i++) {
         for (int j = 0; j < pantalla->altura; j++) {
             Rayo *rayo = new Rayo(camara->posicion, pantalla->pixelesPantalla[i][j]);
-            RGBQUAD color=traza_RR(rayo, 1);
+            RGBQUAD color = traza_RR(rayo, 1);
             FreeImage_SetPixelColor(pantalla->bitmap, i, j, &color);
 
         }
@@ -141,7 +138,7 @@ int _tmain(int argc, _TCHAR* argv[])
     //    return color; /* Devolver color del rayo. */
     
 
-    FreeImage_Save(FIF_PNG, bitmap, char_array, 0);
+    FreeImage_Save(FIF_PNG, pantalla->bitmap, char_array, 0);
     FreeImage_DeInitialise();
 
     return 0;
