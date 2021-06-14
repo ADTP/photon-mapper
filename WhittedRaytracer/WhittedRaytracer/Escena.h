@@ -1,21 +1,21 @@
 #pragma once
 #include "Plano.h"
 #include "Elemento.h"
+
 #include <vector>
+
 using namespace std;
-class Escena
-{
-private:
-	static Escena* instancia;
 
-public:
-	
-	Escena();
-	~Escena();
+class Escena {
+	private:
+		static Escena* instancia;
 
-	vector <Elemento*> elementos;
+	public:
+		Escena();
+		~Escena();
 
-	//Esfera esfera;
-	static Escena* getInstance();
+		vector <Elemento*> elementos;
+
+		static Escena* getInstance();
 };
 

@@ -5,21 +5,17 @@ using namespace glm;
 class Camara
 {
 public:
-	vec3 posicion;
+	Camara(vec3 posicion, vec3 arriba, vec3 adelante, float fov_vertical, float fov_horizontal, float distanciaCamaraPantalla);
+	~Camara();
 
-	vec3 normal;
-	vec3 centro;
+	vec3 posicion; //punto de posicion de la camara
+
+	vec3 arriba;
+	vec3 adelante;
 	vec3 derecha;
 
-	float lejos;
-	float cerca;
 	float fov_vertical;
 	float fov_horizontal;
 	float distanciaCamaraPantalla;
-
-	Camara();
-	~Camara();
-	Camara(vec3 posicion, vec3 normal, vec3 centro, float fov_vertical, float fov_horizontal, float distancia);
-
 };
 

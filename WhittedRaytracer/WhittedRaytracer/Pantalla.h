@@ -1,31 +1,35 @@
 #pragma once
+
 #include "../Freeimage/FreeImage.h"
 #include "../glm-0.9.9.8/glm-0.9.9.8/glm/glm.hpp"
 #include "Camara.h"
+
 #define PI 3.14159265
 
 using namespace glm;
 
-class Pantalla
-{
-public:
-	Pantalla();
-	~Pantalla();
+class Pantalla {
 
-	void cargarMalla(Camara *camara);
+	public:
+		Pantalla();
+		~Pantalla();
 
-	int ancho;
-	int altura;
+		void cargarMalla(Camara *camara);
 
-	vec3** pixelesPantalla;
+		int ancho;
+		int altura;
 
-	FIBITMAP* bitmap;
+		vec3** pixelesPantalla;
 
-	FIBITMAP* bitmapAmbiente;
-	FIBITMAP* bitmapDifuso;
-	FIBITMAP* bitmapEspecular;
+		FIBITMAP* bitmap;
 
-	FIBITMAP* bitmapReflexion;
-	FIBITMAP* bitmapTransmision;
+		/*
+		FIBITMAP* bitmapAmbiente;
+		FIBITMAP* bitmapDifuso;
+		FIBITMAP* bitmapEspecular;
+
+		FIBITMAP* bitmapReflexion;
+		FIBITMAP* bitmapTransmision;
+		*/
 };
 

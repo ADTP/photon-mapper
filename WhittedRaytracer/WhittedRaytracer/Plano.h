@@ -3,24 +3,24 @@
 #include "Rayo.h"
 #include "Elemento.h";
 #include "../Freeimage/FreeImage.h"
+
 using namespace glm;
 
-class Plano:public Elemento
-{
-private:
-	float a;
-	float b;
-	float c;
-	float d;
+class Plano : public Elemento {
+	private:
+		float a;
+		float b;
+		float c;
+		float d;
 
-	vec3 origen_normal;
-	vec3 normal;
+		vec3 origen_normal;
+		vec3 normal;
 
-public:
-	Plano();
-	~Plano();
-	Plano(vec3 p1, vec3 p2, vec3 p3, RGBQUAD color);
-	float interseccionRayo(Rayo *r);
-	vec3 normalDelPunto(vec3 punto);
+	public:
+		Plano(vec3 p1, vec3 p2, vec3 p3, RGBQUAD color);
+		~Plano();
+
+		float interseccionRayo(Rayo *r);
+		vec3 normalDelPunto(vec3 punto);
 };
 

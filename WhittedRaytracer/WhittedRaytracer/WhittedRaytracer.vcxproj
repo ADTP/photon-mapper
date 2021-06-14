@@ -146,6 +146,7 @@
     <ClCompile Include="Camara.cpp" />
     <ClCompile Include="Elemento.cpp" />
     <ClCompile Include="Escena.cpp" />
+    <ClCompile Include="Esfera.cpp" />
     <ClCompile Include="Pantalla.cpp" />
     <ClCompile Include="Plano.cpp" />
     <ClCompile Include="Rayo.cpp" />
@@ -155,6 +156,7 @@
     <ClInclude Include="Camara.h" />
     <ClInclude Include="Elemento.h" />
     <ClInclude Include="Escena.h" />
+    <ClInclude Include="Esfera.h" />
     <ClInclude Include="Pantalla.h" />
     <ClInclude Include="Plano.h" />
     <ClInclude Include="Rayo.h" />

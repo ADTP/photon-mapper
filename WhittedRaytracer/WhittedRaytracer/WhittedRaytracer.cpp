@@ -6,6 +6,7 @@
 #include <time.h>       /* time */
 #include <direct.h>
 #include <tchar.h>
+
 #include "Plano.h"
 #include "Escena.h"
 #include "Pantalla.h"
@@ -21,14 +22,19 @@ using namespace std;
 RGBQUAD traza_RR(Rayo* rayo_RR, int profundidad) {
     RGBQUAD color = { 0,0,0 };
     Escena* escena = Escena::getInstance();
-    int indiceMasCerca = -1;//elemento donde voy a guardar el mas chico
-    float distancia = 100000;//bien grandota
+
+    int indiceMasCerca = -1;    //elemento donde voy a guardar el mas chico
+    float distancia = 100000;
+
     vec3 interseccionMasCercana;
+
     for (int i = 0; i < escena->elementos.size(); i++) {
         float t = escena->elementos[i]->interseccionRayo(rayo_RR);
-        if (t != 0) {// intersecta
+
+        if (t != 0) {   // intersecta
             vec3 interseccion = rayo_RR->origen + rayo_RR->direccion * t;
             float distanciaNueva = distance(rayo_RR->origen, interseccion);
+
             if (distanciaNueva < distancia) {
                 distancia = distanciaNueva;
                 indiceMasCerca = i;
@@ -36,12 +42,15 @@ RGBQUAD traza_RR(Rayo* rayo_RR, int profundidad) {
             }
         }
     }
-    if (indiceMasCerca != -1) {//hay objeto intersectado
+
+    if (indiceMasCerca != -1) { //hay objeto intersectado
         //calculamos normal de la interseccion.
         vec3 normal = escena->elementos[indiceMasCerca]->normalDelPunto(interseccionMasCercana);
+
         //LLAMO A SOMBRA.
         color = escena->elementos[indiceMasCerca]->color;
     }
+
     return color;
 }
 
@@ -51,8 +60,8 @@ int _tmain(int argc, _TCHAR* argv[])
     int height = 480;
 
     FreeImage_Initialise();
-    FIBITMAP *bitmap = FreeImage_Allocate(width, height, 24);
 
+    // Creacion de imagenes con fecha y hora actual
     time_t rawtime;
     struct tm timeinfo;
     char buffer[80];
@@ -67,22 +76,30 @@ int _tmain(int argc, _TCHAR* argv[])
     char char_array[44];
     strcpy_s(char_array, str.c_str());
     
-    /* Whitted */
-    Pantalla* pantalla = new Pantalla();
+    // Inicializacion de componentes
     Escena* escena = new Escena();
-    Camara* camara = new Camara({5, 5, 5}, { 0, 1, 0 }, {10, 5, 7}, 90, 120, 1);
-
+    
+    Camara* camara = new Camara({3, 3, 3}, {0, 1, 0}, {-1, 0, 0.6}, 90, 90, 1);
+    
+    Pantalla* pantalla = new Pantalla();
     pantalla->cargarMalla(camara);
 
-    for (int i = 0; i < pantalla->ancho; i++) {
-        for (int j = 0; j < pantalla->altura; j++) {
+    // Whitted - recorrido de la maya tirando rayos desde la camara.
+    for (int i = pantalla->altura - 1; i >= 0; i--) {
+        for (int j = 0; j < pantalla->ancho; j++) {
             Rayo *rayo = new Rayo(camara->posicion, pantalla->pixelesPantalla[i][j]);
             RGBQUAD color = traza_RR(rayo, 1);
-            FreeImage_SetPixelColor(pantalla->bitmap, i, j, &color);
+            FreeImage_SetPixelColor(pantalla->bitmap, j, i, &color);
 
         }
     }
-    
+
+    FreeImage_Save(FIF_PNG, pantalla->bitmap, char_array, 0);
+    FreeImage_DeInitialise();
+
+    return 0;
+}
+
     //// Seleccionar el centro de proyección y la ventana en el plano de vista;
     //for (cada línea de barrido en la imagen) {
     //    for (cada píxel en la línea de barrido) {
@@ -136,11 +153,4 @@ int _tmain(int argc, _TCHAR* argv[])
     //    }
 
     //    return color; /* Devolver color del rayo. */
-    
-
-    FreeImage_Save(FIF_PNG, pantalla->bitmap, char_array, 0);
-    FreeImage_DeInitialise();
-
-    return 0;
-}
-
+    //}
