@@ -3,8 +3,8 @@
 Plano::Plano(vec3 p1, vec3 p2, vec3 p3, RGBQUAD color) {
 	this->origen_normal = p1;
 
-	vec3 p1p2 = p1 - p2;
-	vec3 p1p3 = p1 - p3;
+	vec3 p1p2 = p2 - p1;
+	vec3 p1p3 = p3 - p1;
 
 	this->normal = normalize(cross(p1p2, p1p3));
 
@@ -32,29 +32,10 @@ float Plano::interseccionRayo(Rayo *rayo) {
 	}
 
 	return 0; // retorna negativo si no hay interseccion
-
-	/*float direction_ax_by_cz = a * rayo->direccion.x + b * rayo->direccion.y + c * rayo->direccion.z;
-	float origin_ax_by_cz_d = a * rayo->origen.x + b * rayo->origen.y + c * rayo->origen.z + d;
-	if (direction_ax_by_cz != 0) {
-		float t = -origin_ax_by_cz_d / direction_ax_by_cz;
-		if (t >= 0) {
-			return t;
-		}
-		else return 0;
-	}
-	else {
-		if (origin_ax_by_cz_d == 0) {
-			return 0;
-		}
-		else {
-			return 0;
-		}
-	}*/
 }
 
 vec3 Plano::normalDelPunto(vec3 punto) {
-	// HAY Q CALCULAR LA NORMAL AL PUNTO NO DEVOLVER EL PUNTO ORIGEN DE LA NORMAL
-	return this->origen_normal;
+	return this->normal;
 }
 
 Plano::~Plano() {

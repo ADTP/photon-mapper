@@ -9,9 +9,13 @@ using namespace glm;
 class Elemento {
 	public:
 
-		float difusa;
 		float ambiente;
+		float difusa;
 		float especular;
+
+		float reflexion;
+		float refraccion;
+		float transparencia;
 
 		RGBQUAD color;
 
@@ -19,4 +23,12 @@ class Elemento {
 
 		virtual float interseccionRayo(Rayo* rayo) = 0;
 		virtual vec3 normalDelPunto(vec3 punto) = 0;
+
+		float getAmbiente();
+		float getDifusa();
+		float getEspecular();
+
+		float getReflexion();
+		float getRefraccion();
+		float getTransparencia();
 };

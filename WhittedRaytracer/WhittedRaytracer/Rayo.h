@@ -4,10 +4,11 @@ using namespace glm;
 
 class Rayo {
 	public:
-		Rayo(vec3 origen, vec3 direccion);
+		Rayo(vec3 origen, vec3 destino);
 		~Rayo();
 
 		vec3 origen;
+		vec3 destino;
 		vec3 direccion;
 };
 

@@ -1,6 +1,8 @@
 #pragma once
+
 #include "Plano.h"
 #include "Elemento.h"
+#include "Luz.h"
 
 #include <vector>
 
@@ -15,6 +17,7 @@ class Escena {
 		~Escena();
 
 		vector <Elemento*> elementos;
+		vector <Luz*> luces;
 
 		static Escena* getInstance();
 };

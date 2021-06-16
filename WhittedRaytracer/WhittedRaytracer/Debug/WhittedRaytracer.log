@@ -1,6 +1,33 @@
-﻿  Pantalla.cpp
-C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Pantalla.cpp(23,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Pantalla.cpp(24,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Pantalla.cpp(31,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Pantalla.cpp(32,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+﻿  Escena.cpp
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Plano.h(4,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+  WhittedRaytracer.cpp
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Plano.h(4,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\WhittedRaytracer.cpp(78,77): warning C4244: '=': conversion from 'T' to 'BYTE', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\WhittedRaytracer.cpp(79,79): warning C4244: '=': conversion from 'T' to 'BYTE', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\WhittedRaytracer.cpp(80,78): warning C4244: '=': conversion from 'T' to 'BYTE', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\WhittedRaytracer.cpp(84,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\WhittedRaytracer.cpp(93,31): warning C4018: '<': signed/unsigned mismatch
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\WhittedRaytracer.cpp(112,96): warning C4244: '+=': conversion from 'float' to 'BYTE', possible loss of data
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\WhittedRaytracer.cpp(113,100): warning C4244: '+=': conversion from 'float' to 'BYTE', possible loss of data
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\WhittedRaytracer.cpp(114,98): warning C4244: '+=': conversion from 'float' to 'BYTE', possible loss of data
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\WhittedRaytracer.cpp(119,100): warning C4244: '+=': conversion from 'float' to 'BYTE', possible loss of data
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\WhittedRaytracer.cpp(120,105): warning C4244: '+=': conversion from 'float' to 'BYTE', possible loss of data
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\WhittedRaytracer.cpp(121,103): warning C4244: '+=': conversion from 'float' to 'BYTE', possible loss of data
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\WhittedRaytracer.cpp(127,132): warning C4244: '+=': conversion from 'float' to 'BYTE', possible loss of data
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\WhittedRaytracer.cpp(128,138): warning C4244: '+=': conversion from 'float' to 'BYTE', possible loss of data
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\WhittedRaytracer.cpp(129,135): warning C4244: '+=': conversion from 'float' to 'BYTE', possible loss of data
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\WhittedRaytracer.cpp(162,23): warning C4018: '<': signed/unsigned mismatch
+  Generating Code...
   WhittedRaytracer.vcxproj -> C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\Debug\WhittedRaytracer.exe

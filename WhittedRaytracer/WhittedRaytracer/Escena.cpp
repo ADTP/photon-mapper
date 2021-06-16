@@ -2,6 +2,8 @@
 #include "Esfera.h"
 
 Escena::Escena() {
+
+	// CREACION TEMPORAL DE OBJETOS
 	RGBQUAD color;
 
 	color.rgbRed = 255;
@@ -35,9 +37,18 @@ Escena::Escena() {
 	elementos.push_back(planoDerecha);
 	elementos.push_back(planoAdelante);
 
-	Esfera* esferaCentro = new Esfera(2, 3, 2, -3);
+	Esfera* esferaCentro = new Esfera(0.5, 3, 2, -3);
 
 	elementos.push_back(esferaCentro);
+
+	// CREACION TEMPORAL DE LUCES
+	color.rgbRed = 255;
+	color.rgbGreen = 255;
+	color.rgbBlue = 255;
+	Luz* luzTecho = new Luz({3, 4, -3}, {0.9, 0.9, 0.9}, color);
+	
+	luces.push_back(luzTecho);
+
 }
 
 Escena* Escena::instancia = nullptr;
