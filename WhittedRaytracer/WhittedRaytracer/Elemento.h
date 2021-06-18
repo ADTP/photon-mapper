@@ -15,7 +15,7 @@ class Elemento {
 
 		float reflexion;
 		float refraccion;
-		float transparencia;
+		float transmision;
 
 		RGBQUAD color;
 
@@ -30,5 +30,5 @@ class Elemento {
 
 		float getReflexion();
 		float getRefraccion();
-		float getTransparencia();
+		float getTransmision();
 };

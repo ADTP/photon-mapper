@@ -151,7 +151,8 @@
     <ClCompile Include="Pantalla.cpp" />
     <ClCompile Include="Plano.cpp" />
     <ClCompile Include="Rayo.cpp" />
-    <ClCompile Include="WhittedRaytracer.cpp" />
+    <ClCompile Include="Whitted.cpp" />
+    <ClCompile Include="Raytracer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camara.h" />
@@ -162,6 +163,7 @@
     <ClInclude Include="Pantalla.h" />
     <ClInclude Include="Plano.h" />
     <ClInclude Include="Rayo.h" />
+    <ClInclude Include="Whitted.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

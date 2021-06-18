@@ -1,8 +1,21 @@
 #include "Esfera.h"
 
-Esfera::Esfera(float radio, float a, float b, float c) {
+Esfera::Esfera(
+    float radio, float a, float b, float c,
+    RGBQUAD color, float ambiente, float difusa, float especular, 
+    float reflexion, float refraccion, float transmision) {
+
 	this->radio = radio;
     this->posicion = { a, b, c };
+    this->color = color;
+
+    this->ambiente = ambiente;
+    this->difusa = difusa;
+    this->especular = especular;
+
+    this->reflexion = reflexion;
+    this->refraccion = refraccion;
+    this->transmision = transmision;
 }
 
 Esfera::~Esfera() {}

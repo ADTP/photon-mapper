@@ -20,6 +20,6 @@ float Elemento::getRefraccion() {
 	return this->refraccion;
 }
 
-float Elemento::getTransparencia() {
-	return this->transparencia;
+float Elemento::getTransmision() {
+	return this->transmision;
 }

@@ -1,8 +1,11 @@
 #include "Rayo.h"
 
-Rayo::Rayo(vec3 origen, vec3 destino) {
+Rayo::Rayo(vec3 origen, vec3 destino, float refraccionObjetoActual) {
 	this->origen = origen;
 	this->direccion = normalize(destino - origen);
+
+	this->refraccionObjetoActual = refraccionObjetoActual;
+
 }
 
 Rayo::~Rayo() {}

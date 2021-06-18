@@ -17,7 +17,13 @@ class Plano : public Elemento {
 		vec3 normal;
 
 	public:
-		Plano(vec3 p1, vec3 p2, vec3 p3, RGBQUAD color);
+
+		Plano(
+			vec3 p1, vec3 p2, vec3 p3,
+			RGBQUAD color, float ambiente, float difusa, float especular,
+			float reflexion, float refraccion, float transmision
+		);
+
 		~Plano();
 
 		float interseccionRayo(Rayo *r);

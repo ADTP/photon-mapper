@@ -1,33 +1,39 @@
-﻿  Escena.cpp
+﻿  Whitted.cpp
 C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Plano.h(4,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-  WhittedRaytracer.cpp
-C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Plano.h(4,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\WhittedRaytracer.cpp(78,77): warning C4244: '=': conversion from 'T' to 'BYTE', possible loss of data
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Whitted.cpp(59,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Whitted.cpp(97,77): warning C4244: '=': conversion from 'T' to 'BYTE', possible loss of data
           with
           [
               T=float
           ]
-C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\WhittedRaytracer.cpp(79,79): warning C4244: '=': conversion from 'T' to 'BYTE', possible loss of data
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Whitted.cpp(98,79): warning C4244: '=': conversion from 'T' to 'BYTE', possible loss of data
           with
           [
               T=float
           ]
-C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\WhittedRaytracer.cpp(80,78): warning C4244: '=': conversion from 'T' to 'BYTE', possible loss of data
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Whitted.cpp(99,78): warning C4244: '=': conversion from 'T' to 'BYTE', possible loss of data
           with
           [
               T=float
           ]
-C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\WhittedRaytracer.cpp(84,23): warning C4018: '<': signed/unsigned mismatch
-C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\WhittedRaytracer.cpp(93,31): warning C4018: '<': signed/unsigned mismatch
-C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\WhittedRaytracer.cpp(112,96): warning C4244: '+=': conversion from 'float' to 'BYTE', possible loss of data
-C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\WhittedRaytracer.cpp(113,100): warning C4244: '+=': conversion from 'float' to 'BYTE', possible loss of data
-C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\WhittedRaytracer.cpp(114,98): warning C4244: '+=': conversion from 'float' to 'BYTE', possible loss of data
-C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\WhittedRaytracer.cpp(119,100): warning C4244: '+=': conversion from 'float' to 'BYTE', possible loss of data
-C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\WhittedRaytracer.cpp(120,105): warning C4244: '+=': conversion from 'float' to 'BYTE', possible loss of data
-C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\WhittedRaytracer.cpp(121,103): warning C4244: '+=': conversion from 'float' to 'BYTE', possible loss of data
-C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\WhittedRaytracer.cpp(127,132): warning C4244: '+=': conversion from 'float' to 'BYTE', possible loss of data
-C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\WhittedRaytracer.cpp(128,138): warning C4244: '+=': conversion from 'float' to 'BYTE', possible loss of data
-C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\WhittedRaytracer.cpp(129,135): warning C4244: '+=': conversion from 'float' to 'BYTE', possible loss of data
-C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\WhittedRaytracer.cpp(162,23): warning C4018: '<': signed/unsigned mismatch
-  Generating Code...
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Whitted.cpp(103,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Whitted.cpp(118,31): warning C4018: '<': signed/unsigned mismatch
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Whitted.cpp(137,96): warning C4244: '+=': conversion from 'float' to 'BYTE', possible loss of data
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Whitted.cpp(138,100): warning C4244: '+=': conversion from 'float' to 'BYTE', possible loss of data
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Whitted.cpp(139,98): warning C4244: '+=': conversion from 'float' to 'BYTE', possible loss of data
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Whitted.cpp(144,101): warning C4244: '+=': conversion from 'float' to 'BYTE', possible loss of data
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Whitted.cpp(145,105): warning C4244: '+=': conversion from 'float' to 'BYTE', possible loss of data
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Whitted.cpp(146,103): warning C4244: '+=': conversion from 'float' to 'BYTE', possible loss of data
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Whitted.cpp(151,132): warning C4244: '+=': conversion from 'float' to 'BYTE', possible loss of data
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Whitted.cpp(152,138): warning C4244: '+=': conversion from 'float' to 'BYTE', possible loss of data
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Whitted.cpp(153,135): warning C4244: '+=': conversion from 'float' to 'BYTE', possible loss of data
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Whitted.cpp(164,107): warning C4244: '+=': conversion from 'float' to 'BYTE', possible loss of data
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Whitted.cpp(165,111): warning C4244: '+=': conversion from 'float' to 'BYTE', possible loss of data
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Whitted.cpp(166,109): warning C4244: '+=': conversion from 'float' to 'BYTE', possible loss of data
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Whitted.cpp(176,36): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Whitted.cpp(177,33): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Whitted.cpp(185,47): warning C4305: '=': truncation from 'double' to 'float'
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Whitted.cpp(191,90): warning C4244: '+=': conversion from 'float' to 'BYTE', possible loss of data
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Whitted.cpp(192,94): warning C4244: '+=': conversion from 'float' to 'BYTE', possible loss of data
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Whitted.cpp(193,91): warning C4244: '+=': conversion from 'float' to 'BYTE', possible loss of data
   WhittedRaytracer.vcxproj -> C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\Debug\WhittedRaytracer.exe

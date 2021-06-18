@@ -7,16 +7,17 @@
 using namespace std;
 
 class Esfera : public Elemento {
-	private:
-
 	public:
-		Esfera(float radio, float a, float b, float c);
+
+		Esfera(
+			float radio, float a, float b, float c, 
+			RGBQUAD color, float ambiente, float difusa, float especular,
+			float reflexion, float refraccion, float transmision
+		);
+
 		~Esfera();
 
 		float radio;
-		float a;
-		float b;
-		float c;
 
 		float interseccionRayo(Rayo* rayo);
 		vec3 normalDelPunto(vec3 punto);
