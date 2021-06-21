@@ -1,5 +1,14 @@
 #include "Pantalla.h"
 
+Pantalla* Pantalla::instancia = nullptr;
+
+Pantalla* Pantalla::getInstance() {
+	if (instancia == nullptr) {
+		instancia = new Pantalla();
+	}
+	return instancia;
+}
+
 Pantalla::Pantalla() {
 	this->ancho = 640;
 	this->altura = 480;
@@ -11,14 +20,12 @@ Pantalla::Pantalla() {
 
 	this->bitmap = FreeImage_Allocate(ancho, altura, 24);
 
-	/*
 	this->bitmapAmbiente = FreeImage_Allocate(ancho, altura, 24);
 	this->bitmapDifuso = FreeImage_Allocate(ancho, altura, 24);
 	this->bitmapEspecular = FreeImage_Allocate(ancho, altura, 24);
 
 	this->bitmapReflexion = FreeImage_Allocate(ancho, altura, 24);
 	this->bitmapTransmision = FreeImage_Allocate(ancho, altura, 24);
-	*/
 }
 
 Pantalla::~Pantalla() {}

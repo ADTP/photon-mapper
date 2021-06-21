@@ -1,18 +1,4 @@
-﻿  Escena.cpp
+﻿  Raytracer.cpp
 C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Plano.h(4,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Escena.cpp(18,3): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Escena.cpp(27,3): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Escena.cpp(36,3): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Escena.cpp(45,3): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Escena.cpp(54,3): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Escena.cpp(63,3): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Escena.cpp(80,3): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Escena.cpp(89,3): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Escena.cpp(103,3): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Escena.cpp(117,3): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Escena.cpp(123,3): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Escena.cpp(129,3): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Escena.cpp(135,3): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Escena.cpp(141,3): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Escena.cpp(147,3): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Raytracer.cpp(41): warning C4172: returning address of local variable or temporary: char_array
   WhittedRaytracer.vcxproj -> C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\Debug\WhittedRaytracer.exe

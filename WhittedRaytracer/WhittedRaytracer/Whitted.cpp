@@ -30,22 +30,15 @@ float clamp(const float& lo, const float& hi, const float& v) {
     return std::max(lo, std::min(hi, v));
 }
 
-vec3 refractSCRATCHPIXEL(const vec3& I, const vec3& N, const float& ior)
-{
-    float cosi = clamp(-1, 1, dot(I, N));
-    float etai = 1, etat = ior;
-    vec3 n = N;
-    if (cosi < 0) { cosi = -cosi; }
-    else { std::swap(etai, etat); n = -N; }
-    float eta = etai / etat;
-    float k = 1 - eta * eta * (1 - cosi * cosi);
+RGBQUAD* cargadorBitmapsAlternativos(float coeficiente) {
+    float valor = 255 * coeficiente;
 
-    if (k < 0) {
-        return { 0, 0, 0 };
-    }
-    else {
-        return eta * I + (eta * cosi - sqrtf(k)) * n;
-    }
+    RGBQUAD* resultado = new RGBQUAD;
+    resultado->rgbRed = valor;
+    resultado->rgbGreen = valor;
+    resultado->rgbBlue = valor;
+
+    return resultado;
 }
 
 RGBQUAD Whitted::traza_RR(Rayo* rayo_RR, int profundidad) {
@@ -72,12 +65,31 @@ RGBQUAD Whitted::traza_RR(Rayo* rayo_RR, int profundidad) {
         }
     }
 
-    if (indiceMasCerca != -1) { //hay objeto intersectado
+    //hay objeto intersectado
+    if (indiceMasCerca != -1) {
         //calculamos normal de la interseccion.
         vec3 normalInterseccion = escena->elementos[indiceMasCerca]->normalDelPunto(interseccionMasCercana);
 
         color = sombra_RR(indiceMasCerca, rayo_RR, interseccionMasCercana, normalInterseccion, profundidad);
-        //color = escena->elementos[indiceMasCerca]->color;
+
+        if (profundidad == 0) {
+            Pantalla* pantalla = Pantalla::getInstance();
+
+            FreeImage_SetPixelColor(pantalla->bitmapAmbiente, rayo_RR->iteradorAncho, rayo_RR->iteradorAltura, 
+                cargadorBitmapsAlternativos(escena->elementos[indiceMasCerca]->getAmbiente()));
+
+            FreeImage_SetPixelColor(pantalla->bitmapDifuso, rayo_RR->iteradorAncho, rayo_RR->iteradorAltura,
+                cargadorBitmapsAlternativos(escena->elementos[indiceMasCerca]->getDifusa()));
+
+            FreeImage_SetPixelColor(pantalla->bitmapEspecular, rayo_RR->iteradorAncho, rayo_RR->iteradorAltura,
+                cargadorBitmapsAlternativos(escena->elementos[indiceMasCerca]->getEspecular()));
+
+            FreeImage_SetPixelColor(pantalla->bitmapReflexion, rayo_RR->iteradorAncho, rayo_RR->iteradorAltura,
+                cargadorBitmapsAlternativos(escena->elementos[indiceMasCerca]->getReflexion()));
+
+            FreeImage_SetPixelColor(pantalla->bitmapTransmision, rayo_RR->iteradorAncho, rayo_RR->iteradorAltura,
+                cargadorBitmapsAlternativos(escena->elementos[indiceMasCerca]->getTransmision()));
+        }
     }
 
     return color;

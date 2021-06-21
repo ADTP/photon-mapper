@@ -9,10 +9,14 @@
 using namespace glm;
 
 class Pantalla {
+	private:
+		static Pantalla* instancia;
 
 	public:
 		Pantalla();
 		~Pantalla();
+		
+		static Pantalla* getInstance();
 
 		void cargarMalla(Camara *camara);
 
@@ -23,13 +27,11 @@ class Pantalla {
 
 		FIBITMAP* bitmap;
 
-		/*
 		FIBITMAP* bitmapAmbiente;
 		FIBITMAP* bitmapDifuso;
 		FIBITMAP* bitmapEspecular;
 
 		FIBITMAP* bitmapReflexion;
 		FIBITMAP* bitmapTransmision;
-		*/
+		
 };
-

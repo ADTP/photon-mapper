@@ -12,5 +12,8 @@ class Rayo {
 		vec3 direccion;
 
 		float refraccionObjetoActual;
-};
 
+		Rayo(vec3 origen, vec3 destino, float refraccionObjetoActual, int j, int i);
+		int iteradorAncho;
+		int iteradorAltura;
+};

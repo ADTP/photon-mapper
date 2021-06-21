@@ -13,7 +13,7 @@ Escena::Escena() {
 	color.rgbBlue = 255;
 	Plano* planoAbajo = new Plano(
 		{0, 0, 0}, {1, 0, 0}, { 0, 0, 1 },
-		color, 0.3, 0.9, 0.3,
+		color, 0.5, 0.9, 0.3,
 		0, 0, 0
 	);
 
@@ -22,7 +22,7 @@ Escena::Escena() {
 	color.rgbBlue = 100;
 	Plano* planoArriba = new Plano(
 		{0, 6, 0}, {0, 6, 1}, { 1, 6, 0 },
-		color, 0.3, 0.9, 0.3,
+		color, 0.7, 0.9, 0.3,
 		0, 0, 0
 	);
 
@@ -31,7 +31,7 @@ Escena::Escena() {
 	color.rgbBlue = 255;
 	Plano* planoIzquierda = new Plano(
 		{6, 0, 0}, {6, 1, 0}, { 6, 0, 1 },
-		color, 0.3, 0.9, 0.3,
+		color, 0.2, 0.9, 0.3,
 		0, 0, 0
 	);
 
@@ -49,7 +49,7 @@ Escena::Escena() {
 	color.rgbBlue = 0;
 	Plano* planoAdelante = new Plano(
 		{0, 0, -6}, { 0, 1, -6 }, { 1, 0, -6 },
-		color, 0.3, 0.9, 0.3,
+		color, 0.6, 0.9, 0.3,
 		0, 0, 0
 	);
 
@@ -75,7 +75,7 @@ Escena::Escena() {
 	color.rgbBlue = 254;
 	Esfera* fullReflectiva = new Esfera(
 		0.3, 4, 1.3, -4, 
-		color, 0.3, 0, 1,
+		color, 0.7, 0, 1,
 		1, 0, 0
 	);
 
@@ -84,7 +84,7 @@ Escena::Escena() {
 	color.rgbBlue = 254;
 	Esfera* fullRR = new Esfera(
 		0.8, 5, 4, -4,
-		color, 0.3, 0.9, 0.4,
+		color, 0.1, 0.9, 0.4,
 		1, 2.49, 1
 	);
 
@@ -98,7 +98,7 @@ Escena::Escena() {
 	color.rgbBlue = 255;
 	Cilindro* cilindroVidrio = new Cilindro(
 		{ 2, 1, -4 }, 0.4, 1,
-		color, 0.3, 0.9, 0.9,
+		color, 0.4, 0.9, 0.9,
 		0, 1.3, 1
 	);
 
