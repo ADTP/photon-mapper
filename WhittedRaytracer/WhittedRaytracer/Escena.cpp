@@ -2,6 +2,7 @@
 #include "Esfera.h"
 #include "Cilindro.h"
 #include "Triangulo.h"
+#include "Camara.h"
 
 Escena::Escena() {
 
@@ -93,7 +94,8 @@ Escena::Escena() {
 	float fovV = camaraXML.attribute("fovVertical").as_float();
 	float fovH = camaraXML.attribute("fovHorizontal").as_float();
 	float distanciaMalla = camaraXML.attribute("distanciaMalla").as_float();
-	//Camara* camara = new Camara(pos, up, front, fovV, fovH, distanciaMalla);
+	
+	Camara::setInstance(new Camara(pos, up, front, fovV, fovH, distanciaMalla));
 
 	//*******************************************************CILINDROS********************************************
 	xml_node cilindrosXML = elems.child("cilindros");
@@ -123,7 +125,6 @@ Escena::Escena() {
 	}
 
 	//*******************************************************TRIANGULOS********************************************
-	//this->parsearPlanos(elems);
 	xml_node triangulosXML = elems.child("triangulos");
 	it = triangulosXML.begin();
 	while (it != triangulosXML.end()) {

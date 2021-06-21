@@ -44,10 +44,10 @@ const char* nombreImagen(const char* identificador) {
 int _tmain(int argc, _TCHAR* argv[])
 {
     FreeImage_Initialise();
-    
-    // Inicializacion de componentes    
-    Camara* camara = new Camara({3, 3, 6}, {0, 1, 0}, {-1, 0, 0.8}, 40, 50, 1);
-    
+
+    Escena* escena = Escena::getInstance();
+    Camara* camara = Camara::getInstance();
+
     Pantalla* pantalla = Pantalla::getInstance();
     pantalla->cargarMalla(camara);
 

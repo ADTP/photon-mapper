@@ -92,8 +92,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\SDL2-2.0.12\lib\x86;C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\Freeimage</AdditionalLibraryDirectories>
-      <AdditionalDependencies>FreeImage.lib;SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\pugixml;C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\SDL2-2.0.12\lib\x86;C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\Freeimage</AdditionalLibraryDirectories>
+      <AdditionalDependencies>FreeImage.lib;SDL2.lib;pugixml.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -110,8 +110,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\SDL2-2.0.12\lib\x86;C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\Freeimage</AdditionalLibraryDirectories>
-      <AdditionalDependencies>FreeImage.lib;SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\pugixml;C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\SDL2-2.0.12\lib\x86;C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\Freeimage</AdditionalLibraryDirectories>
+      <AdditionalDependencies>FreeImage.lib;SDL2.lib;pugixml.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -151,6 +151,7 @@
     <ClCompile Include="Luz.cpp" />
     <ClCompile Include="Pantalla.cpp" />
     <ClCompile Include="Plano.cpp" />
+    <ClCompile Include="pugixml.cpp" />
     <ClCompile Include="Rayo.cpp" />
     <ClCompile Include="Triangulo.cpp" />
     <ClCompile Include="Whitted.cpp" />
@@ -165,6 +166,8 @@
     <ClInclude Include="Luz.h" />
     <ClInclude Include="Pantalla.h" />
     <ClInclude Include="Plano.h" />
+    <ClInclude Include="pugiconfig.hpp" />
+    <ClInclude Include="pugixml.hpp" />
     <ClInclude Include="Rayo.h" />
     <ClInclude Include="Triangulo.h" />
     <ClInclude Include="Whitted.h" />
