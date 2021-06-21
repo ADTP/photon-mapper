@@ -18,6 +18,7 @@
 #include <string>
 
 #include "Whitted.h"
+#include "Esfera.h"
 
 const int PROFUNDIDAD_MAX = 5;
 
@@ -86,7 +87,7 @@ RGBQUAD Whitted::sombra_RR(int indiceObjetoIntersectado, Rayo* rayo, vec3 inters
     Escena* escena = Escena::getInstance();
     Elemento* objeto = escena->elementos[indiceObjetoIntersectado];
 
-    vec3 intensidadLuzAmbiente = { 0.2, 0.2, 0.2 }; // { 0, 0, 0 }
+    vec3 intensidadLuzAmbiente = { 0.8, 0.8, 0.8 }; // { 0, 0, 0 }
 
     RGBQUAD resultadoAmbiente = { 0, 0, 0 };
     RGBQUAD resultadoDifuso = { 0, 0, 0 };
@@ -106,12 +107,13 @@ RGBQUAD Whitted::sombra_RR(int indiceObjetoIntersectado, Rayo* rayo, vec3 inters
         float distanciaObjetoLuz = distance(interseccion, escena->luces[i]->posicion);
         vec3 intesidadLuzActual = escena->luces[i]->intesidad;
 
-        float factorNormalLuz = 42;
-        if (indiceObjetoIntersectado == 5) {
-            float factorNormalLuz = dot(normal, rayoSecundario->direccion); // la normal de los planos esta al revez la muy hdp
-        }
-        else {
-            float factorNormalLuz = dot(-normal, rayoSecundario->direccion);
+        Plano* p = dynamic_cast<Plano*>(objeto);
+        float factorNormalLuz = 0;
+
+        if (p != nullptr) {
+            factorNormalLuz = dot(-normal, rayoSecundario->direccion); // la normal de los planos esta al revez la muy hdp
+        } else {
+            factorNormalLuz = dot(normal, rayoSecundario->direccion);
         }
 
         if (factorNormalLuz > 0) {
@@ -132,11 +134,10 @@ RGBQUAD Whitted::sombra_RR(int indiceObjetoIntersectado, Rayo* rayo, vec3 inters
 
             // usarlo para escalar los términos difusos y especulares antes de añadirlos a color;
 
-            // calcular atenuacion de la luz en funcion de distancia luz objeto ????
             float coeficenteDifuso = objeto->getDifusa();
-            resultadoDifuso.rgbRed += factorNormalLuz * coeficenteDifuso * objeto->color.rgbRed;
-            resultadoDifuso.rgbGreen += factorNormalLuz * coeficenteDifuso * objeto->color.rgbGreen;
-            resultadoDifuso.rgbBlue += factorNormalLuz * coeficenteDifuso * objeto->color.rgbBlue;
+            resultadoDifuso.rgbRed = clamp(0, 255, resultadoDifuso.rgbRed + factorNormalLuz * coeficenteDifuso * objeto->color.rgbRed);
+            resultadoDifuso.rgbGreen = clamp(0, 255, resultadoDifuso.rgbGreen + factorNormalLuz * coeficenteDifuso * objeto->color.rgbGreen);
+            resultadoDifuso.rgbBlue = clamp(0, 255, resultadoDifuso.rgbBlue + factorNormalLuz * coeficenteDifuso * objeto->color.rgbBlue);
 
             float RV = dot(reflect(-rayoSecundario->direccion, normal), -rayo->direccion);  // puede q sea con - en ambos rayos o ninguno jeje
             if (RV > 0) { // si hay reflexion
@@ -148,50 +149,51 @@ RGBQUAD Whitted::sombra_RR(int indiceObjetoIntersectado, Rayo* rayo, vec3 inters
 
             float factorAtenuacion = 1 / distanciaObjetoLuz;
 
-            resultadoFinal.rgbRed += (resultadoDifuso.rgbRed + resultadoEspecular.rgbRed) * factorAtenuacion * intesidadLuzActual.r;
-            resultadoFinal.rgbGreen += (resultadoDifuso.rgbGreen + resultadoEspecular.rgbGreen) * factorAtenuacion * intesidadLuzActual.g;
-            resultadoFinal.rgbBlue += (resultadoDifuso.rgbBlue + resultadoEspecular.rgbBlue) * factorAtenuacion * intesidadLuzActual.b;
-            // VOLVER A CALCULAR RESUTLADO FINAL
+            resultadoFinal.rgbRed = clamp(0, 255, resultadoFinal.rgbRed + ((resultadoDifuso.rgbRed + resultadoEspecular.rgbRed) * factorAtenuacion * intesidadLuzActual.r));
+            resultadoFinal.rgbGreen = clamp(0, 255, resultadoFinal.rgbGreen + ((resultadoDifuso.rgbGreen + resultadoEspecular.rgbGreen) * factorAtenuacion * intesidadLuzActual.g));
+            resultadoFinal.rgbBlue = clamp(0, 255, resultadoFinal.rgbBlue + ((resultadoDifuso.rgbBlue + resultadoEspecular.rgbBlue) * factorAtenuacion * intesidadLuzActual.b));
         }
     }
 
     if (profundidad < PROFUNDIDAD_MAX) {
         float coeficienteReflexion = objeto->getReflexion();
         if (coeficienteReflexion > 0) {
-            Rayo* rayoReflejado = crearRayoConDireccion(interseccion - normal * 0.005f, reflect(rayo->direccion, normal), rayo->refraccionObjetoActual);
+
+            vec3 auxNormal = normal;
+            Esfera* e = dynamic_cast<Esfera*>(objeto);
+            if (e != nullptr) {
+                auxNormal = -normal;
+            }
+
+            Rayo* rayoReflejado = crearRayoConDireccion(interseccion - auxNormal * 0.005f, reflect(rayo->direccion, auxNormal), rayo->refraccionObjetoActual);
             RGBQUAD colorReflejado = traza_RR(rayoReflejado, profundidad + 1);
 
-            resultadoFinal.rgbRed += colorReflejado.rgbRed * objeto->getEspecular() * coeficienteReflexion;
-            resultadoFinal.rgbGreen += colorReflejado.rgbGreen * objeto->getEspecular() * coeficienteReflexion;
-            resultadoFinal.rgbBlue += colorReflejado.rgbBlue * objeto->getEspecular() * coeficienteReflexion;
+            resultadoFinal.rgbRed = clamp(0, 255, resultadoFinal.rgbRed + colorReflejado.rgbRed * objeto->getEspecular() * coeficienteReflexion);
+            resultadoFinal.rgbGreen = clamp(0, 255, resultadoFinal.rgbGreen + colorReflejado.rgbGreen * objeto->getEspecular() * coeficienteReflexion);
+            resultadoFinal.rgbBlue = clamp(0, 255, resultadoFinal.rgbBlue + colorReflejado.rgbBlue * objeto->getEspecular() * coeficienteReflexion);
         }
 
         float coeficienteTransmision = objeto->getTransmision();
         if (coeficienteTransmision > 0) {
-            // siempre viene del aire?? o pueden superponerse objetos??
-            // en un principio salteamos la reflexion interna total, pero habria que contemplarla?
-
             float indiceRefraccion = objeto->getRefraccion();
 
-            float anguloIncidencia = (double)acos(dot(normal,rayo->direccion));     //HAY ALGO RARO EN LOS ANGULOS - ENTRA SIEMPRE
-            float anguloCritico = (double)asin(indiceRefraccion / rayo->refraccionObjetoActual);
+            float anguloIncidencia = (double)acos(dot(normal, -rayo->direccion)) * 180 / PI;     //HAY ALGO RARO EN LOS ANGULOS - ENTRA SIEMPRE
+            float anguloCritico = (double)asin(indiceRefraccion / rayo->refraccionObjetoActual) * 180 / PI;
 
-            //if (!((rayo->refraccionObjetoActual > indiceRefraccion) && (anguloIncidencia > anguloCritico))) {
-                // eta puede ser -> n2 || n2/n1. PROBAR AMBOS
-                // ver si usar glm::refract o si usar FRESNEL
+            if (!((rayo->refraccionObjetoActual >= indiceRefraccion) && (anguloIncidencia > anguloCritico))) {
 
-                float refraccionActual = indiceRefraccion;
+                float refraccionProximoRayo = indiceRefraccion;
                 if (dot(normal, rayo->direccion) > 0) {
-                    refraccionActual = 1.00029; // PUEDE Q SEA UN menor EN VEZ DE mayor
+                    refraccionProximoRayo = 1.00029;
                 }
 
-                Rayo* rayoRefractado = crearRayoConDireccion(interseccion + normal * 0.00001f, refract(rayo->direccion, normal, indiceRefraccion/rayo->refraccionObjetoActual), refraccionActual);
+                Rayo* rayoRefractado = crearRayoConDireccion(interseccion + normal * 0.0001f, refract(rayo->direccion, normal, rayo->refraccionObjetoActual/refraccionProximoRayo), refraccionProximoRayo);
                 RGBQUAD colorRefractado = traza_RR(rayoRefractado, profundidad + 1);
 
-                resultadoFinal.rgbRed += colorRefractado.rgbRed  * coeficienteTransmision;
-                resultadoFinal.rgbGreen += colorRefractado.rgbGreen  * coeficienteTransmision;
-                resultadoFinal.rgbBlue += colorRefractado.rgbBlue * coeficienteTransmision;
-            //}
+                resultadoFinal.rgbRed = clamp(0, 255, resultadoFinal.rgbRed + colorRefractado.rgbRed);
+                resultadoFinal.rgbGreen = clamp(0, 255, resultadoFinal.rgbGreen + colorRefractado.rgbGreen);
+                resultadoFinal.rgbBlue = clamp(0, 255, resultadoFinal.rgbBlue + colorRefractado.rgbBlue);
+            }
         }
     }
 

@@ -40,7 +40,7 @@ int _tmain(int argc, _TCHAR* argv[])
     strcpy_s(char_array, str.c_str());
     
     // Inicializacion de componentes    
-    Camara* camara = new Camara({3, 3, 3}, {0, 1, 0}, {-1, 0, 0.8}, 40, 50, 1);
+    Camara* camara = new Camara({3, 3, 6}, {0, 1, 0}, {-1, 0, 0.8}, 40, 50, 1);
     
     Pantalla* pantalla = new Pantalla();
     pantalla->cargarMalla(camara);
