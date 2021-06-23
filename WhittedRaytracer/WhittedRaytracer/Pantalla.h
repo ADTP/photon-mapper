@@ -13,10 +13,11 @@ class Pantalla {
 		static Pantalla* instancia;
 
 	public:
-		Pantalla();
+		Pantalla(int ancho, int altura);
 		~Pantalla();
 		
 		static Pantalla* getInstance();
+		static void setInstance(Pantalla* pantalla);
 
 		void cargarMalla(Camara *camara);
 

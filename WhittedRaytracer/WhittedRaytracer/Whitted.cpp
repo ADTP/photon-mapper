@@ -92,6 +92,8 @@ RGBQUAD Whitted::traza_RR(Rayo* rayo_RR, int profundidad) {
         }
     }
 
+    delete rayo_RR;
+
     return color;
 }
 
@@ -165,6 +167,8 @@ RGBQUAD Whitted::sombra_RR(int indiceObjetoIntersectado, Rayo* rayo, vec3 inters
             resultadoFinal.rgbGreen = clamp(0, 255, resultadoFinal.rgbGreen + ((resultadoDifuso.rgbGreen + resultadoEspecular.rgbGreen) * factorAtenuacion * intesidadLuzActual.g));
             resultadoFinal.rgbBlue = clamp(0, 255, resultadoFinal.rgbBlue + ((resultadoDifuso.rgbBlue + resultadoEspecular.rgbBlue) * factorAtenuacion * intesidadLuzActual.b));
         }
+
+        delete rayoSecundario;
     }
 
     if (profundidad < PROFUNDIDAD_MAX) {
@@ -192,7 +196,7 @@ RGBQUAD Whitted::sombra_RR(int indiceObjetoIntersectado, Rayo* rayo, vec3 inters
             float anguloIncidencia = (double)acos(dot(normal, -rayo->direccion)) * 180 / PI;     //HAY ALGO RARO EN LOS ANGULOS - ENTRA SIEMPRE
             float anguloCritico = (double)asin(indiceRefraccion / rayo->refraccionObjetoActual) * 180 / PI;
 
-            if (!((rayo->refraccionObjetoActual >= indiceRefraccion) && (anguloIncidencia > anguloCritico))) {
+            if (!((rayo->refraccionObjetoActual > indiceRefraccion) && (anguloIncidencia > anguloCritico))) {
 
                 float refraccionProximoRayo = indiceRefraccion;
                 if (dot(normal, rayo->direccion) > 0) {

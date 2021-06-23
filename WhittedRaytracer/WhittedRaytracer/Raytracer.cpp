@@ -54,11 +54,11 @@ int _tmain(int argc, _TCHAR* argv[])
     Whitted* whitted = new Whitted();
 
     // Whitted - recorrido de la maya tirando rayos desde la camara.
-    for (int i = pantalla->altura - 1; i >= 0; i--) {
-        for (int j = 0; j < pantalla->ancho; j++) {
-            Rayo *rayo = new Rayo(camara->posicion, pantalla->pixelesPantalla[i][j], 1.00029f, j, i);
+    for (int y = 0; y < pantalla->altura; y++) {
+        for (int x = 0; x < pantalla->ancho; x++) {
+            Rayo *rayo = new Rayo(camara->posicion, pantalla->pixelesPantalla[x][y], 1.00029f, x, y);
             RGBQUAD color = whitted->traza_RR(rayo, 0);
-            FreeImage_SetPixelColor(pantalla->bitmap, j, i, &color);
+            FreeImage_SetPixelColor(pantalla->bitmap, x, y, &color);
         }
     }
 

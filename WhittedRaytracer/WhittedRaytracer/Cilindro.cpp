@@ -77,8 +77,8 @@ float Cilindro::interseccionRayo(Rayo* rayo) {
         }
     }
 
-    delete(caraAbajo);
-    delete(caraArriba);
+    delete caraAbajo;
+    delete caraArriba;
 
     return t;
 }

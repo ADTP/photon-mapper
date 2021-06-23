@@ -1,3 +1,8 @@
-﻿  main.cpp
-MSVCRT.lib(exe_main.obj) : error LNK2001: unresolved external symbol _main
-C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\Release\WhittedRaytracer.exe : fatal error LNK1120: 1 unresolved externals
+﻿  Plano.cpp
+C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\WhittedRaytracer\Plano.h(4,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+  Generating code
+  8 of 376 functions ( 2.1%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    11 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  WhittedRaytracer.vcxproj -> C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\Release\WhittedRaytracer.exe

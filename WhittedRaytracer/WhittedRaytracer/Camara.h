@@ -7,7 +7,7 @@ class Camara {
 		static Camara* instancia;
 
 	public:
-		Camara(vec3 posicion, vec3 arriba, vec3 adelante, float fov_vertical, float fov_horizontal, float distanciaCamaraPantalla);
+		Camara(vec3 posicion, vec3 arriba, vec3 adelante, float fov_horizontal, float distanciaCamaraPantalla);
 		~Camara();
 
 		vec3 posicion; //punto de posicion de la camara
@@ -16,7 +16,6 @@ class Camara {
 		vec3 adelante;
 		vec3 derecha;
 
-		float fov_vertical;
 		float fov_horizontal;
 		float distanciaCamaraPantalla;
 
