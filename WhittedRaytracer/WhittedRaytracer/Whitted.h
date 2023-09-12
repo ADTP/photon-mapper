@@ -1,5 +1,5 @@
 #pragma once
-
+#include <embree4/rtcore.h>
 class Whitted
 {
     public:
