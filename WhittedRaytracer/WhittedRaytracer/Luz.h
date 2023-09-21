@@ -9,11 +9,13 @@ class Luz {
 
 	public:
 
-		Luz(vec3 posicion, vec3 intesidad, RGBQUAD color);
+		Luz(vec3 posicion, vec3 intesidad, RGBQUAD color, float potencia);
 		~Luz();
 
 		vec3 posicion;
 		vec3 intesidad;
+
+		float potencia;
 
 		RGBQUAD color;
 };

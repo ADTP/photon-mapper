@@ -17,6 +17,9 @@ class Elemento {
 		float refraccion;
 		float transmision;
 
+		RGBQUAD coeficienteReflexionDifusa; // Exculsivo photon mapping
+		RGBQUAD coeficienteReflexionEspecular; // Exculsivo photon mapping
+
 		RGBQUAD color;
 
 		vec3 posicion;
@@ -31,4 +34,7 @@ class Elemento {
 		float getReflexion();
 		float getRefraccion();
 		float getTransmision();
+
+		RGBQUAD getCoeficienteReflexionDifusa();
+		RGBQUAD getCoeficienteReflexionEspecular();
 };

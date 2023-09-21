@@ -23,3 +23,11 @@ float Elemento::getRefraccion() {
 float Elemento::getTransmision() {
 	return this->transmision;
 }
+
+RGBQUAD Elemento::getCoeficienteReflexionDifusa() {
+	return this->coeficienteReflexionDifusa;
+}
+
+RGBQUAD Elemento::getCoeficienteReflexionEspecular() {
+	return this->coeficienteReflexionEspecular;
+}
