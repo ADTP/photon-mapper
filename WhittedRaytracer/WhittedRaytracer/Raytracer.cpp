@@ -20,6 +20,7 @@
 #include <string>
 #include <random> 
 #include <functional> 
+#include <list> 
 
 using namespace std;
 
@@ -44,8 +45,8 @@ const char* nombreImagen(const char* identificador) {
     return char_array;
 }
 
-void trazarFoton(RGBQUAD color, vec3 origen, vec3 direccion, Foton** listaFotones, int &fotonesEmitidos, int cantidadMaximaDeFotones) {
-    Rayo* trazaFoton = new Rayo(origen, direccion, 0);
+void trazarFoton(RGBQUAD color, vec3 origen, vec3 direccion, vector<Foton> &listaFotones, int profundidad, float indiceRefraccionActual) {
+    Rayo* trazaFoton = new Rayo(origen, direccion, indiceRefraccionActual);
     Escena* escena = Escena::getInstance();
 
     int indiceMasCerca = -1;
@@ -71,7 +72,9 @@ void trazarFoton(RGBQUAD color, vec3 origen, vec3 direccion, Foton** listaFotone
     // si hay objeto intersectado
     if (indiceMasCerca != -1) {
         Elemento* elementoIntersectado = escena->elementos[indiceMasCerca];
- 
+        vec3 normalInterseccion = elementoIntersectado->normalDelPunto(interseccionMasCercana);
+        vec3 direccionIncidente = direccion - origen;
+
         RGBQUAD reflexionEspecular = elementoIntersectado->getCoeficienteReflexionEspecular();
         RGBQUAD reflexionDifusa = elementoIntersectado->getCoeficienteReflexionDifusa();
         
@@ -82,40 +85,49 @@ void trazarFoton(RGBQUAD color, vec3 origen, vec3 direccion, Foton** listaFotone
         double a = generator();
 
         double dividendoDifusa = max({reflexionDifusa.rgbRed * color.rgbRed, reflexionDifusa.rgbGreen * color.rgbGreen, reflexionDifusa.rgbBlue * color.rgbBlue});
-        double divisorDifusa = max({reflexionDifusa.rgbRed * color.rgbRed, reflexionDifusa.rgbGreen * color.rgbGreen, reflexionDifusa.rgbBlue * color.rgbBlue});
+        double divisorDifusa = max({color.rgbRed, color.rgbGreen, color.rgbBlue});
         double factorPotenciaDifusa = dividendoDifusa / divisorDifusa; // Pd
 
         double dividendoEspecular = max({ reflexionEspecular.rgbRed * color.rgbRed, reflexionEspecular.rgbGreen * color.rgbGreen, reflexionEspecular.rgbBlue * color.rgbBlue });
-        double divisorEspecular = max({ reflexionEspecular.rgbRed * color.rgbRed, reflexionEspecular.rgbGreen * color.rgbGreen, reflexionEspecular.rgbBlue * color.rgbBlue });
+        double divisorEspecular = max({ color.rgbRed, color.rgbGreen, color.rgbBlue });
         double factorPotenciaEspecular = dividendoEspecular / divisorEspecular; // Ps
 
+        vec3 direccionReflejada{};
         if (a < factorPotenciaDifusa) {
             RGBQUAD potenciaReflejada = { color.rgbRed * reflexionDifusa.rgbRed / factorPotenciaDifusa, color.rgbGreen * reflexionDifusa.rgbGreen / factorPotenciaDifusa, color.rgbBlue * reflexionDifusa.rgbBlue / factorPotenciaDifusa };
             
-            // QUESTION: HAY QUE ALMACENAR CADA UNO DE LOS REBOTES EN EL KDTREE?
-            listaFotones[fotonesEmitidos] = new Foton(interseccionMasCercana, potenciaReflejada, 0, 0, 0); // TODO: FALTAN ANGULOS Y FLAG PARA KDTREE
-            fotonesEmitidos++;
+            if (profundidad >= 1) {
+                listaFotones.push_back(Foton(interseccionMasCercana, potenciaReflejada, 0, 0, 0)); // TODO: FALTAN ANGULOS Y FLAG PARA KDTREE
+            } 
+            
+            do {
+                direccionReflejada = { generator(), generator(), generator() };
+            } while (dot(normalInterseccion, direccionReflejada) <= 0);
 
-            // TODO: CALCULAR DIRECCION
-            vec3 direccionReflejada = { 0,0,0 };
-
-            // QUESTION: HAY QUE CHECKEAR NO SUPERAR LA CANTIDAD MAXIMA DE FOTONES DE LA ESCENA ANTES DE TRAZAR REBOTES?
-            // QUESTION: CORTAR RECURSION SI LA POTENCIA ES MUY PEQUEÑA?
-            trazarFoton(potenciaReflejada, interseccionMasCercana, direccionReflejada, listaFotones, fotonesEmitidos, cantidadMaximaDeFotones);
+            trazarFoton(potenciaReflejada, interseccionMasCercana, direccionReflejada, listaFotones, profundidad++, trazaFoton->refraccionObjetoActual);
 
         } else if (a < factorPotenciaDifusa + factorPotenciaEspecular) {
             RGBQUAD potenciaReflejada = { color.rgbRed * reflexionEspecular.rgbRed / factorPotenciaEspecular, color.rgbGreen * reflexionEspecular.rgbGreen / factorPotenciaEspecular, color.rgbBlue * reflexionEspecular.rgbBlue / factorPotenciaEspecular };
-            
-            listaFotones[fotonesEmitidos] = new Foton(interseccionMasCercana, potenciaReflejada, 0, 0, 0); // TODO: FALTAN ANGULOS Y FLAG PARA KDTREE
-            fotonesEmitidos++;
 
-            // TODO: CALCULAR DIRECCION
-            vec3 direccionReflejada = { 0,0,0 };
-            trazarFoton(potenciaReflejada, interseccionMasCercana, direccionReflejada, listaFotones, fotonesEmitidos, cantidadMaximaDeFotones);
+            float refraccionProximoRayo = elementoIntersectado->getRefraccion();
+            if (elementoIntersectado->getReflexion() > 0.0) { // si hay que reflejar
+                direccionReflejada = reflect(direccionIncidente, normalInterseccion);
+
+            }
+            else if (elementoIntersectado->getRefraccion() > 0.0) { // si hay que refractar
+                if (dot(normalInterseccion, direccionIncidente) > 0) {
+                    refraccionProximoRayo = 1.00029;
+                }
+
+                direccionReflejada = refract(direccionIncidente, normalInterseccion, trazaFoton->refraccionObjetoActual / refraccionProximoRayo);
+            } 
+
+            trazarFoton(potenciaReflejada, interseccionMasCercana, direccionReflejada, listaFotones, profundidad++, refraccionProximoRayo);
 
         } else {
-            listaFotones[fotonesEmitidos] = new Foton(interseccionMasCercana, color, 0, 0, 0); // FALTAN ANGULOS Y FLAG PARA KDTREE
-            fotonesEmitidos++;
+            if (elementoIntersectado->getDifusa() > 0.0) {
+                listaFotones.push_back(Foton(interseccionMasCercana, color, 0, 0, 0));
+            }
         }
     }
 }
@@ -123,33 +135,45 @@ void trazarFoton(RGBQUAD color, vec3 origen, vec3 direccion, Foton** listaFotone
 void generarMapaDeFotones() {
     Escena* escena = Escena::getInstance();
 
-    int fotonesEmitidos = 0;
     vec3 dirFoton = { 0, 0, 0 };
-    Foton** listaFotones = new Foton * [escena->cantidadDeFotones];
+    vector<Foton> listaFotones; // TODO: SERIA MEJOR USAR STD::VECTOR DE UNA? 
 
     uniform_real_distribution<double> distribution(-1.0, 1.0);
     mt19937 engine;  //Mersenne twister MT19937
     auto generator = std::bind(distribution, engine);
 
-    // Calcular la potencia total para poder ver cuanto aporta cada luz a la escena
-    for (int i = 0; i < escena->luces.size(); i++) {}
+    // Calcular la potencia total para poder ver cuantos fotones aporta cada luz a la escena
+    int potenciaTotal = 0;
+    for (int i = 0; i < escena->luces.size(); i++) {
+        potenciaTotal += escena->luces[i]->watts;
+    }
 
     // Iterar sobre todas las luces de la escena emitiendo fotones
     for (int i = 0; i < escena->luces.size(); i++) {
+        int fotonesAEmitir = escena->luces[i]->watts * escena->cantidadDeFotones / potenciaTotal;
+        int fotonesEmitidos = 0;
 
-        while (fotonesEmitidos != escena->cantidadDeFotones) {
+        while (fotonesEmitidos < fotonesAEmitir) {
             do {
                 dirFoton.x = generator();
                 dirFoton.y = generator();
                 dirFoton.z = generator();
             } while (pow(dirFoton.x,2) + pow(dirFoton.y, 2) + pow(dirFoton.z, 2) > 1);
 
-            trazarFoton(escena->luces[i]->color, escena->luces[i]->posicion, dirFoton, listaFotones, fotonesEmitidos, escena->cantidadDeFotones);
-            // listaFotones[fotonesEmitidos] = foton;
-
-            // fotonesEmitidos++;
-            // SCALE POWER OF STORED PHOTONS ??
+            trazarFoton(escena->luces[i]->color, escena->luces[i]->posicion, dirFoton, listaFotones, 0, 1.00029);
+            fotonesEmitidos++;
+            // QUESTION: SCALE POWER OF STORED PHOTONS ??
         }
+    }
+
+    kdt::KDTree<Foton> mapaDeFotonesGlobal(listaFotones);
+    
+    cout << listaFotones.size();
+
+    int k = 10;
+    std::vector<int> indices = mapaDeFotonesGlobal.knnSearch(listaFotones.front(), k);
+    for (int i = 0; i < indices.size(); i++) {
+        cout << indices[i];
     }
 }
 
@@ -165,29 +189,29 @@ int _tmain(int argc, _TCHAR* argv[])
 
     // AGREGAR MAPA DE PROYECCIONES
     
-    // generarMapaDeFotones
+    generarMapaDeFotones();
 
-    Whitted* whitted = new Whitted();
+    //Whitted* whitted = new Whitted();
 
-    // Whitted - recorrido de la maya tirando rayos desde la camara.
-    for (int y = 0; y < pantalla->altura; y++) {
-        for (int x = 0; x < pantalla->ancho; x++) {
-            Rayo *rayo = new Rayo(camara->posicion, pantalla->pixelesPantalla[x][y], 1.00029f, x, y);
-            RGBQUAD color = whitted->traza_RR(rayo, 0);
-            FreeImage_SetPixelColor(pantalla->bitmap, x, y, &color);
-        }
-    }
+    //// Whitted - recorrido de la maya tirando rayos desde la camara.
+    //for (int y = 0; y < pantalla->altura; y++) {
+    //    for (int x = 0; x < pantalla->ancho; x++) {
+    //        Rayo *rayo = new Rayo(camara->posicion, pantalla->pixelesPantalla[x][y], 1.00029f, x, y);
+    //        RGBQUAD color = whitted->traza_RR(rayo, 0);
+    //        FreeImage_SetPixelColor(pantalla->bitmap, x, y, &color);
+    //    }
+    //}
 
-    FreeImage_Save(FIF_PNG, pantalla->bitmap, "Final\\AA Resultado.png", 0);
+    //FreeImage_Save(FIF_PNG, pantalla->bitmap, "Final\\AA Resultado.png", 0);
 
-    FreeImage_Save(FIF_PNG, pantalla->bitmapAmbiente,"Final\\Ambiente.png", 0);
-    FreeImage_Save(FIF_PNG, pantalla->bitmapDifuso, "Final\\Difuso.png", 0);
-    FreeImage_Save(FIF_PNG, pantalla->bitmapEspecular, "Final\\Especular.png", 0);
+    //FreeImage_Save(FIF_PNG, pantalla->bitmapAmbiente,"Final\\Ambiente.png", 0);
+    //FreeImage_Save(FIF_PNG, pantalla->bitmapDifuso, "Final\\Difuso.png", 0);
+    //FreeImage_Save(FIF_PNG, pantalla->bitmapEspecular, "Final\\Especular.png", 0);
 
-    FreeImage_Save(FIF_PNG, pantalla->bitmapReflexion, "Final\\Reflexion.png", 0);
-    FreeImage_Save(FIF_PNG, pantalla->bitmapTransmision, "Final\\Transmision.png", 0);
+    //FreeImage_Save(FIF_PNG, pantalla->bitmapReflexion, "Final\\Reflexion.png", 0);
+    //FreeImage_Save(FIF_PNG, pantalla->bitmapTransmision, "Final\\Transmision.png", 0);
 
-    FreeImage_DeInitialise();
+    //FreeImage_DeInitialise();
 
     return 0;
 }

@@ -79,7 +79,7 @@ Escena::Escena() {
 		colorLuz.rgbRed = color.attribute("r").as_float();
 		colorLuz.rgbGreen = color.attribute("g").as_float();
 		colorLuz.rgbBlue = color.attribute("b").as_float();
-		Luz* luzTecho = new Luz(pos, intense, colorLuz);
+		Luz* luzTecho = new Luz(pos, intense, colorLuz, 60); // AGREGAR WATTS A LAS LUCES DE LA ESCENA Y CARGARLAS DESDE EL XML
 		luces.push_back(luzTecho);
 		it++;
 	}
