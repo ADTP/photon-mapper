@@ -12,7 +12,9 @@ class Esfera : public Elemento {
 		Esfera(
 			float radio, float a, float b, float c, 
 			RGBQUAD color, float ambiente, float difusa, float especular,
-			float reflexion, float refraccion, float transmision
+			float reflexion, float refraccion, float transmision,
+			vec3 coeficienteReflexionDifusa,
+			vec3 coeficienteReflexionEspecular
 		);
 
 		~Esfera();

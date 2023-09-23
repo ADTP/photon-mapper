@@ -24,6 +24,14 @@
 
 using namespace std;
 
+mt19937 engine;  //Mersenne twister MT19937
+
+uniform_real_distribution<double> distribution1(0.0, 1.0);
+static auto generator1 = std::bind(distribution1, engine);
+
+uniform_real_distribution<double> distribution2(-1.0, 1.0);
+static auto generator2 = std::bind(distribution2, engine);
+
 const char* nombreImagen(const char* identificador) {
     // Creacion de imagenes con fecha y hora actual
     time_t rawtime;
@@ -75,39 +83,39 @@ void trazarFoton(RGBQUAD color, vec3 origen, vec3 direccion, vector<Foton> &list
         vec3 normalInterseccion = elementoIntersectado->normalDelPunto(interseccionMasCercana);
         vec3 direccionIncidente = direccion - origen;
 
-        RGBQUAD reflexionEspecular = elementoIntersectado->getCoeficienteReflexionEspecular();
-        RGBQUAD reflexionDifusa = elementoIntersectado->getCoeficienteReflexionDifusa();
-        
-        uniform_real_distribution<double> distribution(0.0, 1.0);
-        mt19937 engine;  //Mersenne twister MT19937
-        auto generator = std::bind(distribution, engine);
+        vec3 reflexionEspecular = elementoIntersectado->getCoeficienteReflexionEspecular();
+        vec3 reflexionDifusa = elementoIntersectado->getCoeficienteReflexionDifusa();
 
-        double a = generator();
+        double a = generator1();
 
-        double dividendoDifusa = max({reflexionDifusa.rgbRed * color.rgbRed, reflexionDifusa.rgbGreen * color.rgbGreen, reflexionDifusa.rgbBlue * color.rgbBlue});
+        double dividendoDifusa = max({reflexionDifusa.r * color.rgbRed, reflexionDifusa.g * color.rgbGreen, reflexionDifusa.b * color.rgbBlue});
         double divisorDifusa = max({color.rgbRed, color.rgbGreen, color.rgbBlue});
         double factorPotenciaDifusa = dividendoDifusa / divisorDifusa; // Pd
 
-        double dividendoEspecular = max({ reflexionEspecular.rgbRed * color.rgbRed, reflexionEspecular.rgbGreen * color.rgbGreen, reflexionEspecular.rgbBlue * color.rgbBlue });
+        double dividendoEspecular = max({ reflexionEspecular.r * color.rgbRed, reflexionEspecular.g * color.rgbGreen, reflexionEspecular.b * color.rgbBlue });
         double divisorEspecular = max({ color.rgbRed, color.rgbGreen, color.rgbBlue });
         double factorPotenciaEspecular = dividendoEspecular / divisorEspecular; // Ps
 
+        /*cout << "a: " << a << "\n";
+        cout << "Pd: " << factorPotenciaDifusa << "\n";
+        cout << "Pd: " << factorPotenciaEspecular << "\n\n";*/
+
         vec3 direccionReflejada{};
         if (a < factorPotenciaDifusa) {
-            RGBQUAD potenciaReflejada = { color.rgbRed * reflexionDifusa.rgbRed / factorPotenciaDifusa, color.rgbGreen * reflexionDifusa.rgbGreen / factorPotenciaDifusa, color.rgbBlue * reflexionDifusa.rgbBlue / factorPotenciaDifusa };
+            RGBQUAD potenciaReflejada = { color.rgbRed * reflexionDifusa.r / factorPotenciaDifusa, color.rgbGreen * reflexionDifusa.g / factorPotenciaDifusa, color.rgbBlue * reflexionDifusa.b / factorPotenciaDifusa };
             
             if (profundidad >= 1) {
                 listaFotones.push_back(Foton(interseccionMasCercana, potenciaReflejada, 0, 0, 0)); // TODO: FALTAN ANGULOS Y FLAG PARA KDTREE
             } 
             
             do {
-                direccionReflejada = { generator(), generator(), generator() };
+                direccionReflejada = { generator2(), generator2(), generator2() };
             } while (dot(normalInterseccion, direccionReflejada) <= 0);
 
-            trazarFoton(potenciaReflejada, interseccionMasCercana, direccionReflejada, listaFotones, profundidad++, trazaFoton->refraccionObjetoActual);
+            trazarFoton(potenciaReflejada, interseccionMasCercana, direccionReflejada, listaFotones, profundidad + 1, trazaFoton->refraccionObjetoActual);
 
         } else if (a < factorPotenciaDifusa + factorPotenciaEspecular) {
-            RGBQUAD potenciaReflejada = { color.rgbRed * reflexionEspecular.rgbRed / factorPotenciaEspecular, color.rgbGreen * reflexionEspecular.rgbGreen / factorPotenciaEspecular, color.rgbBlue * reflexionEspecular.rgbBlue / factorPotenciaEspecular };
+            RGBQUAD potenciaReflejada = { color.rgbRed * reflexionEspecular.r / factorPotenciaEspecular, color.rgbGreen * reflexionEspecular.g / factorPotenciaEspecular, color.rgbBlue * reflexionEspecular.b / factorPotenciaEspecular };
 
             float refraccionProximoRayo = elementoIntersectado->getRefraccion();
             if (elementoIntersectado->getReflexion() > 0.0) { // si hay que reflejar
@@ -122,7 +130,7 @@ void trazarFoton(RGBQUAD color, vec3 origen, vec3 direccion, vector<Foton> &list
                 direccionReflejada = refract(direccionIncidente, normalInterseccion, trazaFoton->refraccionObjetoActual / refraccionProximoRayo);
             } 
 
-            trazarFoton(potenciaReflejada, interseccionMasCercana, direccionReflejada, listaFotones, profundidad++, refraccionProximoRayo);
+            trazarFoton(potenciaReflejada, interseccionMasCercana, direccionReflejada, listaFotones, profundidad + 1, refraccionProximoRayo);
 
         } else {
             if (elementoIntersectado->getDifusa() > 0.0) {
@@ -132,15 +140,10 @@ void trazarFoton(RGBQUAD color, vec3 origen, vec3 direccion, vector<Foton> &list
     }
 }
 
-void generarMapaDeFotones() {
+kdt::KDTree<Foton> generarMapaDeFotones(vector<Foton> &listaFotones) {
     Escena* escena = Escena::getInstance();
 
     vec3 dirFoton = { 0, 0, 0 };
-    vector<Foton> listaFotones; // TODO: SERIA MEJOR USAR STD::VECTOR DE UNA? 
-
-    uniform_real_distribution<double> distribution(-1.0, 1.0);
-    mt19937 engine;  //Mersenne twister MT19937
-    auto generator = std::bind(distribution, engine);
 
     // Calcular la potencia total para poder ver cuantos fotones aporta cada luz a la escena
     int potenciaTotal = 0;
@@ -153,28 +156,29 @@ void generarMapaDeFotones() {
         int fotonesAEmitir = escena->luces[i]->watts * escena->cantidadDeFotones / potenciaTotal;
         int fotonesEmitidos = 0;
 
+        //cout << "Fotones emitidos: " << fotonesEmitidos << "\n\n";
         while (fotonesEmitidos < fotonesAEmitir) {
             do {
-                dirFoton.x = generator();
-                dirFoton.y = generator();
-                dirFoton.z = generator();
+                dirFoton.x = generator2();
+                dirFoton.y = generator2();
+                dirFoton.z = generator2();
             } while (pow(dirFoton.x,2) + pow(dirFoton.y, 2) + pow(dirFoton.z, 2) > 1);
 
             trazarFoton(escena->luces[i]->color, escena->luces[i]->posicion, dirFoton, listaFotones, 0, 1.00029);
             fotonesEmitidos++;
             // QUESTION: SCALE POWER OF STORED PHOTONS ??
+
+            //if (fotonesEmitidos % 100 == 0) {
+            //    cout << "Fotones Emitidos: " << fotonesEmitidos << "\n";
+            //}
         }
     }
 
     kdt::KDTree<Foton> mapaDeFotonesGlobal(listaFotones);
     
-    cout << listaFotones.size();
+    //cout << "Size Lista: " << listaFotones.size() << "\n\n";
 
-    int k = 10;
-    std::vector<int> indices = mapaDeFotonesGlobal.knnSearch(listaFotones.front(), k);
-    for (int i = 0; i < indices.size(); i++) {
-        cout << indices[i];
-    }
+    return mapaDeFotonesGlobal;
 }
 
 int _tmain(int argc, _TCHAR* argv[])
@@ -188,30 +192,63 @@ int _tmain(int argc, _TCHAR* argv[])
     pantalla->cargarMalla(camara);
 
     // AGREGAR MAPA DE PROYECCIONES
-    
-    generarMapaDeFotones();
+    vector<Foton> listaFotones;
+    kdt::KDTree<Foton> mapa = generarMapaDeFotones(listaFotones);
 
-    //Whitted* whitted = new Whitted();
+    Whitted* whitted = new Whitted();
 
-    //// Whitted - recorrido de la maya tirando rayos desde la camara.
-    //for (int y = 0; y < pantalla->altura; y++) {
-    //    for (int x = 0; x < pantalla->ancho; x++) {
-    //        Rayo *rayo = new Rayo(camara->posicion, pantalla->pixelesPantalla[x][y], 1.00029f, x, y);
-    //        RGBQUAD color = whitted->traza_RR(rayo, 0);
-    //        FreeImage_SetPixelColor(pantalla->bitmap, x, y, &color);
-    //    }
-    //}
+    // Whitted - recorrido de la maya tirando rayos desde la camara.
+    for (int y = 0; y < pantalla->altura; y++) {
+        for (int x = 0; x < pantalla->ancho; x++) {
+            Rayo *rayo = new Rayo(camara->posicion, pantalla->pixelesPantalla[x][y], 1.00029f, x, y);
 
-    //FreeImage_Save(FIF_PNG, pantalla->bitmap, "Final\\AA Resultado.png", 0);
+            //RGBQUAD color = whitted->traza_RR(rayo, 0);
+            //FreeImage_SetPixelColor(pantalla->bitmap, x, y, &color);
 
-    //FreeImage_Save(FIF_PNG, pantalla->bitmapAmbiente,"Final\\Ambiente.png", 0);
-    //FreeImage_Save(FIF_PNG, pantalla->bitmapDifuso, "Final\\Difuso.png", 0);
-    //FreeImage_Save(FIF_PNG, pantalla->bitmapEspecular, "Final\\Especular.png", 0);
+            vec3 interseccionMasCercana;
+            float distancia = 100000;
+            int indiceMasCerca = -1;
 
-    //FreeImage_Save(FIF_PNG, pantalla->bitmapReflexion, "Final\\Reflexion.png", 0);
-    //FreeImage_Save(FIF_PNG, pantalla->bitmapTransmision, "Final\\Transmision.png", 0);
+            for (int i = 0; i < escena->elementos.size(); i++) {
+                float t = escena->elementos[i]->interseccionRayo(rayo);
 
-    //FreeImage_DeInitialise();
+                if (t > 1e-3) {
+                    vec3 interseccion = rayo->origen + rayo->direccion * t;
+                    float distanciaNueva = distance(rayo->origen, interseccion);
+
+                    if (distanciaNueva < distancia) {
+                        distancia = distanciaNueva;
+                        indiceMasCerca = i;
+                        interseccionMasCercana = interseccion;
+                    }
+                }
+            }
+
+            if (indiceMasCerca != -1) {
+                // K-nearest neighbor search (gets indices to neighbors)
+
+                Foton interseccion = Foton(interseccionMasCercana, { 0,0,0 }, 0, 0, 0);
+                vector<int> indexes = mapa.radiusSearch(interseccion, 0.02);
+
+                if (indexes.size() > 0) {
+                    Foton masCercano = listaFotones[indexes.front()];
+                    FreeImage_SetPixelColor(pantalla->bitmap, x, y, &masCercano.potencia);
+                    //cout << "(X,Y) = (" << x << ", " << y << ")";
+                }
+            }
+        }
+    }
+
+    FreeImage_Save(FIF_PNG, pantalla->bitmap, "Final\\AA Resultado.png", 0);
+
+    /*FreeImage_Save(FIF_PNG, pantalla->bitmapAmbiente,"Final\\Ambiente.png", 0);
+    FreeImage_Save(FIF_PNG, pantalla->bitmapDifuso, "Final\\Difuso.png", 0);
+    FreeImage_Save(FIF_PNG, pantalla->bitmapEspecular, "Final\\Especular.png", 0);
+
+    FreeImage_Save(FIF_PNG, pantalla->bitmapReflexion, "Final\\Reflexion.png", 0);
+    FreeImage_Save(FIF_PNG, pantalla->bitmapTransmision, "Final\\Transmision.png", 0);*/
+
+    FreeImage_DeInitialise();
 
     return 0;
 }

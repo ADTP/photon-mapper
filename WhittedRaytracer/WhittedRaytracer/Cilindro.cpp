@@ -47,14 +47,14 @@ float Cilindro::interseccionRayo(Rayo* rayo) {
 
     Plano* caraAbajo = new Plano(
         this->posicion, this->posicion + vec3{ 0, 0, 1 }, this->posicion + vec3{ 1, 0, 0 }, 
-        {0,0,0}, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f
+        {0,0,0}, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, { 0, 0, 0 }, { 0, 0, 0 }
     );
 
     float tAbajo = caraAbajo->interseccionRayo(rayo);
 
     Plano* caraArriba = new Plano(
         this->posicion + vec3{0, this->altura, 0}, this->posicion + vec3{ 1, this->altura, 0 }, this->posicion + vec3{ 0, this->altura, 1 },
-        { 0,0,0 }, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f
+        { 0,0,0 }, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, { 0, 0, 0 }, { 0, 0, 0 }
     );
 
     float tArriba = caraArriba->interseccionRayo(rayo);

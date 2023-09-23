@@ -24,10 +24,10 @@ float Elemento::getTransmision() {
 	return this->transmision;
 }
 
-RGBQUAD Elemento::getCoeficienteReflexionDifusa() {
+vec3 Elemento::getCoeficienteReflexionDifusa() {
 	return this->coeficienteReflexionDifusa;
 }
 
-RGBQUAD Elemento::getCoeficienteReflexionEspecular() {
+vec3 Elemento::getCoeficienteReflexionEspecular() {
 	return this->coeficienteReflexionEspecular;
 }

@@ -21,7 +21,10 @@ class Plano : public Elemento {
 		Plano(
 			vec3 p1, vec3 p2, vec3 p3,
 			RGBQUAD color, float ambiente, float difusa, float especular,
-			float reflexion, float refraccion, float transmision
+			float reflexion, float refraccion, float transmision,
+			vec3 coeficienteReflexionDifusa,
+			vec3 coeficienteReflexionEspecular
+
 		);
 
 		~Plano();

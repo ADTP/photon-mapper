@@ -19,7 +19,7 @@ Triangulo::Triangulo(vec3 p1, vec3 p2, vec3 p3,
 	this->p2 = p2;
 	this->p3 = p3;
 
-	this->planoPadre = new Plano(p1, p2, p3, { 0,0,0 }, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	this->planoPadre = new Plano(p1, p2, p3, { 0,0,0 }, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, { 0, 0, 0 }, { 0, 0, 0 });
 
 	this->area = calcularArea(p1, p2, p3);
 
