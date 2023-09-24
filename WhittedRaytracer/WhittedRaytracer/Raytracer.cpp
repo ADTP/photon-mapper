@@ -103,16 +103,17 @@ void trazarFoton(RGBQUAD color, vec3 origen, vec3 direccion, vector<Foton> &list
         vec3 direccionReflejada{};
         if (a < factorPotenciaDifusa) {
             RGBQUAD potenciaReflejada = { color.rgbRed * reflexionDifusa.r / factorPotenciaDifusa, color.rgbGreen * reflexionDifusa.g / factorPotenciaDifusa, color.rgbBlue * reflexionDifusa.b / factorPotenciaDifusa };
-            
-            if (profundidad >= 1) {
-                listaFotones.push_back(Foton(interseccionMasCercana, potenciaReflejada, 0, 0, 0)); // TODO: FALTAN ANGULOS Y FLAG PARA KDTREE
+            potenciaReflejada = { potenciaReflejada.rgbRed, potenciaReflejada.rgbGreen, potenciaReflejada.rgbBlue };
+            if (profundidad > 1) {
+                listaFotones.push_back(Foton(interseccionMasCercana, color, 0, 0, 0)); // TODO: FALTAN ANGULOS Y FLAG PARA KDTREE
+                //cout << color.rgbRed << " " << color.rgbBlue << " " << color.rgbGreen << "\n\n";
             } 
             
             do {
                 direccionReflejada = { generator2(), generator2(), generator2() };
             } while (dot(normalInterseccion, direccionReflejada) <= 0);
-
-            trazarFoton(potenciaReflejada, interseccionMasCercana, direccionReflejada, listaFotones, profundidad + 1, trazaFoton->refraccionObjetoActual);
+            direccionReflejada = interseccionMasCercana - direccionReflejada;
+            trazarFoton(potenciaReflejada, interseccionMasCercana+0.01f * elementoIntersectado->normalDelPunto(interseccionMasCercana), direccionReflejada, listaFotones, profundidad + 1, trazaFoton->refraccionObjetoActual);
 
         } else if (a < factorPotenciaDifusa + factorPotenciaEspecular) {
             RGBQUAD potenciaReflejada = { color.rgbRed * reflexionEspecular.r / factorPotenciaEspecular, color.rgbGreen * reflexionEspecular.g / factorPotenciaEspecular, color.rgbBlue * reflexionEspecular.b / factorPotenciaEspecular };
@@ -134,7 +135,7 @@ void trazarFoton(RGBQUAD color, vec3 origen, vec3 direccion, vector<Foton> &list
 
         } else {
             if (elementoIntersectado->getDifusa() > 0.0) {
-                listaFotones.push_back(Foton(interseccionMasCercana, color, 0, 0, 0));
+                //listaFotones.push_back(Foton(interseccionMasCercana, color, 0, 0, 0));
             }
         }
     }
@@ -159,11 +160,11 @@ kdt::KDTree<Foton> generarMapaDeFotones(vector<Foton> &listaFotones) {
         //cout << "Fotones emitidos: " << fotonesEmitidos << "\n\n";
         while (fotonesEmitidos < fotonesAEmitir) {
             do {
-                dirFoton.x = generator2();
-                dirFoton.y = generator2();
-                dirFoton.z = generator2();
+                dirFoton.x = 0;
+                dirFoton.y = 0;
+                dirFoton.z = -1;
             } while (pow(dirFoton.x,2) + pow(dirFoton.y, 2) + pow(dirFoton.z, 2) > 1);
-
+            dirFoton = dirFoton + escena->luces[i]->posicion;
             trazarFoton(escena->luces[i]->color, escena->luces[i]->posicion, dirFoton, listaFotones, 0, 1.00029);
             fotonesEmitidos++;
             // QUESTION: SCALE POWER OF STORED PHOTONS ??
@@ -228,10 +229,21 @@ int _tmain(int argc, _TCHAR* argv[])
                 // K-nearest neighbor search (gets indices to neighbors)
 
                 Foton interseccion = Foton(interseccionMasCercana, { 0,0,0 }, 0, 0, 0);
-                vector<int> indexes = mapa.radiusSearch(interseccion, 0.02);
+                vector<int> indexes = mapa.radiusSearch(interseccion, 0.01);
 
                 if (indexes.size() > 0) {
                     Foton masCercano = listaFotones[indexes.front()];
+                    RGBQUAD color = { 0, 0, 0 };
+                    int i = 0;
+                    while (i < indexes.size()) {
+                        color.rgbRed = color.rgbRed + listaFotones[indexes[i]].potencia.rgbRed;
+                        color.rgbGreen = color.rgbGreen + listaFotones[indexes[i]].potencia.rgbGreen;
+                        color.rgbBlue = color.rgbBlue + listaFotones[indexes[i]].potencia.rgbBlue;
+                        i++;
+                    }
+                    if (color.rgbRed > 255) { color.rgbRed = 255; }
+                    if (color.rgbGreen > 255) { color.rgbGreen = 255; }
+                    if (color.rgbBlue > 255) { color.rgbBlue = 255; }
                     FreeImage_SetPixelColor(pantalla->bitmap, x, y, &masCercano.potencia);
                     //cout << "(X,Y) = (" << x << ", " << y << ")";
                 }

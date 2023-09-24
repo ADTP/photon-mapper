@@ -5,6 +5,8 @@
 #include "Camara.h"
 #include "Pantalla.h"
 
+using namespace std;
+
 Escena::Escena() {
 
 	RGBQUAD color;

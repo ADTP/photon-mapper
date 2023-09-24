@@ -72,6 +72,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\embree4;..\kd-tree-master;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -92,7 +93,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\pugixml;C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\SDL2-2.0.12\lib\x86;C:\Users\sebac\Desktop\FING\Comp Grafica\raytracer\WhittedRaytracer\Freeimage</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\pugixml;..\SDL2-2.0.12\lib\x86;..\Freeimage;..\embree4</AdditionalLibraryDirectories>
       <AdditionalDependencies>FreeImage.lib;SDL2.lib;pugixml.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -148,6 +149,7 @@
     <ClCompile Include="Elemento.cpp" />
     <ClCompile Include="Escena.cpp" />
     <ClCompile Include="Esfera.cpp" />
+    <ClCompile Include="Foton.cpp" />
     <ClCompile Include="Luz.cpp" />
     <ClCompile Include="Pantalla.cpp" />
     <ClCompile Include="Plano.cpp" />
@@ -163,6 +165,7 @@
     <ClInclude Include="Elemento.h" />
     <ClInclude Include="Escena.h" />
     <ClInclude Include="Esfera.h" />
+    <ClInclude Include="Foton.h" />
     <ClInclude Include="Luz.h" />
     <ClInclude Include="Pantalla.h" />
     <ClInclude Include="Plano.h" />
