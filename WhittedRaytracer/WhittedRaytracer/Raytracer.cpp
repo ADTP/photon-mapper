@@ -135,7 +135,7 @@ void trazarFoton(RGBQUAD color, vec3 origen, vec3 direccion, vector<Foton> &list
 
         } else {
             if (elementoIntersectado->getDifusa() > 0.0) {
-                //listaFotones.push_back(Foton(interseccionMasCercana, color, 0, 0, 0));
+                listaFotones.push_back(Foton(interseccionMasCercana, color, 0, 0, 0));
             }
         }
     }
@@ -160,9 +160,9 @@ kdt::KDTree<Foton> generarMapaDeFotones(vector<Foton> &listaFotones) {
         //cout << "Fotones emitidos: " << fotonesEmitidos << "\n\n";
         while (fotonesEmitidos < fotonesAEmitir) {
             do {
-                dirFoton.x = 0;
-                dirFoton.y = 0;
-                dirFoton.z = -1;
+                dirFoton.x = generator2();
+                dirFoton.y = generator2();
+                dirFoton.z = generator2();
             } while (pow(dirFoton.x,2) + pow(dirFoton.y, 2) + pow(dirFoton.z, 2) > 1);
             dirFoton = dirFoton + escena->luces[i]->posicion;
             trazarFoton(escena->luces[i]->color, escena->luces[i]->posicion, dirFoton, listaFotones, 0, 1.00029);
