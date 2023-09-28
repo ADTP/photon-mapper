@@ -153,13 +153,10 @@
     </luces>
 
     <camara fovHorizontal="90" distanciaMalla="1">
-        <posicion x="2" y="2" z="2">
-        </posicion>
-        <arriba x="0" y="1" z="0">
-        </arriba>
-        <adelante x="0" y="0" z="-1">
-        </adelante>
+        <posicion x="2" y="2" z="2" />
+        <arriba x="0" y="1" z="0" />
+        <adelante x="0" y="0" z="-1" />
     </camara>
 
-    <pantalla ancho="1920" altura="1080" cantidadDeFotones="5000000"></pantalla>
+    <pantalla ancho="1920" altura="1080" cantidadDeFotones="3000000" generarMapas="true" />
 </elementos>

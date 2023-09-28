@@ -106,7 +106,6 @@ void trazarFoton(RGBQUAD color, vec3 origen, vec3 direccion, vector<Foton> &list
             potenciaReflejada = { potenciaReflejada.rgbRed, potenciaReflejada.rgbGreen, potenciaReflejada.rgbBlue };
             if (profundidad > 1) {
                 listaFotones.push_back(Foton(interseccionMasCercana, color, 0, 0, 0)); // TODO: FALTAN ANGULOS Y FLAG PARA KDTREE
-                //cout << color.rgbRed << " " << color.rgbBlue << " " << color.rgbGreen << "\n\n";
             } 
             
             do {
@@ -117,13 +116,13 @@ void trazarFoton(RGBQUAD color, vec3 origen, vec3 direccion, vector<Foton> &list
 
         } else if (a < factorPotenciaDifusa + factorPotenciaEspecular) {
             RGBQUAD potenciaReflejada = { color.rgbRed * reflexionEspecular.r / factorPotenciaEspecular, color.rgbGreen * reflexionEspecular.g / factorPotenciaEspecular, color.rgbBlue * reflexionEspecular.b / factorPotenciaEspecular };
+            potenciaReflejada = { potenciaReflejada.rgbRed, potenciaReflejada.rgbGreen, potenciaReflejada.rgbBlue };
 
             float refraccionProximoRayo = elementoIntersectado->getRefraccion();
             if (elementoIntersectado->getReflexion() > 0.0) { // si hay que reflejar
                 direccionReflejada = reflect(direccionIncidente, normalInterseccion);
 
-            }
-            else if (elementoIntersectado->getRefraccion() > 0.0) { // si hay que refractar
+            } else if (elementoIntersectado->getRefraccion() > 0.0) { // si hay que refractar // HABRIA QUE SACAR ESTO Y DEJARLO SOLO PARA EL MAPA DE CAUSTICAS?
                 if (dot(normalInterseccion, direccionIncidente) > 0) {
                     refraccionProximoRayo = 1.00029;
                 }
@@ -131,7 +130,7 @@ void trazarFoton(RGBQUAD color, vec3 origen, vec3 direccion, vector<Foton> &list
                 direccionReflejada = refract(direccionIncidente, normalInterseccion, trazaFoton->refraccionObjetoActual / refraccionProximoRayo);
             } 
 
-            trazarFoton(potenciaReflejada, interseccionMasCercana, direccionReflejada, listaFotones, profundidad + 1, refraccionProximoRayo);
+            trazarFoton(potenciaReflejada, interseccionMasCercana, interseccionMasCercana - direccionReflejada, listaFotones, profundidad + 1, refraccionProximoRayo);
 
         } else {
             if (elementoIntersectado->getDifusa() > 0.0) {
@@ -141,7 +140,7 @@ void trazarFoton(RGBQUAD color, vec3 origen, vec3 direccion, vector<Foton> &list
     }
 }
 
-kdt::KDTree<Foton> generarMapaDeFotones(vector<Foton> &listaFotones) {
+void generarMapaDeFotones(vector<Foton> &listaFotones) {
     Escena* escena = Escena::getInstance();
 
     vec3 dirFoton = { 0, 0, 0 };
@@ -174,12 +173,6 @@ kdt::KDTree<Foton> generarMapaDeFotones(vector<Foton> &listaFotones) {
             //}
         }
     }
-
-    kdt::KDTree<Foton> mapaDeFotonesGlobal(listaFotones);
-    
-    //cout << "Size Lista: " << listaFotones.size() << "\n\n";
-
-    return mapaDeFotonesGlobal;
 }
 
 int _tmain(int argc, _TCHAR* argv[])
@@ -193,12 +186,11 @@ int _tmain(int argc, _TCHAR* argv[])
     pantalla->cargarMalla(camara);
 
     // AGREGAR MAPA DE PROYECCIONES
-    vector<Foton> listaFotones;
-    kdt::KDTree<Foton> mapa = generarMapaDeFotones(listaFotones);
 
-    Whitted* whitted = new Whitted();
+    vector<Foton> listaFotones = {};
+    generarMapaDeFotones(listaFotones);
+    kdt::KDTree<Foton> mapa(listaFotones);
 
-    // Whitted - recorrido de la maya tirando rayos desde la camara.
     for (int y = 0; y < pantalla->altura; y++) {
         for (int x = 0; x < pantalla->ancho; x++) {
             Rayo *rayo = new Rayo(camara->posicion, pantalla->pixelesPantalla[x][y], 1.00029f, x, y);
@@ -226,26 +218,13 @@ int _tmain(int argc, _TCHAR* argv[])
             }
 
             if (indiceMasCerca != -1) {
-                // K-nearest neighbor search (gets indices to neighbors)
 
                 Foton interseccion = Foton(interseccionMasCercana, { 0,0,0 }, 0, 0, 0);
                 vector<int> indexes = mapa.radiusSearch(interseccion, 0.01);
 
                 if (indexes.size() > 0) {
                     Foton masCercano = listaFotones[indexes.front()];
-                    RGBQUAD color = { 0, 0, 0 };
-                    int i = 0;
-                    while (i < indexes.size()) {
-                        color.rgbRed = color.rgbRed + listaFotones[indexes[i]].potencia.rgbRed;
-                        color.rgbGreen = color.rgbGreen + listaFotones[indexes[i]].potencia.rgbGreen;
-                        color.rgbBlue = color.rgbBlue + listaFotones[indexes[i]].potencia.rgbBlue;
-                        i++;
-                    }
-                    if (color.rgbRed > 255) { color.rgbRed = 255; }
-                    if (color.rgbGreen > 255) { color.rgbGreen = 255; }
-                    if (color.rgbBlue > 255) { color.rgbBlue = 255; }
                     FreeImage_SetPixelColor(pantalla->bitmap, x, y, &masCercano.potencia);
-                    //cout << "(X,Y) = (" << x << ", " << y << ")";
                 }
             }
         }

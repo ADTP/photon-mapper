@@ -195,6 +195,7 @@ Escena::Escena() {
 
 	//*******************************************************ESCENA********************************************
 	cantidadDeFotones = pantallaXML.attribute("cantidadDeFotones").as_int();
+	generarMapas = pantallaXML.attribute("generarMapas").as_bool();
 }
 
 Escena* Escena::instancia = nullptr;

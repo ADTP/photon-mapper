@@ -21,7 +21,9 @@ class Escena {
 
 		vector <Elemento*> elementos;
 		vector <Luz*> luces;
+		
 		int cantidadDeFotones;
+		bool generarMapas;
 
 		static Escena* getInstance();
 };
