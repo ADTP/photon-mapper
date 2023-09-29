@@ -172,6 +172,7 @@
     <ClInclude Include="pugiconfig.hpp" />
     <ClInclude Include="pugixml.hpp" />
     <ClInclude Include="Rayo.h" />
+    <ClInclude Include="tiny_obj_loader.h" />
     <ClInclude Include="Triangulo.h" />
     <ClInclude Include="Whitted.h" />
   </ItemGroup>

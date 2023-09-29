@@ -176,13 +176,27 @@ Escena::Escena() {
 		colorGuardar.rgbRed = color.attribute("r").as_float();
 		colorGuardar.rgbGreen = color.attribute("g").as_float();
 		colorGuardar.rgbBlue = color.attribute("b").as_float();
+		
 		float ambiente = it->attribute("ambiente").as_float();
 		float difusa = it->attribute("difusa").as_float();
 		float especular = it->attribute("especular").as_float();
 		float reflexion = it->attribute("reflexion").as_float();
 		float refraccion = it->attribute("refraccion").as_float();
 		float transmision = it->attribute("transmision").as_float();
-		Triangulo* trianguloNuevo = new Triangulo(p1, p2, p3, colorGuardar, ambiente, difusa, especular, reflexion, refraccion, transmision);
+
+		xml_node iterCoeficienteDifusa = it->first_child().next_sibling().next_sibling();
+		vec3 coeficienteReflexionDifusa;
+		coeficienteReflexionDifusa.r = iterCoeficienteDifusa.attribute("r").as_float();
+		coeficienteReflexionDifusa.g = iterCoeficienteDifusa.attribute("g").as_float();
+		coeficienteReflexionDifusa.b = iterCoeficienteDifusa.attribute("b").as_float();
+
+		xml_node iterCoeficienteEspecular = it->first_child().next_sibling().next_sibling().next_sibling();
+		vec3 coeficienteReflexionEspecular;
+		coeficienteReflexionEspecular.r = iterCoeficienteEspecular.attribute("r").as_float();
+		coeficienteReflexionEspecular.g = iterCoeficienteEspecular.attribute("g").as_float();
+		coeficienteReflexionEspecular.b = iterCoeficienteEspecular.attribute("b").as_float();
+		
+		Triangulo* trianguloNuevo = new Triangulo(p1, p2, p3, colorGuardar, ambiente, difusa, especular, reflexion, refraccion, transmision, coeficienteReflexionDifusa, coeficienteReflexionEspecular);
 		elementos.push_back(trianguloNuevo);
 		it++;
 	}

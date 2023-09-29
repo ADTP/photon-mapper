@@ -13,7 +13,9 @@ float calcularArea(vec3 p1, vec3 p2, vec3 p3) {
 
 Triangulo::Triangulo(vec3 p1, vec3 p2, vec3 p3,
 	RGBQUAD color, float ambiente, float difusa, float especular,
-	float reflexion, float refraccion, float transmision) {
+	float reflexion, float refraccion, float transmision,
+	vec3 coeficienteReflexionDifusa,
+	vec3 coeficienteReflexionEspecular) {
 
 	this->p1 = p1;
 	this->p2 = p2;
@@ -32,6 +34,9 @@ Triangulo::Triangulo(vec3 p1, vec3 p2, vec3 p3,
 	this->reflexion = reflexion;
 	this->refraccion = refraccion;
 	this->transmision = transmision;
+
+	this->coeficienteReflexionDifusa = coeficienteReflexionDifusa;
+	this->coeficienteReflexionEspecular = coeficienteReflexionEspecular;
 }
 
 float Triangulo::interseccionRayo(Rayo* rayo) {
