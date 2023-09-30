@@ -167,6 +167,8 @@
     <ClInclude Include="Esfera.h" />
     <ClInclude Include="Foton.h" />
     <ClInclude Include="Luz.h" />
+    <ClInclude Include="nanoflann\nanoflann.h" />
+    <ClInclude Include="nanoflann\utils.h" />
     <ClInclude Include="Pantalla.h" />
     <ClInclude Include="Plano.h" />
     <ClInclude Include="pugiconfig.hpp" />

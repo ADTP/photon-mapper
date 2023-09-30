@@ -170,5 +170,5 @@
         <adelante x="0" y="0" z="-1" />
     </camara>
 
-    <pantalla ancho="200" altura="200" cantidadDeFotones="1000000" generarMapas="true" />
+    <pantalla ancho="1920" altura="1080" cantidadDeFotones="2000000" generarMapas="true" />
 </elementos>

@@ -104,5 +104,11 @@
     <ClInclude Include="tiny_obj_loader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="nanoflann\nanoflann.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nanoflann\utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
