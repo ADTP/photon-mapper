@@ -1,6 +1,4 @@
 #pragma once
-#include <embree4/rtcore.h>
-#include <kdtree.h>
 
 class Whitted
 {

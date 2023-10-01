@@ -29,6 +29,10 @@
 #include "nanoflann/nanoflann.h"
 #include "nanoflann/utils.h"
 
+#include <embree3/rtcore.h>
+#include <limits>
+#include <iostream>
+
 using namespace std;
 
 mt19937 engine;  //Mersenne twister MT19937
@@ -305,6 +309,48 @@ int _tmain(int argc, _TCHAR* argv[])
     using CustomKDTree = nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<float, PointCloud>, PointCloud, 3 /* dim */>;
     CustomKDTree index(3 /*dim*/, listaFotones, { 10 /* max leaf */ }); // PROBAR CAMBIANDO LA CANTIDAD MAXIMA DE HOJAS
 
+    
+    RTCDevice device = rtcNewDevice(NULL);
+    RTCScene scene = rtcNewScene(device);
+    RTCGeometry geom = rtcNewGeometry(device, RTC_GEOMETRY_TYPE_TRIANGLE);
+
+    float* vb = (float*)rtcSetNewGeometryBuffer(geom, RTC_BUFFER_TYPE_VERTEX, 0, RTC_FORMAT_FLOAT3, 3 * sizeof(float), 3);
+    vb[0] = 0.f; vb[1] = 0.f; vb[2] = 0.f; // 1st vertex
+    vb[3] = 1.f; vb[4] = 0.f; vb[5] = 0.f; // 2nd vertex
+    vb[6] = 0.f; vb[7] = 1.f; vb[8] = 0.f; // 3rd vertex
+
+    unsigned* ib = (unsigned*)rtcSetNewGeometryBuffer(geom, RTC_BUFFER_TYPE_INDEX, 0, RTC_FORMAT_UINT3, 3 * sizeof(unsigned), 1);
+    ib[0] = 0; ib[1] = 1; ib[2] = 2;
+
+    rtcCommitGeometry(geom);
+    rtcAttachGeometry(scene, geom);
+    rtcReleaseGeometry(geom);
+    rtcCommitScene(scene);
+
+    RTCRayHit rayhit;
+    rayhit.ray.org_x = 0.f; rayhit.ray.org_y = 0.f; rayhit.ray.org_z = -1.f;
+    rayhit.ray.dir_x = 0.f; rayhit.ray.dir_y = 0.f; rayhit.ray.dir_z = 1.f;
+    rayhit.ray.tnear = 0.f;
+    rayhit.ray.tfar = std::numeric_limits<float>::infinity();
+    rayhit.hit.geomID = RTC_INVALID_GEOMETRY_ID;
+    rayhit.ray.flags = 0;
+
+    RTCIntersectContext context;
+    rtcInitIntersectContext(&context);
+
+    rtcIntersect1(scene, &context, &rayhit);
+
+    if (rayhit.hit.geomID != RTC_INVALID_GEOMETRY_ID) {
+        std::cout << "Intersection at t = " << rayhit.ray.tfar << std::endl;
+    }
+    else {
+        std::cout << "No Intersection" << std::endl;
+    }
+
+    rtcReleaseScene(scene);
+    rtcReleaseDevice(device);
+
+
     for (int y = 0; y < pantalla->altura; y++) {
         for (int x = 0; x < pantalla->ancho; x++) {
             Rayo *rayo = new Rayo(camara->posicion, pantalla->pixelesPantalla[x][y], 1.00029f, x, y);
@@ -335,7 +381,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
                 const float query[3] = { interseccionMasCercana.x, interseccionMasCercana.y, interseccionMasCercana.z };
                 const float radius = 0.001;
-                std::vector <nanoflann::ResultItem<size_t, float>> matches;
+                std::vector <nanoflann::ResultItem<uint32_t, float>> matches;
                 nanoflann::SearchParameters params;
                 params.sorted = true;
 
