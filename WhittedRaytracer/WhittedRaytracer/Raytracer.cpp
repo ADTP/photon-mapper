@@ -26,6 +26,9 @@
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "tiny_obj_loader.h"
 
+#include "nanoflann/nanoflann.h"
+#include "nanoflann/utils.h"
+
 using namespace std;
 
 mt19937 engine;  //Mersenne twister MT19937
@@ -57,7 +60,7 @@ const char* nombreImagen(const char* identificador) {
     return char_array;
 }
 
-void trazarFoton(RGBQUAD color, vec3 origen, vec3 direccion, vector<Foton> &listaFotones, int profundidad, float indiceRefraccionActual) {
+void trazarFoton(RGBQUAD color, vec3 origen, vec3 direccion, PointCloud &listaFotones, int profundidad, float indiceRefraccionActual) {
     Rayo* trazaFoton = new Rayo(origen, direccion, indiceRefraccionActual);
     Escena* escena = Escena::getInstance();
 
@@ -109,7 +112,7 @@ void trazarFoton(RGBQUAD color, vec3 origen, vec3 direccion, vector<Foton> &list
             RGBQUAD potenciaReflejada = { color.rgbRed * reflexionDifusa.r / factorPotenciaDifusa, color.rgbGreen * reflexionDifusa.g / factorPotenciaDifusa, color.rgbBlue * reflexionDifusa.b / factorPotenciaDifusa };
             potenciaReflejada = { potenciaReflejada.rgbRed, potenciaReflejada.rgbGreen, potenciaReflejada.rgbBlue };
             if (profundidad > 1) {
-                listaFotones.push_back(Foton(interseccionMasCercana, color, 0, 0, 0)); // TODO: FALTAN ANGULOS Y FLAG PARA KDTREE
+                listaFotones.pts.push_back(Foton(interseccionMasCercana, color, 0, 0, 0)); // TODO: FALTAN ANGULOS Y FLAG PARA KDTREE
             } 
             
             do {
@@ -139,13 +142,13 @@ void trazarFoton(RGBQUAD color, vec3 origen, vec3 direccion, vector<Foton> &list
 
         } else {
             if (elementoIntersectado->getDifusa() > 0.0) {
-                listaFotones.push_back(Foton(interseccionMasCercana, color, 0, 0, 0));
+                listaFotones.pts.push_back(Foton(interseccionMasCercana, color, 0, 0, 0));
             }
         }
     }
 }
 
-void generarMapaDeFotones(vector<Foton> &listaFotones) {
+void generarMapaDeFotones(PointCloud &listaFotones) {
     Escena* escena = Escena::getInstance();
 
     vec3 dirFoton = { 0, 0, 0 };
@@ -267,13 +270,40 @@ int _tmain(int argc, _TCHAR* argv[])
     //Whitted* whitted = new Whitted();
 
     // AGREGAR MAPA DE PROYECCIONES
-    cargarObjeto(escena);
+    //cargarObjeto(escena);
 
-    cout << "Empieza Foton Map ";
+    /*cout << "Empieza Foton Map ";
     vector<Foton> listaFotones = {};
     generarMapaDeFotones(listaFotones);
     kdt::KDTree<Foton> mapa(listaFotones);
-    cout << "Termina Foton Map ";
+    cout << "Termina Foton Map ";*/
+
+    PointCloud listaFotones;
+    if (escena->generarMapas) {
+        generarMapaDeFotones(listaFotones);
+
+        std::ofstream outfile("Mapas\\foton_list.dat", std::ios::binary);
+        for (const Foton& foton : listaFotones.pts) {
+            foton.serializar(outfile);
+        }
+        outfile.close();
+
+    } else {
+        std::ifstream infile("Mapas\\foton_list.dat", std::ios::binary);
+        listaFotones.pts.clear();
+        while (!infile.eof()) {
+            Foton foton;
+            foton.deserializar(infile);
+            if (!infile.eof()) {
+                listaFotones.pts.push_back(foton);
+            }
+        }
+        infile.close();
+
+    }
+
+    using CustomKDTree = nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<float, PointCloud>, PointCloud, 3 /* dim */>;
+    CustomKDTree index(3 /*dim*/, listaFotones, { 10 /* max leaf */ }); // PROBAR CAMBIANDO LA CANTIDAD MAXIMA DE HOJAS
 
     for (int y = 0; y < pantalla->altura; y++) {
         for (int x = 0; x < pantalla->ancho; x++) {
@@ -303,13 +333,25 @@ int _tmain(int argc, _TCHAR* argv[])
 
             if (indiceMasCerca != -1) {
 
-                Foton interseccion = Foton(interseccionMasCercana, { 0,0,0 }, 0, 0, 0);
+                const float query[3] = { interseccionMasCercana.x, interseccionMasCercana.y, interseccionMasCercana.z };
+                const float radius = 0.001;
+                std::vector <nanoflann::ResultItem<size_t, float>> matches;
+                nanoflann::SearchParameters params;
+                params.sorted = true;
+
+                index.radiusSearch(&query[0], radius, matches, params); // Devuelve en matches un vector de pares con el siguiente formato: (indice, distancia)
+                if (matches.size() > 0) {
+                    Foton masCercano = listaFotones.pts[matches[0].first];
+                    FreeImage_SetPixelColor(pantalla->bitmap, x, y, &masCercano.potencia);
+                }
+
+                /*Foton interseccion = Foton(interseccionMasCercana, { 0,0,0 }, 0, 0, 0);
                 vector<int> indexes = mapa.radiusSearch(interseccion, 0.01);
 
                 if (indexes.size() > 0) {
                     Foton masCercano = listaFotones[indexes.front()];
                     FreeImage_SetPixelColor(pantalla->bitmap, x, y, &masCercano.potencia);
-                }
+                }*/
             }
         }
     }

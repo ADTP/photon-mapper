@@ -9,4 +9,6 @@ Foton::Foton(vec3 posicion, RGBQUAD potencia, char phi, char theta, short flag) 
 	this->flag = flag;
 }
 
+Foton::Foton() {}
+
 Foton::~Foton() {}

@@ -63,17 +63,17 @@
     </planos>
 
     <esferas>
-        <!-- <esfera radio="0.5" a="4.5" b="1.5" c="-4" ambiente="0.3" difusa="0" especular="1" reflexion="1" refraccion="0" transmision="0"> -->
-            <!-- <color r="254" g="254" b="254" /> -->
-            <!-- <coeficienteReflexionDifusa r="0.3" g="0.4" b="0.3" /> -->
-            <!-- <coeficientereflexionespecular r="0.3" g="0.4" b="0.3" /> -->
-        <!-- </esfera> -->
-        <!-- <esfera radio="2" a="4" b="2" c="-4" ambiente="0" difusa="0" especular="0.9" reflexion="0" refraccion="2.44" transmision="0.9" >
+        <!-- <esfera radio="0.5" a="4.5" b="1.5" c="-4" ambiente="0.3" difusa="0" especular="1" reflexion="1" refraccion="0" transmision="0">
+            <color r="254" g="254" b="254" />
+            <coeficienteReflexionDifusa r="0.3" g="0.4" b="0.3" />
+            <coeficientereflexionespecular r="0.3" g="0.4" b="0.3" />
+        </esfera> -->
+        <esfera radio="2" a="4" b="2" c="-4" ambiente="0" difusa="0" especular="0.9" reflexion="0" refraccion="2.44" transmision="0.9" >
             <color r="0" g="0" b="255">
             </color>
-			<coeficienteReflexionDifusa r="0.3" g="0.3" b="0.3" />
+			<coeficienteReflexionDifusa r="0" g="0" b="0.3" />
             <coeficientereflexionespecular r="0.0" g="0.0" b="0.0" />
-        </esfera> -->
+        </esfera>
     </esferas>
 
     <!-- <cilindros> -->
@@ -170,5 +170,5 @@
         <adelante x="0" y="0" z="-1" />
     </camara>
 
-    <pantalla ancho="200" altura="200" cantidadDeFotones="1000000" generarMapas="true" />
+    <pantalla ancho="1920" altura="1080" cantidadDeFotones="5000000" generarMapas="false" />
 </elementos>
