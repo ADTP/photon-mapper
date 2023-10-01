@@ -279,9 +279,31 @@ int _tmain(int argc, _TCHAR* argv[])
     cout << "Termina Foton Map ";*/
 
     PointCloud listaFotones;
-    generarMapaDeFotones(listaFotones);
+    if (escena->generarMapas) {
+        generarMapaDeFotones(listaFotones);
+
+        std::ofstream outfile("Mapas\\foton_list.dat", std::ios::binary);
+        for (const Foton& foton : listaFotones.pts) {
+            foton.serializar(outfile);
+        }
+        outfile.close();
+
+    } else {
+        std::ifstream infile("Mapas\\foton_list.dat", std::ios::binary);
+        listaFotones.pts.clear();
+        while (!infile.eof()) {
+            Foton foton;
+            foton.deserializar(infile);
+            if (!infile.eof()) {
+                listaFotones.pts.push_back(foton);
+            }
+        }
+        infile.close();
+
+    }
+
     using CustomKDTree = nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<float, PointCloud>, PointCloud, 3 /* dim */>;
-    CustomKDTree index(3 /*dim*/, listaFotones, { 10 /* max leaf */ });
+    CustomKDTree index(3 /*dim*/, listaFotones, { 10 /* max leaf */ }); // PROBAR CAMBIANDO LA CANTIDAD MAXIMA DE HOJAS
 
     for (int y = 0; y < pantalla->altura; y++) {
         for (int x = 0; x < pantalla->ancho; x++) {
@@ -312,7 +334,7 @@ int _tmain(int argc, _TCHAR* argv[])
             if (indiceMasCerca != -1) {
 
                 const float query[3] = { interseccionMasCercana.x, interseccionMasCercana.y, interseccionMasCercana.z };
-                const float radius = 0.01;
+                const float radius = 0.001;
                 std::vector <nanoflann::ResultItem<size_t, float>> matches;
                 nanoflann::SearchParameters params;
                 params.sorted = true;
