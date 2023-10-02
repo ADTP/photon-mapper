@@ -187,8 +187,8 @@ void generarMapaDeFotones(PointCloud &listaFotones) {
     }
 }
 
-void cargarObjeto(Escena* escena) {
-    std::string inputfile = "Modelos\\sphere.obj";
+int cargarObjeto(vector<float> &vertices) {
+    std::string inputfile = "Modelos\\diablo.obj";
     tinyobj::ObjReaderConfig reader_config;
     //reader_config.mtl_search_path = "./"; // Path to material files
 
@@ -243,22 +243,27 @@ void cargarObjeto(Escena* escena) {
                 // tinyobj::real_t red   = attrib.colors[3*size_t(idx.vertex_index)+0];
                 // tinyobj::real_t green = attrib.colors[3*size_t(idx.vertex_index)+1];
                 // tinyobj::real_t blue  = attrib.colors[3*size_t(idx.vertex_index)+2];
-                puntos[v] = { vx, vy, vz };
+
+                vertices.push_back(vx+2);
+                vertices.push_back(vy+2);
+                vertices.push_back(vz-2);
                
             }
             vec3 traslacion = { 3, 1, -3 };
-            escena->elementos.push_back(new Triangulo(
+            /*escena->elementos.push_back(new Triangulo(
                 puntos[0] + traslacion, puntos[1] + traslacion, puntos[2] + traslacion,
                 { 255, 255, 255 }, 0.5, 0.5, 0, 0, 0, 0, { 0, 0, 0.3 }, { 0, 0, 0 }
-            ));
-
+            ));*/
+            puntos[0] = puntos[0] + traslacion;
+            puntos[1] = puntos[1] + traslacion;
+            puntos[2] = puntos[2] + traslacion;
             index_offset += fv;
 
             // per-face material
             //shapes[s].mesh.material_ids[f];
         }
     }
-
+    return shapes[0].mesh.num_face_vertices.size() * 3;
 }
 
 int _tmain(int argc, _TCHAR* argv[])
@@ -270,6 +275,9 @@ int _tmain(int argc, _TCHAR* argv[])
 
     Pantalla* pantalla = Pantalla::getInstance();
     pantalla->cargarMalla(camara);
+
+    RTCDevice device = rtcNewDevice(NULL);
+    RTCScene scene = rtcNewScene(device);
 
     //Whitted* whitted = new Whitted();
 
@@ -283,113 +291,154 @@ int _tmain(int argc, _TCHAR* argv[])
     cout << "Termina Foton Map ";*/
 
     PointCloud listaFotones;
-    if (escena->generarMapas) {
-        generarMapaDeFotones(listaFotones);
+    //if (escena->generarMapas) {
+    //    generarMapaDeFotones(listaFotones);
 
-        std::ofstream outfile("Mapas\\foton_list.dat", std::ios::binary);
-        for (const Foton& foton : listaFotones.pts) {
-            foton.serializar(outfile);
-        }
-        outfile.close();
+    //    std::ofstream outfile("Mapas\\foton_list.dat", std::ios::binary);
+    //    for (const Foton& foton : listaFotones.pts) {
+    //        foton.serializar(outfile);
+    //    }
+    //    outfile.close();
 
-    } else {
-        std::ifstream infile("Mapas\\foton_list.dat", std::ios::binary);
-        listaFotones.pts.clear();
-        while (!infile.eof()) {
-            Foton foton;
-            foton.deserializar(infile);
-            if (!infile.eof()) {
-                listaFotones.pts.push_back(foton);
-            }
-        }
-        infile.close();
+    //} else {
+    //    std::ifstream infile("Mapas\\foton_list.dat", std::ios::binary);
+    //    listaFotones.pts.clear();
+    //    while (!infile.eof()) {
+    //        Foton foton;
+    //        foton.deserializar(infile);
+    //        if (!infile.eof()) {
+    //            listaFotones.pts.push_back(foton);
+    //        }
+    //    }
+    //    infile.close();
 
-    }
+    //}
 
-    using CustomKDTree = nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<float, PointCloud>, PointCloud, 3 /* dim */>;
-    CustomKDTree index(3 /*dim*/, listaFotones, { 10 /* max leaf */ }); // PROBAR CAMBIANDO LA CANTIDAD MAXIMA DE HOJAS
+    //using CustomKDTree = nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<float, PointCloud>, PointCloud, 3 /* dim */>;
+    //CustomKDTree index(3 /*dim*/, listaFotones, { 10 /* max leaf */ }); // PROBAR CAMBIANDO LA CANTIDAD MAXIMA DE HOJAS
 
     
-    RTCDevice device = rtcNewDevice(NULL);
-    RTCScene scene = rtcNewScene(device);
+
+
+    //float* vb = (float*)rtcSetNewGeometryBuffer(geom, RTC_BUFFER_TYPE_VERTEX, 0, RTC_FORMAT_FLOAT3, 3 * sizeof(float), 3);
+    //vb[0] = 0.f; vb[1] = 0.f; vb[2] = -1.f; // 1st vertex
+    //vb[3] = 1.f; vb[4] = 0.f; vb[5] = -1.f; // 2nd vertex
+    //vb[6] = 0.f; vb[7] = 1.f; vb[8] = -1.f; // 3rd vertex
+
+    //unsigned* ib = (unsigned*)rtcSetNewGeometryBuffer(geom, RTC_BUFFER_TYPE_INDEX, 0, RTC_FORMAT_UINT3, 3 * sizeof(unsigned), 1);
+    //ib[0] = 0; ib[1] = 1; ib[2] = 2;
+
     RTCGeometry geom = rtcNewGeometry(device, RTC_GEOMETRY_TYPE_TRIANGLE);
+    vector<float> vertices = {};
+    int caras = cargarObjeto(vertices);
 
-    float* vb = (float*)rtcSetNewGeometryBuffer(geom, RTC_BUFFER_TYPE_VERTEX, 0, RTC_FORMAT_FLOAT3, 3 * sizeof(float), 3);
-    vb[0] = 0.f; vb[1] = 0.f; vb[2] = 0.f; // 1st vertex
-    vb[3] = 1.f; vb[4] = 0.f; vb[5] = 0.f; // 2nd vertex
-    vb[6] = 0.f; vb[7] = 1.f; vb[8] = 0.f; // 3rd vertex
-
-    unsigned* ib = (unsigned*)rtcSetNewGeometryBuffer(geom, RTC_BUFFER_TYPE_INDEX, 0, RTC_FORMAT_UINT3, 3 * sizeof(unsigned), 1);
-    ib[0] = 0; ib[1] = 1; ib[2] = 2;
+    float* vb = (float*)rtcSetNewGeometryBuffer(geom, RTC_BUFFER_TYPE_VERTEX, 0,
+        RTC_FORMAT_FLOAT3,
+        3 * sizeof(float), vertices.size());
+    for (int i = 0; i < vertices.size(); ++i) {
+        vb[i] = vertices[i];
+    }
+    size_t nCaras = caras;
+    // set indices
+    unsigned* ib = (unsigned*)rtcSetNewGeometryBuffer(
+        geom, RTC_BUFFER_TYPE_INDEX, 0, RTC_FORMAT_UINT3, 3 * sizeof(unsigned),
+        nCaras*3);
+    for (int i = 0; i < caras - 3; ++i) {
+        ib[i] = i;
+    }
+    cout << vertices.size();
 
     rtcCommitGeometry(geom);
     rtcAttachGeometry(scene, geom);
     rtcReleaseGeometry(geom);
     rtcCommitScene(scene);
 
-    RTCRayHit rayhit;
-    rayhit.ray.org_x = 0.f; rayhit.ray.org_y = 0.f; rayhit.ray.org_z = -1.f;
-    rayhit.ray.dir_x = 0.f; rayhit.ray.dir_y = 0.f; rayhit.ray.dir_z = 1.f;
-    rayhit.ray.tnear = 0.f;
-    rayhit.ray.tfar = std::numeric_limits<float>::infinity();
-    rayhit.hit.geomID = RTC_INVALID_GEOMETRY_ID;
-    rayhit.ray.flags = 0;
+   
 
-    RTCIntersectContext context;
-    rtcInitIntersectContext(&context);
+    //RTCRayHit rayhit;
+    //rayhit.ray.org_x = 0.f; rayhit.ray.org_y = 0.f; rayhit.ray.org_z = -1.f;
+    //rayhit.ray.dir_x = 0.f; rayhit.ray.dir_y = 0.f; rayhit.ray.dir_z = 1.f;
+    //rayhit.ray.tnear = 0.f;
+    //rayhit.ray.tfar = std::numeric_limits<float>::infinity();
+    //rayhit.hit.geomID = RTC_INVALID_GEOMETRY_ID;
+    //rayhit.ray.flags = 0;
 
-    rtcIntersect1(scene, &context, &rayhit);
+    //RTCIntersectContext context;
+    //rtcInitIntersectContext(&context);
 
-    if (rayhit.hit.geomID != RTC_INVALID_GEOMETRY_ID) {
-        std::cout << "Intersection at t = " << rayhit.ray.tfar << std::endl;
-    }
-    else {
-        std::cout << "No Intersection" << std::endl;
-    }
+    //rtcIntersect1(scene, &context, &rayhit);
 
-    rtcReleaseScene(scene);
-    rtcReleaseDevice(device);
+    //if (rayhit.hit.geomID != RTC_INVALID_GEOMETRY_ID) {
+    //    std::cout << "Intersection at t = " << rayhit.ray.tfar << std::endl;
+    //}
+    //else {
+    //    std::cout << "No Intersection" << std::endl;
+    //}
 
+    RGBQUAD blanco = { 255, 255, 255 };
+    RGBQUAD rojo = { 255, 0, 0 };
+    rojo = { rojo.rgbRed, rojo.rgbGreen, rojo.rgbBlue };
 
+    RGBQUAD negro = { 0, 0, 0 };
     for (int y = 0; y < pantalla->altura; y++) {
         for (int x = 0; x < pantalla->ancho; x++) {
-            Rayo *rayo = new Rayo(camara->posicion, pantalla->pixelesPantalla[x][y], 1.00029f, x, y);
+            //Rayo *rayo = new Rayo(camara->posicion, pantalla->pixelesPantalla[x][y], 1.00029f, x, y);
+            RTCRayHit rayhit;
+            rayhit.ray.org_x = camara->posicion.x;
+            rayhit.ray.org_y = camara->posicion.y;
+            rayhit.ray.org_z = camara->posicion.z;
+            rayhit.ray.dir_x = pantalla->pixelesPantalla[x][y].x - camara->posicion.x;
+            rayhit.ray.dir_y = pantalla->pixelesPantalla[x][y].y - camara->posicion.y;
+            rayhit.ray.dir_z = pantalla->pixelesPantalla[x][y].z - camara->posicion.z;
+            rayhit.ray.tnear = 0.f;
+            rayhit.ray.tfar = std::numeric_limits<float>::infinity();
+            rayhit.hit.geomID = RTC_INVALID_GEOMETRY_ID;
+
+            RTCIntersectContext context;
+            rtcInitIntersectContext(&context);
+            rtcIntersect1(scene, &context, &rayhit);
+            if (rayhit.hit.geomID != RTC_INVALID_GEOMETRY_ID) {
+                FreeImage_SetPixelColor(pantalla->bitmap, x, y, &rojo);
+            }
+            else {
+                FreeImage_SetPixelColor(pantalla->bitmap, x, y, &negro);
+            }
 
             /*RGBQUAD color = whitted->traza_RR(rayo, 0);
             FreeImage_SetPixelColor(pantalla->bitmap, x, y, &color);*/
 
-            vec3 interseccionMasCercana;
-            float distancia = 100000;
-            int indiceMasCerca = -1;
+            //vec3 interseccionMasCercana;
+            //float distancia = 100000;
+            //int indiceMasCerca = -1;
 
-            for (int i = 0; i < escena->elementos.size(); i++) {
-                float t = escena->elementos[i]->interseccionRayo(rayo);
+            //for (int i = 0; i < escena->elementos.size(); i++) {
+            //    float t = escena->elementos[i]->interseccionRayo(rayo);
 
-                if (t > 1e-3) {
-                    vec3 interseccion = rayo->origen + rayo->direccion * t;
-                    float distanciaNueva = distance(rayo->origen, interseccion);
+            //    if (t > 1e-3) {
+            //        vec3 interseccion = rayo->origen + rayo->direccion * t;
+            //        float distanciaNueva = distance(rayo->origen, interseccion);
 
-                    if (distanciaNueva < distancia) {
-                        distancia = distanciaNueva;
-                        indiceMasCerca = i;
-                        interseccionMasCercana = interseccion;
-                    }
-                }
-            }
+            //        if (distanciaNueva < distancia) {
+            //            distancia = distanciaNueva;
+            //            indiceMasCerca = i;
+            //            interseccionMasCercana = interseccion;
+            //        }
+            //    }
+            //}
 
-            if (indiceMasCerca != -1) {
+            //if (indiceMasCerca != -1) {
 
-                const float query[3] = { interseccionMasCercana.x, interseccionMasCercana.y, interseccionMasCercana.z };
-                const float radius = 0.001;
-                std::vector <nanoflann::ResultItem<uint32_t, float>> matches;
-                nanoflann::SearchParameters params;
-                params.sorted = true;
+            //    const float query[3] = { interseccionMasCercana.x, interseccionMasCercana.y, interseccionMasCercana.z };
+            //    const float radius = 0.001;
+            //    std::vector <nanoflann::ResultItem<uint32_t, float>> matches;
+            //    nanoflann::SearchParameters params;
+            //    params.sorted = true;
 
-                index.radiusSearch(&query[0], radius, matches, params); // Devuelve en matches un vector de pares con el siguiente formato: (indice, distancia)
-                if (matches.size() > 0) {
-                    Foton masCercano = listaFotones.pts[matches[0].first];
-                    FreeImage_SetPixelColor(pantalla->bitmap, x, y, &masCercano.potencia);
-                }
+            //    index.radiusSearch(&query[0], radius, matches, params); // Devuelve en matches un vector de pares con el siguiente formato: (indice, distancia)
+            //    if (matches.size() > 0) {
+            //        Foton masCercano = listaFotones.pts[matches[0].first];
+            //        FreeImage_SetPixelColor(pantalla->bitmap, x, y, &masCercano.potencia);
+            //    }
 
                 /*Foton interseccion = Foton(interseccionMasCercana, { 0,0,0 }, 0, 0, 0);
                 vector<int> indexes = mapa.radiusSearch(interseccion, 0.01);
@@ -398,10 +447,12 @@ int _tmain(int argc, _TCHAR* argv[])
                     Foton masCercano = listaFotones[indexes.front()];
                     FreeImage_SetPixelColor(pantalla->bitmap, x, y, &masCercano.potencia);
                 }*/
-            }
+            //}
         }
+ 
     }
-
+    //rtcReleaseScene(scene);
+    //rtcReleaseDevice(device);
     FreeImage_Save(FIF_PNG, pantalla->bitmap, "Final\\AA Resultado.png", 0);
 
     /*FreeImage_Save(FIF_PNG, pantalla->bitmapAmbiente,"Final\\Ambiente.png", 0);
