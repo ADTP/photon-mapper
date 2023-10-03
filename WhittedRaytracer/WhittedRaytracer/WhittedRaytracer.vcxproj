@@ -166,6 +166,7 @@
     <ClInclude Include="nanoflann\nanoflann.h" />
     <ClInclude Include="nanoflann\utils.h" />
     <ClInclude Include="Pantalla.h" />
+    <ClInclude Include="PhotonMapper.h" />
     <ClInclude Include="pugiconfig.hpp" />
     <ClInclude Include="pugixml.hpp" />
     <ClInclude Include="tiny_obj_loader.h" />
