@@ -18,13 +18,7 @@
     <ClCompile Include="Escena.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Plano.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Camara.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Rayo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Pantalla.cpp">
@@ -33,22 +27,10 @@
     <ClCompile Include="Elemento.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Esfera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Luz.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Whitted.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Raytracer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Cilindro.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Triangulo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="pugixml.cpp">
@@ -62,13 +44,7 @@
     <ClInclude Include="Escena.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Plano.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Camara.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Rayo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Pantalla.h">
@@ -77,19 +53,7 @@
     <ClInclude Include="Elemento.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Esfera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Luz.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Whitted.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Cilindro.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Triangulo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="pugiconfig.hpp">

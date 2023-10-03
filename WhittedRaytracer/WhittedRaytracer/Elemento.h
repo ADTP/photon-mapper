@@ -1,14 +1,28 @@
 #pragma once
+
 #include "../glm-0.9.9.8/glm-0.9.9.8/glm/glm.hpp"
 #include "../Freeimage/FreeImage.h"
 
-#include "Rayo.h"
+#include <string>
 
 using namespace glm;
 
 class Elemento {
 	public:
 
+		Elemento(std::string nombreArchivo, RGBQUAD color, vec3 posicion, vec3 coeficienteReflexionDifusa, vec3 coeficienteReflexionEspecular);
+		~Elemento();
+
+		std::string nombreArchivo;
+
+		RGBQUAD color;
+		
+		vec3 posicion;
+		
+		vec3 coeficienteReflexionDifusa;
+		vec3 coeficienteReflexionEspecular;
+
+		/*
 		float ambiente;
 		float difusa;
 		float especular;
@@ -16,25 +30,5 @@ class Elemento {
 		float reflexion;
 		float refraccion;
 		float transmision;
-
-		vec3 coeficienteReflexionDifusa; // Exculsivo photon mapping
-		vec3 coeficienteReflexionEspecular; // Exculsivo photon mapping
-
-		RGBQUAD color;
-
-		vec3 posicion;
-
-		virtual float interseccionRayo(Rayo* rayo) = 0;
-		virtual vec3 normalDelPunto(vec3 punto) = 0;
-
-		float getAmbiente();
-		float getDifusa();
-		float getEspecular();
-
-		float getReflexion();
-		float getRefraccion();
-		float getTransmision();
-
-		vec3 getCoeficienteReflexionDifusa();
-		vec3 getCoeficienteReflexionEspecular();
+		*/
 };

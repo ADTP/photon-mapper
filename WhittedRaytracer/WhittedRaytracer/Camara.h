@@ -1,5 +1,7 @@
 #pragma once
+
 #include "../glm-0.9.9.8/glm-0.9.9.8/glm/glm.hpp"
+
 using namespace glm;
 
 class Camara {

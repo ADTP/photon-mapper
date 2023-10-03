@@ -1,37 +1,19 @@
 ﻿  Raytracer.cpp
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\Plano.h(4,10): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\Raytracer.cpp(58,29): warning C4267: 'inicializando': conversión de 'size_t' a 'int'; posible pérdida de datos
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\Raytracer.cpp(58,17): warning C4267: 'inicializando': conversión de 'size_t' a 'const int'; posible pérdida de datos
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\Raytracer.cpp(116,76): warning C4838: la conversión de 'double' en 'BYTE' requiere una conversión de restricción
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\Raytracer.cpp(116,76): warning C4244: 'inicializando': conversión de 'double' a 'BYTE'; posible pérdida de datos
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\Raytracer.cpp(116,135): warning C4838: la conversión de 'double' en 'BYTE' requiere una conversión de restricción
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\Raytracer.cpp(116,135): warning C4244: 'inicializando': conversión de 'double' a 'BYTE'; posible pérdida de datos
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\Raytracer.cpp(116,193): warning C4838: la conversión de 'double' en 'BYTE' requiere una conversión de restricción
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\Raytracer.cpp(116,193): warning C4244: 'inicializando': conversión de 'double' a 'BYTE'; posible pérdida de datos
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\Raytracer.cpp(129,79): warning C4838: la conversión de 'double' en 'BYTE' requiere una conversión de restricción
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\Raytracer.cpp(129,79): warning C4244: 'inicializando': conversión de 'double' a 'BYTE'; posible pérdida de datos
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\Raytracer.cpp(129,144): warning C4838: la conversión de 'double' en 'BYTE' requiere una conversión de restricción
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\Raytracer.cpp(129,144): warning C4244: 'inicializando': conversión de 'double' a 'BYTE'; posible pérdida de datos
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\Raytracer.cpp(129,208): warning C4838: la conversión de 'double' en 'BYTE' requiere una conversión de restricción
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\Raytracer.cpp(129,208): warning C4244: 'inicializando': conversión de 'double' a 'BYTE'; posible pérdida de datos
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\Raytracer.cpp(138,45): warning C4305: '=': truncamiento de 'double' a 'float'
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\Raytracer.cpp(174,40): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
+C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\Raytracer.cpp(150,40): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
           with
           [
               T=float
           ]
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\Raytracer.cpp(175,40): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
+C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\Raytracer.cpp(151,40): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
           with
           [
               T=float
           ]
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\Raytracer.cpp(176,40): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
+C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\Raytracer.cpp(152,40): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
           with
           [
               T=float
           ]
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\Raytracer.cpp(179,105): warning C4305: 'argumento': truncamiento de 'double' a 'float'
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\Raytracer.cpp(266,52): warning C4267: 'return': conversión de 'size_t' a 'int'; posible pérdida de datos
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\Raytracer.cpp(401,30): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\Raytracer.cpp(64): warning C4172: devolución de dirección de la variable local o temporal: char_array
-  WhittedRaytracer.vcxproj -> D:\Repos\path-tracer\WhittedRaytracer\x64\Debug\WhittedRaytracer.exe
+C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\Raytracer.cpp(155,105): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\Raytracer.cpp(234,52): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+  WhittedRaytracer.vcxproj -> C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\x64\Debug\WhittedRaytracer.exe

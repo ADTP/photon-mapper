@@ -576,12 +576,13 @@ struct SO2_Adaptor
     DistanceType accum_dist(const U a, const V b, const size_t) const
     {
         DistanceType result = DistanceType();
+        DistanceType PI = pi_const<DistanceType>();
 
-        result              = b - a;
-        if (result > pi_const<DistanceType>())
-            result -= 2 * pi_const<DistanceType>();
-        else if (result < -pi_const<DistanceType>())
-            result += 2 * pi_const<DistanceType>();
+        result = b - a;
+        if (result > PI)
+            result -= 2 * PI;
+        else if (result < -PI)
+            result += 2 * PI;
         return result;
     }
 };

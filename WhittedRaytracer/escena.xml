@@ -1,5 +1,77 @@
-<elementos>
-    <planos>
+<escena cantidadDeFotones="5000000" generarMapas="false">
+    <pantalla ancho="1920" altura="1080" />
+
+    <camara fovHorizontal="120" distanciaMalla="1">
+        <posicion x="0" y="0" z="0" />
+        <arriba x="0" y="1" z="0" />
+        <adelante x="0" y="0" z="1" />
+    </camara>
+
+    <luces>
+        <luz watts="50">
+            <color r="255" g="255" b="255" />
+            <posicion x="2" y="4" z="2" />
+        </luz>
+    </luces>
+
+    <elementos>
+        <!-- <objeto nombre="pared-adelante" archivo="">
+            <color r="255" g="255" b="255" />
+            <posicion x="0" y="0" z="10" />
+            <coeficienteReflexionDifusa r="0" g="0" b="0" />
+            <coeficienteReflexionEspecular r="0" g="0" b="0" />
+        </objeto>
+        <objeto nombre="pared-izquierda" archivo="">
+            <color r="255" g="255" b="255" />
+            <posicion x="-10" y="0" z="5" />
+            <coeficienteReflexionDifusa r="0" g="0" b="0" />
+            <coeficienteReflexionEspecular r="0" g="0" b="0" />
+        </objeto>
+        <objeto nombre="pared-derecha" archivo="">
+            <color r="255" g="255" b="255" />
+            <posicion x="10" y="0" z="5" />
+            <coeficienteReflexionDifusa r="0" g="0" b="0" />
+            <coeficienteReflexionEspecular r="0" g="0" b="0" />
+        </objeto>
+        <objeto nombre="pared-abajo" archivo="">
+            <color r="255" g="255" b="255" />
+            <posicion x="0" y="-10" z="5" />
+            <coeficienteReflexionDifusa r="0" g="0" b="0" />
+            <coeficienteReflexionEspecular r="0" g="0" b="0" />
+        </objeto>
+        <objeto nombre="pared-arriba" archivo="">
+            <color r="255" g="255" b="255" />
+            <posicion x="0" y="10" z="5" />
+            <coeficienteReflexionDifusa r="0" g="0" b="0" />
+            <coeficienteReflexionEspecular r="0" g="0" b="0" />
+        </objeto> -->
+
+        <objeto nombre="diablo" archivo="diablo.obj">
+            <color r="255" g="0" b="0" />
+            <posicion x="0" y="0" z="5" />
+            <coeficienteReflexionDifusa r="0.7" g="0" b="0" />
+            <coeficienteReflexionEspecular r="0" g="0" b="0" />
+        </objeto>
+    </elementos>
+</escena>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<planos>
         <plano_abajo tipo="plano" ambiente="0.3" difusa="0.9" especular="0.3" reflexion="0.1" refraccion="0" transmision="0" >
             <puntos>
                 <p1 x="0" y="0" z="0"></p1>
@@ -62,6 +134,7 @@
         </plano_atras>
     </planos>
 
+    
     <esferas>
         <!-- <esfera radio="0.5" a="4.5" b="1.5" c="-4" ambiente="0.3" difusa="0" especular="1" reflexion="1" refraccion="0" transmision="0">
             <color r="254" g="254" b="254" />
@@ -75,100 +148,3 @@
             <coeficientereflexionespecular r="0.0" g="0.0" b="0.0" />
         </esfera>
     </esferas>
-
-    <!-- <cilindros> -->
-         <!-- <cilindro radio="0.5" altura="1" ambiente="0.7" difusa="0.9" especular="0.9" reflexion="0" refraccion="1.45" transmision="0" > -->
-            <!-- <color r="60" g="200" b="60"> -->
-            <!-- </color> -->
-            <!-- <posicion x="2.6" y="1" z="-4"> -->
-            <!-- </posicion> -->
-        <!-- </cilindro> -->
-    <!-- </cilindros> -->
-
-    <!-- <triangulos>
-        <triangulo tipo="base1" ambiente="0.3" difusa="0.9" especular="0.9" reflexion="0" refraccion="0" transmision="0" >
-            <puntos>
-                <p1 x="1" y="1" z="-3"/>
-                <p2 x="1" y="1" z="-5"/>
-                <p3 x="5" y="1" z="-3"/>
-            </puntos>
-            <color r="255" g="255" b="255" />
-            <coeficienteReflexionDifusa r="0" g="0" b="0.3" />
-            <coeficientereflexionespecular r="0.0" g="0.0" b="0.0" />
-        </triangulo>
-        <triangulo tipo="base2" ambiente="0.3" difusa="0.9" especular="0.9" reflexion="0" refraccion="0" transmision="0" >
-            <puntos>
-                <p1 x="1" y="1" z="-5" />
-                <p2 x="5" y="1" z="-5" />
-                <p3 x="5" y="1" z="-3" />
-            </puntos>
-            <color r="255" g="255" b="255"></color>
-            <coeficienteReflexionDifusa r="0" g="0" b="0.3" />
-            <coeficientereflexionespecular r="0.0" g="0.0" b="0.0" />
-        </triangulo>
-        <triangulo tipo="ladoFrente" ambiente="0.3" difusa="0.9" especular="0.9" reflexion="0" refraccion="0" transmision="0" >
-            <puntos>
-                <p1 x="1" y="1" z="-3" />
-                <p2 x="5" y="1" z="-3" />
-                <p3 x="2" y="0" z="-3" />
-            </puntos>
-            <color r="255" g="255" b="255"></color>
-            <coeficienteReflexionDifusa r="0" g="0" b="0.3" />
-            <coeficientereflexionespecular r="0.0" g="0.0" b="0.0" />
-        </triangulo>
-        <triangulo tipo="ladoIzq" ambiente="0.3" difusa="0.9" especular="0.9" reflexion="0" refraccion="0" transmision="0" >
-            <puntos>
-                <p1 x="1" y="1" z="-3" />
-                <p2 x="2" y="0" z="-3" />
-                <p3 x="1" y="1" z="-5" />
-            </puntos>
-            <color r="255" g="255" b="255"></color>
-            <coeficienteReflexionDifusa r="0" g="0" b="0.3" />
-            <coeficientereflexionespecular r="0.0" g="0.0" b="0.0" />
-        </triangulo>
-        <triangulo tipo="ladoDer" ambiente="0.3" difusa="0.9" especular="0.9" reflexion="0" refraccion="0" transmision="0" >
-            <puntos>
-                <p1 x="5" y="1" z="-3" />
-                <p2 x="5" y="1" z="-5" />
-                <p3 x="2" y="0" z="-3" />
-            </puntos>
-            <color r="255" g="255" b="255"></color>
-            <coeficienteReflexionDifusa r="0" g="0" b="0.3" />
-            <coeficientereflexionespecular r="0.0" g="0.0" b="0.0" />
-        </triangulo>
-        <triangulo tipo="ladoAtras" ambiente="0.3" difusa="0.9" especular="0.9" reflexion="0" refraccion="0" transmision="0" >
-            <puntos>
-                <p1 x="1" y="1" z="-5" />
-                <p2 x="2" y="0" z="-3" />
-                <p3 x="5" y="1" z="-5" />
-            </puntos>
-            <color r="255" g="255" b="255"></color>
-            <coeficienteReflexionDifusa r="0" g="0" b="0.3" />
-            <coeficientereflexionespecular r="0.0" g="0.0" b="0.0" />
-        </triangulo>
-    </triangulos> -->
-
-    <luces>
-        <luz watts="50">
-            <color r="255" g="255" b="255" />
-            <posicion x="2" y="4" z="2" />
-            <intensidad i1="0.3" i2="0.3" i3="0.3" />
-        </luz>
-        <!-- <luz>
-            <color r="255" g="255" b="255">
-            </color>
-            <posicion x="3" y="5" z="-2">
-            </posicion>
-            <intensidad i1="0.5" i2="0.5" i3="0.5">
-            </intensidad>
-        </luz> -->
-    </luces>
-
-    <camara fovHorizontal="120" distanciaMalla="1">
-        <posicion x="0" y="0" z="1" />
-        <arriba x="0" y="1" z="0" />
-        <adelante x="0" y="0" z="-1" />
-    </camara>
-
-    <pantalla ancho="800" altura="400" cantidadDeFotones="5000000" generarMapas="false" />
-</elementos>

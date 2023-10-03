@@ -39,8 +39,8 @@ void Pantalla::cargarMalla(Camara *camara) {
 
 	vec3 centroPantalla = camara->posicion + camara->adelante * camara->distanciaCamaraPantalla;
 
-	float mitadHorizontal = camara->distanciaCamaraPantalla * tan((camara->fov_horizontal / 2) * PI / 180);
-	float mitadVertical = camara->distanciaCamaraPantalla * tan((fov_vertical / 2) * PI / 180);
+	float mitadHorizontal = camara->distanciaCamaraPantalla * tan((camara->fov_horizontal / 2) * PI_PANTALLA / 180);
+	float mitadVertical = camara->distanciaCamaraPantalla * tan((fov_vertical / 2) * PI_PANTALLA / 180);
 
 	vec3 puntoBordeIzquierda = centroPantalla - camara->derecha * mitadHorizontal;
 	vec3 puntoAbajoIzquierda = puntoBordeIzquierda - camara->arriba * mitadVertical;

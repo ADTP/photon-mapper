@@ -4,7 +4,7 @@
 #include "../glm-0.9.9.8/glm-0.9.9.8/glm/glm.hpp"
 #include "Camara.h"
 
-#define PI 3.14159265
+#define PI_PANTALLA 3.14159265358979323846
 
 using namespace glm;
 

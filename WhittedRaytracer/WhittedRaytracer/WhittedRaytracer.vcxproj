@@ -149,38 +149,26 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camara.cpp" />
-    <ClCompile Include="Cilindro.cpp" />
     <ClCompile Include="Elemento.cpp" />
     <ClCompile Include="Escena.cpp" />
-    <ClCompile Include="Esfera.cpp" />
     <ClCompile Include="Foton.cpp" />
     <ClCompile Include="Luz.cpp" />
     <ClCompile Include="Pantalla.cpp" />
-    <ClCompile Include="Plano.cpp" />
     <ClCompile Include="pugixml.cpp" />
-    <ClCompile Include="Rayo.cpp" />
-    <ClCompile Include="Triangulo.cpp" />
-    <ClCompile Include="Whitted.cpp" />
     <ClCompile Include="Raytracer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camara.h" />
-    <ClInclude Include="Cilindro.h" />
     <ClInclude Include="Elemento.h" />
     <ClInclude Include="Escena.h" />
-    <ClInclude Include="Esfera.h" />
     <ClInclude Include="Foton.h" />
     <ClInclude Include="Luz.h" />
     <ClInclude Include="nanoflann\nanoflann.h" />
     <ClInclude Include="nanoflann\utils.h" />
     <ClInclude Include="Pantalla.h" />
-    <ClInclude Include="Plano.h" />
     <ClInclude Include="pugiconfig.hpp" />
     <ClInclude Include="pugixml.hpp" />
-    <ClInclude Include="Rayo.h" />
     <ClInclude Include="tiny_obj_loader.h" />
-    <ClInclude Include="Triangulo.h" />
-    <ClInclude Include="Whitted.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

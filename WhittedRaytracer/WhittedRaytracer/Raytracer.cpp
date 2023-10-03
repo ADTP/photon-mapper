@@ -7,14 +7,10 @@
 #include <direct.h>
 #include <tchar.h>
 
-#include "Plano.h"
 #include "Escena.h"
 #include "Pantalla.h"
-#include "Rayo.h"
 #include "Camara.h"
-#include "Whitted.h"
 #include "Foton.h"
-#include "Triangulo.h"
 
 #include <vector>
 #include <iostream>
@@ -43,113 +39,92 @@ static auto generator1 = std::bind(distribution1, engine);
 uniform_real_distribution<double> distribution2(-1.0, 1.0);
 static auto generator2 = std::bind(distribution2, engine);
 
-const char* nombreImagen(const char* identificador) {
-    // Creacion de imagenes con fecha y hora actual
-    time_t rawtime;
-    struct tm timeinfo;
-    char buffer[80];
-
-    time(&rawtime);
-    localtime_s(&timeinfo, &rawtime);
-
-    strftime(buffer, sizeof(buffer), "Alternativas\\%d %m %Y %H %M %S", &timeinfo);
-    string str(buffer);
-
-    const int n = str.length();
-    char char_array[60];
-    strcpy_s(char_array, str.c_str());
-
-    strcat_s(char_array, identificador);
-
-    return char_array;
-}
-
 void trazarFoton(RGBQUAD color, vec3 origen, vec3 direccion, PointCloud &listaFotones, int profundidad, float indiceRefraccionActual) {
-    Rayo* trazaFoton = new Rayo(origen, direccion, indiceRefraccionActual);
-    Escena* escena = Escena::getInstance();
+    //Rayo* trazaFoton = new Rayo(origen, direccion, indiceRefraccionActual);
+    //Escena* escena = Escena::getInstance();
 
-    int indiceMasCerca = -1;
-    float distancia = 100000;
+    //int indiceMasCerca = -1;
+    //float distancia = 100000;
 
-    vec3 interseccionMasCercana;
+    //vec3 interseccionMasCercana;
 
-    for (int i = 0; i < escena->elementos.size(); i++) {
-        float t = escena->elementos[i]->interseccionRayo(trazaFoton);
+    //for (int i = 0; i < escena->elementos.size(); i++) {
+    //    float t = escena->elementos[i]->interseccionRayo(trazaFoton);
 
-        if (t > 1e-3) {
-            vec3 interseccion = trazaFoton->origen + trazaFoton->direccion * t;
-            float distanciaNueva = distance(trazaFoton->origen, interseccion);
+    //    if (t > 1e-3) {
+    //        vec3 interseccion = trazaFoton->origen + trazaFoton->direccion * t;
+    //        float distanciaNueva = distance(trazaFoton->origen, interseccion);
 
-            if (distanciaNueva < distancia) {
-                distancia = distanciaNueva;
-                indiceMasCerca = i;
-                interseccionMasCercana = interseccion;
-            }
-        }
-    }
+    //        if (distanciaNueva < distancia) {
+    //            distancia = distanciaNueva;
+    //            indiceMasCerca = i;
+    //            interseccionMasCercana = interseccion;
+    //        }
+    //    }
+    //}
 
-    // si hay objeto intersectado
-    if (indiceMasCerca != -1) {
-        Elemento* elementoIntersectado = escena->elementos[indiceMasCerca];
-        vec3 normalInterseccion = elementoIntersectado->normalDelPunto(interseccionMasCercana);
-        vec3 direccionIncidente = direccion - origen;
+    //// si hay objeto intersectado
+    //if (indiceMasCerca != -1) {
+    //    Elemento* elementoIntersectado = escena->elementos[indiceMasCerca];
+    //    vec3 normalInterseccion = elementoIntersectado->normalDelPunto(interseccionMasCercana);
+    //    vec3 direccionIncidente = direccion - origen;
 
-        vec3 reflexionEspecular = elementoIntersectado->getCoeficienteReflexionEspecular();
-        vec3 reflexionDifusa = elementoIntersectado->getCoeficienteReflexionDifusa();
+    //    vec3 reflexionEspecular = elementoIntersectado->getCoeficienteReflexionEspecular();
+    //    vec3 reflexionDifusa = elementoIntersectado->getCoeficienteReflexionDifusa();
 
-        double a = generator1();
+    //    double a = generator1();
 
-        double dividendoDifusa = max({reflexionDifusa.r * color.rgbRed, reflexionDifusa.g * color.rgbGreen, reflexionDifusa.b * color.rgbBlue});
-        double divisorDifusa = max({color.rgbRed, color.rgbGreen, color.rgbBlue});
-        double factorPotenciaDifusa = dividendoDifusa / divisorDifusa; // Pd
+    //    double dividendoDifusa = max({reflexionDifusa.r * color.rgbRed, reflexionDifusa.g * color.rgbGreen, reflexionDifusa.b * color.rgbBlue});
+    //    double divisorDifusa = max({color.rgbRed, color.rgbGreen, color.rgbBlue});
+    //    double factorPotenciaDifusa = dividendoDifusa / divisorDifusa; // Pd
 
-        double dividendoEspecular = max({ reflexionEspecular.r * color.rgbRed, reflexionEspecular.g * color.rgbGreen, reflexionEspecular.b * color.rgbBlue });
-        double divisorEspecular = max({ color.rgbRed, color.rgbGreen, color.rgbBlue });
-        double factorPotenciaEspecular = dividendoEspecular / divisorEspecular; // Ps
+    //    double dividendoEspecular = max({ reflexionEspecular.r * color.rgbRed, reflexionEspecular.g * color.rgbGreen, reflexionEspecular.b * color.rgbBlue });
+    //    double divisorEspecular = max({ color.rgbRed, color.rgbGreen, color.rgbBlue });
+    //    double factorPotenciaEspecular = dividendoEspecular / divisorEspecular; // Ps
 
-        /*cout << "a: " << a << "\n";
-        cout << "Pd: " << factorPotenciaDifusa << "\n";
-        cout << "Pd: " << factorPotenciaEspecular << "\n\n";*/
+    //    /*cout << "a: " << a << "\n";
+    //    cout << "Pd: " << factorPotenciaDifusa << "\n";
+    //    cout << "Pd: " << factorPotenciaEspecular << "\n\n";*/
 
-        vec3 direccionReflejada{};
-        if (a < factorPotenciaDifusa) {
-            RGBQUAD potenciaReflejada = { color.rgbRed * reflexionDifusa.r / factorPotenciaDifusa, color.rgbGreen * reflexionDifusa.g / factorPotenciaDifusa, color.rgbBlue * reflexionDifusa.b / factorPotenciaDifusa };
-            potenciaReflejada = { potenciaReflejada.rgbRed, potenciaReflejada.rgbGreen, potenciaReflejada.rgbBlue };
-            if (profundidad > 1) {
-                listaFotones.pts.push_back(Foton(interseccionMasCercana, color, 0, 0, 0)); // TODO: FALTAN ANGULOS Y FLAG PARA KDTREE
-            } 
-            
-            do {
-                direccionReflejada = { generator2(), generator2(), generator2() };
-            } while (dot(normalInterseccion, direccionReflejada) <= 0);
-            direccionReflejada = interseccionMasCercana - direccionReflejada;
-            trazarFoton(potenciaReflejada, interseccionMasCercana+0.01f * elementoIntersectado->normalDelPunto(interseccionMasCercana), direccionReflejada, listaFotones, profundidad + 1, trazaFoton->refraccionObjetoActual);
+    //    vec3 direccionReflejada{};
+    //    if (a < factorPotenciaDifusa) {
+    //        RGBQUAD potenciaReflejada = { color.rgbRed * reflexionDifusa.r / factorPotenciaDifusa, color.rgbGreen * reflexionDifusa.g / factorPotenciaDifusa, color.rgbBlue * reflexionDifusa.b / factorPotenciaDifusa };
+    //        potenciaReflejada = { potenciaReflejada.rgbRed, potenciaReflejada.rgbGreen, potenciaReflejada.rgbBlue };
+    //        if (profundidad > 1) {
+    //            listaFotones.pts.push_back(Foton(interseccionMasCercana, color, 0, 0, 0)); // TODO: FALTAN ANGULOS Y FLAG PARA KDTREE
+    //        } 
+    //        
+    //        do {
+    //            direccionReflejada = { generator2(), generator2(), generator2() };
+    //        } while (dot(normalInterseccion, direccionReflejada) <= 0);
+    //        direccionReflejada = interseccionMasCercana - direccionReflejada;
+    //        trazarFoton(potenciaReflejada, interseccionMasCercana+0.01f * elementoIntersectado->normalDelPunto(interseccionMasCercana), direccionReflejada, listaFotones, profundidad + 1, trazaFoton->refraccionObjetoActual);
 
-        } else if (a < factorPotenciaDifusa + factorPotenciaEspecular) {
-            RGBQUAD potenciaReflejada = { color.rgbRed * reflexionEspecular.r / factorPotenciaEspecular, color.rgbGreen * reflexionEspecular.g / factorPotenciaEspecular, color.rgbBlue * reflexionEspecular.b / factorPotenciaEspecular };
-            potenciaReflejada = { potenciaReflejada.rgbRed, potenciaReflejada.rgbGreen, potenciaReflejada.rgbBlue };
+    //    } else if (a < factorPotenciaDifusa + factorPotenciaEspecular) {
+    //        RGBQUAD potenciaReflejada = { color.rgbRed * reflexionEspecular.r / factorPotenciaEspecular, color.rgbGreen * reflexionEspecular.g / factorPotenciaEspecular, color.rgbBlue * reflexionEspecular.b / factorPotenciaEspecular };
+    //        potenciaReflejada = { potenciaReflejada.rgbRed, potenciaReflejada.rgbGreen, potenciaReflejada.rgbBlue };
 
-            float refraccionProximoRayo = elementoIntersectado->getRefraccion();
-            if (elementoIntersectado->getReflexion() > 0.0) { // si hay que reflejar
-                direccionReflejada = reflect(direccionIncidente, normalInterseccion);
+    //        float refraccionProximoRayo = elementoIntersectado->getRefraccion();
+    //        if (elementoIntersectado->getReflexion() > 0.0) { // si hay que reflejar
+    //            direccionReflejada = reflect(direccionIncidente, normalInterseccion);
 
-            } else if (elementoIntersectado->getRefraccion() > 0.0) { // si hay que refractar // HABRIA QUE SACAR ESTO Y DEJARLO SOLO PARA EL MAPA DE CAUSTICAS?
-                if (dot(normalInterseccion, direccionIncidente) > 0) {
-                    refraccionProximoRayo = 1.00029;
-                }
+    //        } else if (elementoIntersectado->getRefraccion() > 0.0) { // si hay que refractar // HABRIA QUE SACAR ESTO Y DEJARLO SOLO PARA EL MAPA DE CAUSTICAS?
+    //            if (dot(normalInterseccion, direccionIncidente) > 0) {
+    //                refraccionProximoRayo = 1.00029;
+    //            }
 
-                direccionReflejada = refract(direccionIncidente, normalInterseccion, trazaFoton->refraccionObjetoActual / refraccionProximoRayo);
-            } 
+    //            direccionReflejada = refract(direccionIncidente, normalInterseccion, trazaFoton->refraccionObjetoActual / refraccionProximoRayo);
+    //        } 
 
-            direccionReflejada = interseccionMasCercana - direccionReflejada;
-            trazarFoton(potenciaReflejada, interseccionMasCercana, direccionReflejada, listaFotones, profundidad + 1, refraccionProximoRayo);
+    //        direccionReflejada = interseccionMasCercana - direccionReflejada;
+    //        trazarFoton(potenciaReflejada, interseccionMasCercana, direccionReflejada, listaFotones, profundidad + 1, refraccionProximoRayo);
 
-        } else {
-            if (elementoIntersectado->getDifusa() > 0.0) {
-                listaFotones.pts.push_back(Foton(interseccionMasCercana, color, 0, 0, 0));
-            }
-        }
-    }
+    //    } else {
+    //        if (elementoIntersectado->getDifusa() > 0.0) {
+    //            listaFotones.pts.push_back(Foton(interseccionMasCercana, color, 0, 0, 0));
+    //        }
+    //    }
+    //}
 }
 
 void generarMapaDeFotones(PointCloud &listaFotones) {
@@ -188,7 +163,7 @@ void generarMapaDeFotones(PointCloud &listaFotones) {
 }
 
 int cargarObjeto(vector<float> &vertices) {
-    std::string inputfile = "Modelos\\diablo.obj";
+    std::string inputfile = "Modelos\\plano2.obj";
     tinyobj::ObjReaderConfig reader_config;
     //reader_config.mtl_search_path = "./"; // Path to material files
 
@@ -217,7 +192,6 @@ int cargarObjeto(vector<float> &vertices) {
         for (size_t f = 0; f < shapes[s].mesh.num_face_vertices.size(); f++) {
             size_t fv = size_t(shapes[s].mesh.num_face_vertices[f]);
 
-            vec3 puntos[3] = {};
             // Loop over vertices in the face.
             for (size_t v = 0; v < fv; v++) {
                 // access to vertex
@@ -244,19 +218,12 @@ int cargarObjeto(vector<float> &vertices) {
                 // tinyobj::real_t green = attrib.colors[3*size_t(idx.vertex_index)+1];
                 // tinyobj::real_t blue  = attrib.colors[3*size_t(idx.vertex_index)+2];
 
-                vertices.push_back(vx+2);
-                vertices.push_back(vy+2);
-                vertices.push_back(vz-2);
+                vertices.push_back(vx);
+                vertices.push_back(vy -1);
+                vertices.push_back(vz + 5);
                
             }
-            vec3 traslacion = { 3, 1, -3 };
-            /*escena->elementos.push_back(new Triangulo(
-                puntos[0] + traslacion, puntos[1] + traslacion, puntos[2] + traslacion,
-                { 255, 255, 255 }, 0.5, 0.5, 0, 0, 0, 0, { 0, 0, 0.3 }, { 0, 0, 0 }
-            ));*/
-            puntos[0] = puntos[0] + traslacion;
-            puntos[1] = puntos[1] + traslacion;
-            puntos[2] = puntos[2] + traslacion;
+
             index_offset += fv;
 
             // per-face material
@@ -290,7 +257,7 @@ int _tmain(int argc, _TCHAR* argv[])
     kdt::KDTree<Foton> mapa(listaFotones);
     cout << "Termina Foton Map ";*/
 
-    PointCloud listaFotones;
+    //PointCloud listaFotones;
     //if (escena->generarMapas) {
     //    generarMapaDeFotones(listaFotones);
 
@@ -332,28 +299,19 @@ int _tmain(int argc, _TCHAR* argv[])
     vector<float> vertices = {};
     int caras = cargarObjeto(vertices);
 
-    float* vb = (float*)rtcSetNewGeometryBuffer(geom, RTC_BUFFER_TYPE_VERTEX, 0,
-        RTC_FORMAT_FLOAT3,
-        3 * sizeof(float), vertices.size());
-    for (int i = 0; i < vertices.size(); ++i) {
-        vb[i] = vertices[i];
-    }
-    size_t nCaras = caras;
+    // set vertices
+    float* vb = (float*)rtcSetNewGeometryBuffer(geom, RTC_BUFFER_TYPE_VERTEX, 0, RTC_FORMAT_FLOAT3, 3 * sizeof(float), vertices.size());
+    for (int i = 0; i < vertices.size(); ++i) { vb[i] = vertices[i]; }
+    
     // set indices
-    unsigned* ib = (unsigned*)rtcSetNewGeometryBuffer(
-        geom, RTC_BUFFER_TYPE_INDEX, 0, RTC_FORMAT_UINT3, 3 * sizeof(unsigned),
-        nCaras*3);
-    for (int i = 0; i < caras - 3; ++i) {
-        ib[i] = i;
-    }
-    cout << vertices.size();
+    size_t nCaras = caras;
+    unsigned* ib = (unsigned*)rtcSetNewGeometryBuffer(geom, RTC_BUFFER_TYPE_INDEX, 0, RTC_FORMAT_UINT3, 3 * sizeof(unsigned), nCaras * 3);
+    for (int i = 0; i < caras - 3; ++i) { ib[i] = i; }
 
     rtcCommitGeometry(geom);
     rtcAttachGeometry(scene, geom);
     rtcReleaseGeometry(geom);
     rtcCommitScene(scene);
-
-   
 
     //RTCRayHit rayhit;
     //rayhit.ray.org_x = 0.f; rayhit.ray.org_y = 0.f; rayhit.ray.org_z = -1.f;

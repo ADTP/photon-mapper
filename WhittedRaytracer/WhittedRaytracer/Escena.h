@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Plano.h"
 #include "Elemento.h"
 #include "Luz.h"
 
