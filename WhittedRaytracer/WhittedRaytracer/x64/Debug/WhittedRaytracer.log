@@ -14,12 +14,12 @@ D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(49,44): wa
           [
               T=float
           ]
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(98,80): warning C4838: la conversión de 'double' en 'BYTE' requiere una conversión de restricción
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(98,80): warning C4244: 'inicializando': conversión de 'double' a 'BYTE'; posible pérdida de datos
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(98,139): warning C4838: la conversión de 'double' en 'BYTE' requiere una conversión de restricción
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(98,139): warning C4244: 'inicializando': conversión de 'double' a 'BYTE'; posible pérdida de datos
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(98,197): warning C4838: la conversión de 'double' en 'BYTE' requiere una conversión de restricción
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(98,197): warning C4244: 'inicializando': conversión de 'double' a 'BYTE'; posible pérdida de datos
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(99,80): warning C4838: la conversión de 'double' en 'BYTE' requiere una conversión de restricción
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(99,80): warning C4244: 'inicializando': conversión de 'double' a 'BYTE'; posible pérdida de datos
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(99,139): warning C4838: la conversión de 'double' en 'BYTE' requiere una conversión de restricción
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(99,139): warning C4244: 'inicializando': conversión de 'double' a 'BYTE'; posible pérdida de datos
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(99,197): warning C4838: la conversión de 'double' en 'BYTE' requiere una conversión de restricción
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(99,197): warning C4244: 'inicializando': conversión de 'double' a 'BYTE'; posible pérdida de datos
 D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(112,83): warning C4838: la conversión de 'double' en 'BYTE' requiere una conversión de restricción
 D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(112,83): warning C4244: 'inicializando': conversión de 'double' a 'BYTE'; posible pérdida de datos
 D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(112,148): warning C4838: la conversión de 'double' en 'BYTE' requiere una conversión de restricción

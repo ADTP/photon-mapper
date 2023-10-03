@@ -253,7 +253,7 @@ int _tmain(int argc, _TCHAR* argv[])
             //if (indiceMasCerca != -1) {
 
                 const float query[3] = { interseccionMasCercana.x, interseccionMasCercana.y, interseccionMasCercana.z };
-                const float radius = 0.001;
+                const float radius = 0.0001;
                 std::vector <nanoflann::ResultItem<uint32_t, float>> matches;
                 nanoflann::SearchParameters params;
                 params.sorted = true;

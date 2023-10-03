@@ -74,7 +74,7 @@ Escena::Escena() {
 		vec3 coeficienteReflexionDifusa = { coefDifusa.attribute("r").as_float(), coefDifusa.attribute("g").as_float(), coefDifusa.attribute("b").as_float() };
 
 		xml_node coefEspecular = iteradorElementos->child("coeficienteReflexionEspecular");
-		vec3 coeficienteReflexionEspecular = { coefDifusa.attribute("r").as_float(), coefDifusa.attribute("g").as_float(), coefDifusa.attribute("b").as_float() };
+		vec3 coeficienteReflexionEspecular = { coefEspecular.attribute("r").as_float(), coefEspecular.attribute("g").as_float(), coefEspecular.attribute("b").as_float() };
 
 		Elemento* elemento = new Elemento(nombreArchivo, colorElemento, pos, coeficienteReflexionDifusa, coeficienteReflexionEspecular);
 		elementos.push_back(elemento);

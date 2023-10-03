@@ -82,6 +82,7 @@ public:
             vec3 reflexionEspecular = escena->elementos[rayhit.hit.geomID]->coeficienteReflexionEspecular;
             vec3 reflexionDifusa = escena->elementos[rayhit.hit.geomID]->coeficienteReflexionDifusa;
             vec3 normalInterseccion = { rayhit.hit.Ng_x, rayhit.hit.Ng_y, rayhit.hit.Ng_z };
+            normalInterseccion = normalize(normalInterseccion);
 
             double a = generator1();
 
@@ -97,14 +98,13 @@ public:
             if (a < factorPotenciaDifusa) {
                 RGBQUAD potenciaReflejada = { color.rgbRed * reflexionDifusa.r / factorPotenciaDifusa, color.rgbGreen * reflexionDifusa.g / factorPotenciaDifusa, color.rgbBlue * reflexionDifusa.b / factorPotenciaDifusa };
                 potenciaReflejada = { potenciaReflejada.rgbRed, potenciaReflejada.rgbGreen, potenciaReflejada.rgbBlue };
-                if (profundidad > 1) {
+                if (profundidad > 0) {
                     listaFotones.pts.push_back(Foton(interseccionMasCercana, color, 0, 0, 0)); // TODO: FALTAN ANGULOS Y FLAG PARA KDTREE
                 }
 
                 do {
                     direccionReflejada = { generator2(), generator2(), generator2() };
                 } while (dot(normalInterseccion, direccionReflejada) <= 0);
-                direccionReflejada = interseccionMasCercana - direccionReflejada;
                 trazarFoton(potenciaReflejada, interseccionMasCercana + 0.01f * normalInterseccion, direccionReflejada, listaFotones, profundidad + 1, scene);
 
             }
