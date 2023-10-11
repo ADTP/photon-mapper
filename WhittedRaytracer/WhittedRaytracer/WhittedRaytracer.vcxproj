@@ -155,7 +155,7 @@
     <ClCompile Include="Luz.cpp" />
     <ClCompile Include="Pantalla.cpp" />
     <ClCompile Include="pugixml.cpp" />
-    <ClCompile Include="Raytracer.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camara.h" />
@@ -169,6 +169,7 @@
     <ClInclude Include="PhotonMapper.h" />
     <ClInclude Include="pugiconfig.hpp" />
     <ClInclude Include="pugixml.hpp" />
+    <ClInclude Include="RayTracer.h" />
     <ClInclude Include="tiny_obj_loader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

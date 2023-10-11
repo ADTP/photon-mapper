@@ -102,10 +102,14 @@ public:
                     listaFotones.pts.push_back(Foton(interseccionMasCercana, color, 0, 0, 0)); // TODO: FALTAN ANGULOS Y FLAG PARA KDTREE
                 }
 
+                vec3 centroEsfera = interseccionMasCercana + normalInterseccion;
+                vec3 direccionAletoriaEsfera;
                 do {
-                    direccionReflejada = { generator2(), generator2(), generator2() };
-                } while (dot(normalInterseccion, direccionReflejada) <= 0);
-                trazarFoton(potenciaReflejada, interseccionMasCercana + 0.01f * normalInterseccion, direccionReflejada, listaFotones, profundidad + 1, scene);
+                    direccionAletoriaEsfera = { generator2(), generator2(), generator2() };
+                } while (pow(direccionAletoriaEsfera.x, 2) + pow(direccionAletoriaEsfera.y, 2) + pow(direccionAletoriaEsfera.z, 2) > 1);
+                vec3 puntoAleatorioEsfera = centroEsfera + direccionAletoriaEsfera;
+
+                trazarFoton(potenciaReflejada, interseccionMasCercana + 0.01f * normalInterseccion, puntoAleatorioEsfera - interseccionMasCercana, listaFotones, profundidad + 1, scene);
 
             }
             else if (a < factorPotenciaDifusa + factorPotenciaEspecular) {
@@ -117,9 +121,9 @@ public:
 
             }
             else {
-                //if (elementoIntersectado->getDifusa() > 0.0) {
-                listaFotones.pts.push_back(Foton(interseccionMasCercana, color, 0, 0, 0));
-               // }
+                if (profundidad > 0) {
+                    listaFotones.pts.push_back(Foton(interseccionMasCercana, color, 0, 0, 0));
+                }
             }
         }
     }
