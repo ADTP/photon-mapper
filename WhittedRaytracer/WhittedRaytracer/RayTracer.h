@@ -20,14 +20,10 @@ class RayTracer
 {
 public:
     RGBQUAD trazaRR(RTCScene scene, RTCRayHit rayhit, Escena* escena) {
-        //vec3 rayHitOrg = { rayhit.ray.org_x, rayhit.ray.org_y, rayhit.ray.org_z };
-        //vec3 rayHitDir = { rayhit.ray.dir_x, rayhit.ray.dir_y, rayhit.ray.dir_z };
-        //vec3 interseccionMasCercana = rayHitOrg + rayHitDir * rayhit.ray.tfar;
-
         if (rayhit.ray.tfar != std::numeric_limits<float>::infinity()) {
+
             return sombraRR(scene, rayhit, escena->elementos[rayhit.hit.geomID], escena);
         }
-       
         return negro;
     };
     
@@ -39,31 +35,36 @@ public:
         vec3 normalRayoIncidente = { rayoIncidente.hit.Ng_x, rayoIncidente.hit.Ng_y, rayoIncidente.hit.Ng_z };
         normalRayoIncidente = normalize(normalRayoIncidente);
 
-        /*float coeficenteAmbiente = elementoIntersecado->ambiente;
-        RGBQUAD resultadoAmbiente = { 
-            coeficenteAmbiente * elementoIntersecado->color.rgbRed, 
-            coeficenteAmbiente * elementoIntersecado->color.rgbGreen, 
-            coeficenteAmbiente * elementoIntersecado->color.rgbBlue
-        };*/
+        // HAY QUE TENER EN CUENTA LUZ AMBIENTE ??
+        
+        //float coeficenteAmbiente = elementoIntersecado->ambiente;
+        //RGBQUAD resultadoAmbiente = { 
+        //    coeficenteAmbiente * elementoIntersecado->color.rgbRed, 
+        //    coeficenteAmbiente * elementoIntersecado->color.rgbGreen, 
+        //    coeficenteAmbiente * elementoIntersecado->color.rgbBlue
+        //};
         
         RGBQUAD resultadoFinal = negro;
 
         for (Luz* luz : escena->luces) {
 
             RTCRayHit rayoSombra = trazarRayo(scene, interseccionRayoIncidente + normalRayoIncidente * 0.1f, luz->posicion);
-            vec3 normalInterseccion = { rayoSombra.hit.Ng_x, rayoSombra.hit.Ng_y, rayoSombra.hit.Ng_z };
+            vec3 origenRayoSombra = { rayoSombra.ray.org_x, rayoSombra.ray.org_y, rayoSombra.ray.org_z };
             vec3 direccionRayoSombra = { rayoSombra.ray.dir_x , rayoSombra.ray.dir_y , rayoSombra.ray.dir_z };
 
-            if (dot(normalInterseccion, direccionRayoSombra) > 0) { // Si la luz incide directo sobre el punto de interseccion
+            if (dot(normalRayoIncidente, direccionRayoSombra) > 0) { // Si la luz incide directo sobre el punto de interseccion
                 float distanciaLuz = length(luz->posicion - interseccionRayoIncidente);
+                float distanciaInterseccion = length((origenRayoSombra + direccionRayoSombra * rayoSombra.ray.tfar) - origenRayoSombra);
 
-                if (rayoSombra.ray.tfar > distanciaLuz) { // Si no hay objetos intermedios
+                if (distanciaInterseccion > distanciaLuz) { // Si no hay objetos intermedios
                     resultadoFinal.rgbRed += luz->color.rgbRed * (1 / distanciaLuz);
                     resultadoFinal.rgbGreen += luz->color.rgbGreen * (1 / distanciaLuz);
                     resultadoFinal.rgbBlue += luz->color.rgbBlue * (1 / distanciaLuz);
                     
                 } else {
-                    // PREGUNTAR SI HACE FALTA TENER EN CUENTA LA TRANSPARENCIA A ESTA ALTURA O SI SERIA SOLO CON LAS CAUSTICAS
+
+                    // HAY QUE TENER EN CUENTA LA TRANSPARENCIA A ESTA ALTURA ??
+                    // O DIRECTAMENTE ES EN LA SECCION DE CAUSTICAS ?
                     
                     //vec3 origenSombra = { rayoSombra.ray.org_x, rayoSombra.ray.org_y, rayoSombra.ray.org_z };
                     //vec3 direccionSombra = { rayoSombra.ray.dir_x, rayoSombra.ray.dir_y, rayoSombra.ray.dir_z };
