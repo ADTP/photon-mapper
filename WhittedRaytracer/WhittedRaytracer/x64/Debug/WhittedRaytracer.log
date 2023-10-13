@@ -1,69 +1,88 @@
 ﻿  main.cpp
-C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(47,44): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(47,44): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
           with
           [
               T=float
           ]
-C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(48,44): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(48,44): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
           with
           [
               T=float
           ]
-C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(49,44): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(49,44): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
           with
           [
               T=float
           ]
-C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(99,80): warning C4838: conversion from 'double' to 'BYTE' requires a narrowing conversion
-C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(99,80): warning C4244: 'initializing': conversion from 'double' to 'BYTE', possible loss of data
-C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(99,139): warning C4838: conversion from 'double' to 'BYTE' requires a narrowing conversion
-C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(99,139): warning C4244: 'initializing': conversion from 'double' to 'BYTE', possible loss of data
-C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(99,197): warning C4838: conversion from 'double' to 'BYTE' requires a narrowing conversion
-C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(99,197): warning C4244: 'initializing': conversion from 'double' to 'BYTE', possible loss of data
-C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(116,83): warning C4838: conversion from 'double' to 'BYTE' requires a narrowing conversion
-C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(116,83): warning C4244: 'initializing': conversion from 'double' to 'BYTE', possible loss of data
-C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(116,148): warning C4838: conversion from 'double' to 'BYTE' requires a narrowing conversion
-C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(116,148): warning C4244: 'initializing': conversion from 'double' to 'BYTE', possible loss of data
-C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(116,212): warning C4838: conversion from 'double' to 'BYTE' requires a narrowing conversion
-C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(116,212): warning C4244: 'initializing': conversion from 'double' to 'BYTE', possible loss of data
-C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(74,14): warning C4101: 'interseccionMasCercana': unreferenced local variable
-C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(61,64): warning C4244: '+=': conversion from 'float' to 'BYTE', possible loss of data
-C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(62,68): warning C4244: '+=': conversion from 'float' to 'BYTE', possible loss of data
-C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(63,66): warning C4244: '+=': conversion from 'float' to 'BYTE', possible loss of data
-C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\main.cpp(102,52): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\nanoflann\nanoflann.h(1694,65): warning C4267: '=': conversion from 'size_t' to '_Ty', possible loss of data
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(99,80): warning C4838: la conversión de 'double' en 'BYTE' requiere una conversión de restricción
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(99,80): warning C4244: 'inicializando': conversión de 'double' a 'BYTE'; posible pérdida de datos
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(99,139): warning C4838: la conversión de 'double' en 'BYTE' requiere una conversión de restricción
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(99,139): warning C4244: 'inicializando': conversión de 'double' a 'BYTE'; posible pérdida de datos
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(99,197): warning C4838: la conversión de 'double' en 'BYTE' requiere una conversión de restricción
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(99,197): warning C4244: 'inicializando': conversión de 'double' a 'BYTE'; posible pérdida de datos
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(116,83): warning C4838: la conversión de 'double' en 'BYTE' requiere una conversión de restricción
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(116,83): warning C4244: 'inicializando': conversión de 'double' a 'BYTE'; posible pérdida de datos
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(116,148): warning C4838: la conversión de 'double' en 'BYTE' requiere una conversión de restricción
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(116,148): warning C4244: 'inicializando': conversión de 'double' a 'BYTE'; posible pérdida de datos
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(116,212): warning C4838: la conversión de 'double' en 'BYTE' requiere una conversión de restricción
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(116,212): warning C4244: 'inicializando': conversión de 'double' a 'BYTE'; posible pérdida de datos
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(74,14): warning C4101: 'interseccionMasCercana': variable local sin referencia
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(40,52): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(41,52): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(42,52): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(61,46): warning C4244: '=': conversión de 'float' a 'BYTE'; posible pérdida de datos
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(62,48): warning C4244: '=': conversión de 'float' a 'BYTE'; posible pérdida de datos
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(63,47): warning C4244: '=': conversión de 'float' a 'BYTE'; posible pérdida de datos
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(117,26): warning C4305: 'inicializando': truncamiento de 'double' a 'float'
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(120,53): warning C4244: '=': conversión de 'double' a 'BYTE'; posible pérdida de datos
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(121,55): warning C4244: '=': conversión de 'double' a 'BYTE'; posible pérdida de datos
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(122,54): warning C4244: '=': conversión de 'double' a 'BYTE'; posible pérdida de datos
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\main.cpp(102,52): warning C4267: 'return': conversión de 'size_t' a 'int'; posible pérdida de datos
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\nanoflann\nanoflann.h(1694,65): warning C4267: '=': conversión de 'size_t' a '_Ty'; posible pérdida de datos
           with
           [
               _Ty=std::_Vbase
           ]
-C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\nanoflann\nanoflann.h(1689,10): message : while compiling class template member function 'void nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<float,PointCloud,T,uint32_t>,PointCloud,3,uint32_t>::init_vind(void)'
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\nanoflann\nanoflann.h(1689,10): message : al compilar la función del miembro clase plantilla "void nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<float,PointCloud,T,uint32_t>,PointCloud,3,uint32_t>::init_vind(void)"
           with
           [
               T=float
           ]
-C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\nanoflann\nanoflann.h(1549,18): message : see the first reference to 'nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<float,PointCloud,T,uint32_t>,PointCloud,3,uint32_t>::init_vind' in 'nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<float,PointCloud,T,uint32_t>,PointCloud,3,uint32_t>::buildIndex'
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\nanoflann\nanoflann.h(1549,18): message : vea la primera referencia a “nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<float,PointCloud,T,uint32_t>,PointCloud,3,uint32_t>::init_vind” en “nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<float,PointCloud,T,uint32_t>,PointCloud,3,uint32_t>::buildIndex”
           with
           [
               T=float
           ]
-C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\nanoflann\nanoflann.h(1537,23): message : see the first reference to 'nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<float,PointCloud,T,uint32_t>,PointCloud,3,uint32_t>::buildIndex' in 'nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<float,PointCloud,T,uint32_t>,PointCloud,3,uint32_t>::init'
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\nanoflann\nanoflann.h(1537,23): message : vea la primera referencia a “nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<float,PointCloud,T,uint32_t>,PointCloud,3,uint32_t>::buildIndex” en “nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<float,PointCloud,T,uint32_t>,PointCloud,3,uint32_t>::init”
           with
           [
               T=float
           ]
-C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\nanoflann\nanoflann.h(1510,13): message : see the first reference to 'nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<float,PointCloud,T,uint32_t>,PointCloud,3,uint32_t>::init' in 'nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<float,PointCloud,T,uint32_t>,PointCloud,3,uint32_t>::KDTreeSingleIndexAdaptor'
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\nanoflann\nanoflann.h(1510,13): message : vea la primera referencia a “nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<float,PointCloud,T,uint32_t>,PointCloud,3,uint32_t>::init” en “nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<float,PointCloud,T,uint32_t>,PointCloud,3,uint32_t>::KDTreeSingleIndexAdaptor”
           with
           [
               T=float
           ]
-C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\main.cpp(167,23): message : see the first reference to 'nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<float,PointCloud,T,uint32_t>,PointCloud,3,uint32_t>::KDTreeSingleIndexAdaptor' in 'wmain'
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\main.cpp(167,18): message : vea la primera referencia a “nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<float,PointCloud,T,uint32_t>,PointCloud,3,uint32_t>::KDTreeSingleIndexAdaptor” en “wmain”
           with
           [
               T=float
           ]
-C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\main.cpp(167,18): message : see reference to class template instantiation 'nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<float,PointCloud,T,uint32_t>,PointCloud,3,uint32_t>' being compiled
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(97,1): message : Vea la referencia a la creación de una instancia de clase plantilla "nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<float,PointCloud,T,uint32_t>,PointCloud,3,uint32_t>" que se está compilando
           with
           [
               T=float
           ]
-  WhittedRaytracer.vcxproj -> C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\x64\Debug\WhittedRaytracer.exe
+  WhittedRaytracer.vcxproj -> D:\Repos\path-tracer\WhittedRaytracer\x64\Debug\WhittedRaytracer.exe

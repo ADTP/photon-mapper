@@ -1,5 +1,5 @@
-<escena cantidadDeFotones="100" generarMapas="true">
-    <pantalla ancho="1920" altura="1080" />
+<escena cantidadDeFotones="1000" generarMapas="true">
+    <pantalla ancho="1000" altura="600" />
 
     <camara fovHorizontal="120" distanciaMalla="1">
         <posicion x="0" y="0" z="0" />
@@ -12,6 +12,10 @@
             <color r="255" g="255" b="255" />
             <posicion x="2" y="4" z="2" />
         </luz>
+		<luz watts="50">
+            <color r="255" g="255" b="255" />
+            <posicion x="-2" y="4" z="2" />
+        </luz>
     </luces>
 
     <elementos>
@@ -22,9 +26,9 @@
             <coeficienteReflexionEspecular r="0" g="0" b="0" />
         </objeto>
         <objeto nombre="pared-derecha" archivo="pared1.obj">
-            <color r="0" g="255" b="0" />
+            <color r="0" g="0" b="255" />
             <posicion x="-10" y="0" z="5" />
-            <coeficienteReflexionDifusa r="0" g="0.5" b="0" />
+            <coeficienteReflexionDifusa r="0" g="0" b="0.5" />
             <coeficienteReflexionEspecular r="0" g="0" b="0" />
         </objeto>
         <objeto nombre="pared-izquierda" archivo="pared3.obj">
@@ -47,9 +51,9 @@
         </objeto>
 		
 		<objeto nombre="diablo" archivo="diablo.obj">
-            <color r="0" g="250" b="250" />
+            <color r="250" g="250" b="250" />
             <posicion x="0" y="0" z="7" />
-            <coeficienteReflexionDifusa r="0.7" g="0" b="0" />
+            <coeficienteReflexionDifusa r="0.7" g="0.7" b="0.7" />
             <coeficienteReflexionEspecular r="0" g="0" b="0" />
         </objeto>
     </elementos>

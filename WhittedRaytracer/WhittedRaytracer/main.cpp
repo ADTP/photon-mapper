@@ -201,8 +201,16 @@ int _tmain(int argc, _TCHAR* argv[])
             RGBQUAD colorIluminacionIndirecta = rayTracer.iluminacionIndirecta(scene, rayhit, escena, listaFotones, &index);
 
             // causticas
+            RGBQUAD total;
+            total.rgbRed = std::min((int)(colorIluminacionDirecta.rgbRed + 2 * colorIluminacionIndirecta.rgbRed), 255);
+            total.rgbGreen = std::min((int)(colorIluminacionDirecta.rgbGreen + 2 * colorIluminacionIndirecta.rgbGreen), 255);
+            total.rgbBlue = std::min((int)(colorIluminacionDirecta.rgbBlue + 2 * colorIluminacionIndirecta.rgbBlue), 255);
 
-            FreeImage_SetPixelColor(pantalla->bitmap, x, y, &colorIluminacionIndirecta);
+            total.rgbRed = std::min((int)total.rgbRed, 255);
+            total.rgbGreen = std::min((int)total.rgbGreen, 255);
+            total.rgbBlue = std::min((int)total.rgbBlue, 255);
+
+            FreeImage_SetPixelColor(pantalla->bitmap, x, y, &total);
 
 
             //const float query[3] = { interseccionMasCercana.x, interseccionMasCercana.y, interseccionMasCercana.z };
