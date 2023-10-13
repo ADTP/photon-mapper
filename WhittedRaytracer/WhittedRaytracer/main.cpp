@@ -173,7 +173,10 @@ int _tmain(int argc, _TCHAR* argv[])
     RGBQUAD negro = { 0, 0, 0 };
     for (int y = 0; y < pantalla->altura; y++) {
         for (int x = 0; x < pantalla->ancho; x++) {
-            
+            /*if (x % 100 == 0) {
+                cout << "(" << x << "," << y << ")\n";
+            }*/
+
             RTCRayHit rayhit;
             rayhit.ray.org_x = camara->posicion.x;
             rayhit.ray.org_y = camara->posicion.y;
@@ -192,15 +195,14 @@ int _tmain(int argc, _TCHAR* argv[])
             
 
             // iluminacion directa
-            RGBQUAD resultado = rayTracer.trazaRR(scene, rayhit, escena);
-            FreeImage_SetPixelColor(pantalla->bitmap, x, y, &resultado);
+            RGBQUAD colorIluminacionDirecta = rayTracer.iluminacionDirecta(scene, rayhit, escena);
             
-
             // iluminacion indirecta
-
+            RGBQUAD colorIluminacionIndirecta = rayTracer.iluminacionIndirecta(scene, rayhit, escena, listaFotones, &index);
 
             // causticas
 
+            FreeImage_SetPixelColor(pantalla->bitmap, x, y, &colorIluminacionIndirecta);
 
 
             //const float query[3] = { interseccionMasCercana.x, interseccionMasCercana.y, interseccionMasCercana.z };

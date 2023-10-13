@@ -1,5 +1,5 @@
-<escena cantidadDeFotones="5000000" generarMapas="false">
-    <pantalla ancho="600" altura="400" />
+<escena cantidadDeFotones="100" generarMapas="true">
+    <pantalla ancho="1920" altura="1080" />
 
     <camara fovHorizontal="120" distanciaMalla="1">
         <posicion x="0" y="0" z="0" />

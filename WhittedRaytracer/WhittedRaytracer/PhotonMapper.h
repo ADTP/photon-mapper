@@ -99,7 +99,7 @@ public:
                 RGBQUAD potenciaReflejada = { color.rgbRed * reflexionDifusa.r / factorPotenciaDifusa, color.rgbGreen * reflexionDifusa.g / factorPotenciaDifusa, color.rgbBlue * reflexionDifusa.b / factorPotenciaDifusa };
                 potenciaReflejada = { potenciaReflejada.rgbRed, potenciaReflejada.rgbGreen, potenciaReflejada.rgbBlue };
                 if (profundidad > 0) {
-                    listaFotones.pts.push_back(Foton(interseccionMasCercana, color, 0, 0, 0)); // TODO: FALTAN ANGULOS Y FLAG PARA KDTREE
+                    listaFotones.pts.push_back(Foton(interseccionMasCercana, color, rayHitDir, 0, 0, 0));
                 }
 
                 vec3 centroEsfera = interseccionMasCercana + normalInterseccion;
@@ -122,7 +122,7 @@ public:
             }
             else {
                 if (profundidad > 0) {
-                    listaFotones.pts.push_back(Foton(interseccionMasCercana, color, 0, 0, 0));
+                    listaFotones.pts.push_back(Foton(interseccionMasCercana, color, rayHitDir, 0, 0, 0));
                 }
             }
         }
