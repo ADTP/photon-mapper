@@ -20,12 +20,12 @@ D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(99,139): w
 D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(99,139): warning C4244: 'inicializando': conversión de 'double' a 'BYTE'; posible pérdida de datos
 D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(99,197): warning C4838: la conversión de 'double' en 'BYTE' requiere una conversión de restricción
 D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(99,197): warning C4244: 'inicializando': conversión de 'double' a 'BYTE'; posible pérdida de datos
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(116,83): warning C4838: la conversión de 'double' en 'BYTE' requiere una conversión de restricción
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(116,83): warning C4244: 'inicializando': conversión de 'double' a 'BYTE'; posible pérdida de datos
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(116,148): warning C4838: la conversión de 'double' en 'BYTE' requiere una conversión de restricción
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(116,148): warning C4244: 'inicializando': conversión de 'double' a 'BYTE'; posible pérdida de datos
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(116,212): warning C4838: la conversión de 'double' en 'BYTE' requiere una conversión de restricción
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(116,212): warning C4244: 'inicializando': conversión de 'double' a 'BYTE'; posible pérdida de datos
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(124,83): warning C4838: la conversión de 'double' en 'BYTE' requiere una conversión de restricción
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(124,83): warning C4244: 'inicializando': conversión de 'double' a 'BYTE'; posible pérdida de datos
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(124,148): warning C4838: la conversión de 'double' en 'BYTE' requiere una conversión de restricción
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(124,148): warning C4244: 'inicializando': conversión de 'double' a 'BYTE'; posible pérdida de datos
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(124,212): warning C4838: la conversión de 'double' en 'BYTE' requiere una conversión de restricción
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(124,212): warning C4244: 'inicializando': conversión de 'double' a 'BYTE'; posible pérdida de datos
 D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(74,14): warning C4101: 'interseccionMasCercana': variable local sin referencia
 D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(40,52): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
           with
@@ -46,9 +46,6 @@ D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(61,46): warni
 D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(62,48): warning C4244: '=': conversión de 'float' a 'BYTE'; posible pérdida de datos
 D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(63,47): warning C4244: '=': conversión de 'float' a 'BYTE'; posible pérdida de datos
 D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(117,26): warning C4305: 'inicializando': truncamiento de 'double' a 'float'
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(120,53): warning C4244: '=': conversión de 'double' a 'BYTE'; posible pérdida de datos
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(121,55): warning C4244: '=': conversión de 'double' a 'BYTE'; posible pérdida de datos
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(122,54): warning C4244: '=': conversión de 'double' a 'BYTE'; posible pérdida de datos
 D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\main.cpp(102,52): warning C4267: 'return': conversión de 'size_t' a 'int'; posible pérdida de datos
 D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\nanoflann\nanoflann.h(1694,65): warning C4267: '=': conversión de 'size_t' a '_Ty'; posible pérdida de datos
           with

@@ -33,13 +33,13 @@ class RayTracer {
             RGBQUAD resultadoFinal = negro;
 
             for (Luz* luz : escena->luces) {
-                int cantidadDeRayos = 40;
+                int cantidadDeRayos = 300;
                 for (int i = 0; i < cantidadDeRayos; i++) {
                     vec3 offsetLuz;
                     do {
-                        offsetLuz.x = generator2() * 2;
+                        offsetLuz.x = generator2() * 0.1;
                         offsetLuz.y = generator2() * 0;
-                        offsetLuz.z = generator2() * 2;
+                        offsetLuz.z = generator2() * 0.1;
                     } while (pow(offsetLuz.x, 2) + pow(offsetLuz.y, 2) + pow(offsetLuz.z, 2) > 1);
 
                     RTCRayHit rayoSombra = trazarRayo(scene, interseccionRayoIncidente + normalRayoIncidente * 0.1f, luz->posicion + offsetLuz);
@@ -51,9 +51,10 @@ class RayTracer {
                         float distanciaInterseccion = length((origenRayoSombra + direccionRayoSombra * rayoSombra.ray.tfar) - origenRayoSombra);
 
                         if (distanciaInterseccion > distanciaLuz) { // Si no hay objetos intermedios
-                            resultadoIntermedio.x = std::min(255.f, (resultadoIntermedio.x + luz->color.rgbRed * (1 / distanciaLuz) * luz->watts / (20*cantidadDeRayos)));
-                            resultadoIntermedio.y = std::min(255.f, (resultadoIntermedio.y + luz->color.rgbGreen * (1 / distanciaLuz) * luz->watts / (20 * cantidadDeRayos)));
-                            resultadoIntermedio.z = std::min(255.f, (resultadoIntermedio.z + luz->color.rgbBlue * (1 / distanciaLuz) * luz->watts / (20 * cantidadDeRayos)));
+                            float escala = dot(normalize(normalRayoIncidente), normalize(direccionRayoSombra));
+                            resultadoIntermedio.x = std::min(255.f, (resultadoIntermedio.x + luz->color.rgbRed * (1 / distanciaLuz) * escala * luz->watts / (20*cantidadDeRayos)));
+                            resultadoIntermedio.y = std::min(255.f, (resultadoIntermedio.y + luz->color.rgbGreen * (1 / distanciaLuz) * escala * luz->watts / (20 * cantidadDeRayos)));
+                            resultadoIntermedio.z = std::min(255.f, (resultadoIntermedio.z + luz->color.rgbBlue * (1 / distanciaLuz) * escala * luz->watts / (20 * cantidadDeRayos)));
                     
                         }
                     }
@@ -91,39 +92,35 @@ class RayTracer {
             nanoflann::SearchParameters params;
             params.sorted = true;
 
-            int knn = 60;
+            int knn = 500;
             std::vector<uint32_t> ret_index(knn);
             std::vector<float>    out_dist_sqr(knn);
             index->knnSearch(&consulta[0], knn, &ret_index[0], &out_dist_sqr[0]); // Devuelve en fotonesResultantes un vector de pares con el siguiente formato: (indice, distancia
             int cantFotonesResultantes = knn;
 
-
             if (cantFotonesResultantes > 0) {
                 vec3 flujoAcumulado = { 0,0,0 };
-                for (int i = 0; i < knn; i++) {
+                for (int i = 0; i < ret_index.size(); i++) {
                 /*for (int i = 0; i < cantFotonesResultantes; i++) {*/
                     Foton foton = listaFotones.pts[ret_index[i]];
 
                     float productoPunto = dot(normalize(foton.direccionIncidente), normalize(-normalRayoIncidente));
 
                     if (productoPunto > 0) {
-                        flujoAcumulado.r += productoPunto * foton.potencia.rgbRed;
-                        flujoAcumulado.g += productoPunto * foton.potencia.rgbGreen;
-                        flujoAcumulado.b += productoPunto * foton.potencia.rgbBlue;
+                        flujoAcumulado.r += foton.potencia.r * 1500;
+                        flujoAcumulado.g += foton.potencia.g * 1500;
+                        flujoAcumulado.b += foton.potencia.b * 1500;
                     }
                 }
+                int minFotones = std::min(knn, (int)listaFotones.pts.size());
 
-                float distanciaFotonMasLejano = length(listaFotones.pts[ret_index[knn-1]].posicion - interseccionRayoIncidente);
+                float distanciaFotonMasLejano = length(listaFotones.pts[ret_index[minFotones-1]].posicion - interseccionRayoIncidente);
                 float pi = 3.14159265358979323846;
 
                 RGBQUAD resultado;
-                resultado.rgbRed = flujoAcumulado.r / (pi * pow(distanciaFotonMasLejano, 2));
-                resultado.rgbGreen = flujoAcumulado.g / (pi * pow(distanciaFotonMasLejano, 2));
-                resultado.rgbBlue = flujoAcumulado.b / (pi * pow(distanciaFotonMasLejano, 2));
-
-                resultado.rgbRed = std::min((int)resultado.rgbRed, 255);
-                resultado.rgbGreen = std::min((int)resultado.rgbGreen, 255);
-                resultado.rgbBlue = std::min((int)resultado.rgbBlue, 255);
+                resultado.rgbRed = std::min((int)(flujoAcumulado.r / (pi * pow(distanciaFotonMasLejano, 2))), 255);
+                resultado.rgbGreen = std::min((int)(flujoAcumulado.g / (pi * pow(distanciaFotonMasLejano, 2))), 255);
+                resultado.rgbBlue = std::min((int)(flujoAcumulado.b / (pi * pow(distanciaFotonMasLejano, 2))), 255);
                 return resultado;
             }
         }

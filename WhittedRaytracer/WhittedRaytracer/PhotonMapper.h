@@ -76,6 +76,7 @@ public:
         rtcInitIntersectContext(&context);
         rtcIntersect1(scene, &context, &rayhit);
         if (rayhit.hit.geomID != RTC_INVALID_GEOMETRY_ID) {
+            Elemento* elementoIntersecado = escena->elementos[rayhit.hit.geomID];
             vec3 rayHitOrg = { rayhit.ray.org_x, rayhit.ray.org_y, rayhit.ray.org_z };
             vec3 rayHitDir = { rayhit.ray.dir_x, rayhit.ray.dir_y, rayhit.ray.dir_z };
             vec3 interseccionMasCercana = rayHitOrg + rayHitDir * rayhit.ray.tfar;
@@ -99,7 +100,15 @@ public:
                 RGBQUAD potenciaReflejada = { color.rgbRed * reflexionDifusa.r / factorPotenciaDifusa, color.rgbGreen * reflexionDifusa.g / factorPotenciaDifusa, color.rgbBlue * reflexionDifusa.b / factorPotenciaDifusa };
                 potenciaReflejada = { potenciaReflejada.rgbRed, potenciaReflejada.rgbGreen, potenciaReflejada.rgbBlue };
                 if (profundidad > 0) {
-                    listaFotones.pts.push_back(Foton(interseccionMasCercana, color, rayHitDir, 0, 0, 0));
+                    vec3 colorVector;
+                    colorVector.x = color.rgbRed;
+                    colorVector.x = colorVector.x / (float)escena->cantidadDeFotones * elementoIntersecado->color.rgbRed / 255;
+                    colorVector.y = color.rgbGreen;
+                    colorVector.y = colorVector.y / (float)escena->cantidadDeFotones * elementoIntersecado->color.rgbGreen / 255;
+                    colorVector.z = color.rgbBlue;
+                    colorVector.z = colorVector.z / (float)escena->cantidadDeFotones * elementoIntersecado->color.rgbBlue / 255;
+
+                    listaFotones.pts.push_back(Foton(interseccionMasCercana, colorVector, rayHitDir, 0, 0, 0));
                 }
 
                 vec3 centroEsfera = interseccionMasCercana + normalInterseccion;
@@ -122,7 +131,14 @@ public:
             }
             else {
                 if (profundidad > 0) {
-                    listaFotones.pts.push_back(Foton(interseccionMasCercana, color, rayHitDir, 0, 0, 0));
+                    vec3 colorVector;
+                    colorVector.x = color.rgbRed;
+                    colorVector.x = colorVector.x / (float)escena->cantidadDeFotones * elementoIntersecado->color.rgbRed / 255;
+                    colorVector.y = color.rgbGreen;
+                    colorVector.y = colorVector.y / (float)escena->cantidadDeFotones * elementoIntersecado->color.rgbGreen / 255;
+                    colorVector.z = color.rgbBlue;
+                    colorVector.z = colorVector.z / (float)escena->cantidadDeFotones * elementoIntersecado->color.rgbBlue / 255;
+                    listaFotones.pts.push_back(Foton(interseccionMasCercana, colorVector, rayHitDir, 0, 0, 0));
                 }
             }
         }

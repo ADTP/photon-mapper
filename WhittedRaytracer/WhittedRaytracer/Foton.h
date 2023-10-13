@@ -10,11 +10,11 @@ using namespace glm;
 
 class Foton {
 	public:
-		Foton(vec3 posicion, RGBQUAD potencia, vec3 direccionIncidente, char phi, char theta, short flag);
+		Foton(vec3 posicion, vec3 potencia, vec3 direccionIncidente, char phi, char theta, short flag);
 		~Foton();
 
 		vec3 posicion; // position
-		RGBQUAD potencia; // power packed as 4 chars [Ward91]
+		vec3 potencia; // power packed as 4 chars [Ward91]
 		char phi, theta; // compressed incident direction
 		short flag;
 

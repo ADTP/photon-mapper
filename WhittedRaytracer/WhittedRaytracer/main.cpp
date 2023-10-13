@@ -202,14 +202,17 @@ int _tmain(int argc, _TCHAR* argv[])
 
             // causticas
             RGBQUAD total;
-            total.rgbRed = std::min((int)(colorIluminacionDirecta.rgbRed + 2 * colorIluminacionIndirecta.rgbRed), 255);
-            total.rgbGreen = std::min((int)(colorIluminacionDirecta.rgbGreen + 2 * colorIluminacionIndirecta.rgbGreen), 255);
-            total.rgbBlue = std::min((int)(colorIluminacionDirecta.rgbBlue + 2 * colorIluminacionIndirecta.rgbBlue), 255);
+            total.rgbRed = std::min((int)(colorIluminacionDirecta.rgbRed + colorIluminacionIndirecta.rgbRed), 255);
+            total.rgbGreen = std::min((int)(colorIluminacionDirecta.rgbGreen + colorIluminacionIndirecta.rgbGreen), 255);
+            total.rgbBlue = std::min((int)(colorIluminacionDirecta.rgbBlue + colorIluminacionIndirecta.rgbBlue), 255);
 
             total.rgbRed = std::min((int)total.rgbRed, 255);
             total.rgbGreen = std::min((int)total.rgbGreen, 255);
             total.rgbBlue = std::min((int)total.rgbBlue, 255);
 
+
+            FreeImage_SetPixelColor(pantalla->bitmapDifuso, x, y, &colorIluminacionIndirecta);
+            FreeImage_SetPixelColor(pantalla->bitmapAmbiente, x, y, &colorIluminacionDirecta);
             FreeImage_SetPixelColor(pantalla->bitmap, x, y, &total);
 
 
@@ -231,7 +234,9 @@ int _tmain(int argc, _TCHAR* argv[])
     rtcReleaseScene(scene);
     rtcReleaseDevice(device);
 
-    FreeImage_Save(FIF_PNG, pantalla->bitmap, "Final\\AA Resultado.png", 0);
+    FreeImage_Save(FIF_PNG, pantalla->bitmap, "Final\\1-Combinado.png", 0);
+    FreeImage_Save(FIF_PNG, pantalla->bitmapAmbiente, "Final\\2-Directa.png", 0);
+    FreeImage_Save(FIF_PNG, pantalla->bitmapDifuso, "Final\\3-Indirecta.png", 0);
 
     /*FreeImage_Save(FIF_PNG, pantalla->bitmapAmbiente,"Final\\Ambiente.png", 0);
     FreeImage_Save(FIF_PNG, pantalla->bitmapDifuso, "Final\\Difuso.png", 0);
