@@ -21,14 +21,12 @@ Pantalla::Pantalla(int ancho, int altura) {
 		pixelesPantalla[i] = new vec3[altura];
 	}
 
-	this->bitmap = FreeImage_Allocate(ancho, altura, 24);
-
-	this->bitmapAmbiente = FreeImage_Allocate(ancho, altura, 24);
-	this->bitmapDifuso = FreeImage_Allocate(ancho, altura, 24);
+	this->bitmapDirecta = FreeImage_Allocate(ancho, altura, 24);
+	this->bitmapIndirecta = FreeImage_Allocate(ancho, altura, 24);
 	this->bitmapEspecular = FreeImage_Allocate(ancho, altura, 24);
+	this->bitmapCausticas = FreeImage_Allocate(ancho, altura, 24);
 
-	this->bitmapReflexion = FreeImage_Allocate(ancho, altura, 24);
-	this->bitmapTransmision = FreeImage_Allocate(ancho, altura, 24);
+	this->bitmapResultado = FreeImage_Allocate(ancho, altura, 24);
 }
 
 Pantalla::~Pantalla() {}

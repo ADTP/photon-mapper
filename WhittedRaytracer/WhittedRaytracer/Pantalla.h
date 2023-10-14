@@ -26,13 +26,10 @@ class Pantalla {
 
 		vec3** pixelesPantalla;
 
-		FIBITMAP* bitmap;
-
-		FIBITMAP* bitmapAmbiente;
-		FIBITMAP* bitmapDifuso;
+		FIBITMAP* bitmapDirecta;
+		FIBITMAP* bitmapIndirecta;
 		FIBITMAP* bitmapEspecular;
+		FIBITMAP* bitmapCausticas;
 
-		FIBITMAP* bitmapReflexion;
-		FIBITMAP* bitmapTransmision;
-		
+		FIBITMAP* bitmapResultado;
 };

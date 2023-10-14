@@ -22,10 +22,10 @@ static auto generator1 = std::bind(distribution1, engine);
 uniform_real_distribution<double> distribution2(-1.0, 1.0);
 static auto generator2 = std::bind(distribution2, engine);
 
-class PhotonMapper
-{
-public:
-    void generarMapaDeFotones(PointCloud& listaFotones, RTCScene &scene) {
+class PhotonMapper {
+    public:
+
+    void generarMapaGlobal(PointCloud& listaFotones, RTCScene &scene) {
         Escena* escena = Escena::getInstance();
 
         vec3 dirFoton = { 0, 0, 0 };
@@ -48,16 +48,14 @@ public:
                     dirFoton.y = generator2();
                     dirFoton.z = generator2();
                 } while (pow(dirFoton.x, 2) + pow(dirFoton.y, 2) + pow(dirFoton.z, 2) > 1);
+                
                 trazarFoton(escena->luces[i]->color, escena->luces[i]->posicion, dirFoton, listaFotones, 0, scene);
+                
                 fotonesEmitidos++;
-                // QUESTION: SCALE POWER OF STORED PHOTONS ??
-
-                /*if (fotonesEmitidos % 100 == 0) {
-                    cout << "Fotones Emitidos: " << fotonesEmitidos << "\n";
-                }*/
             }
         }
     }
+
     void trazarFoton(RGBQUAD color, vec3 origen, vec3 direccion, PointCloud& listaFotones, int profundidad, RTCScene &scene) {
         RTCRayHit rayhit;
         rayhit.ray.org_x = origen.x;

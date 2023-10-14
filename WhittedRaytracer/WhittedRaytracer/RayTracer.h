@@ -121,6 +121,7 @@ class RayTracer {
                 resultado.rgbRed = std::min((int)(flujoAcumulado.r / (pi * pow(distanciaFotonMasLejano, 2))), 255);
                 resultado.rgbGreen = std::min((int)(flujoAcumulado.g / (pi * pow(distanciaFotonMasLejano, 2))), 255);
                 resultado.rgbBlue = std::min((int)(flujoAcumulado.b / (pi * pow(distanciaFotonMasLejano, 2))), 255);
+
                 return resultado;
             }
         }

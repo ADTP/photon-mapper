@@ -80,5 +80,13 @@
     <ClInclude Include="RayTracer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ObjectLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\escena.xml">
+      <Filter>Resource Files</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

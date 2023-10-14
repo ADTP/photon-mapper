@@ -9,7 +9,6 @@ using namespace glm;
 
 class Elemento {
 	public:
-
 		Elemento(std::string nombreArchivo, RGBQUAD color, vec3 posicion, vec3 coeficienteReflexionDifusa, vec3 coeficienteReflexionEspecular);
 		~Elemento();
 

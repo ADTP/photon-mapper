@@ -20,27 +20,17 @@ class Foton {
 
 		vec3 direccionIncidente;
 
-		/*static const int DIM = 3;
-
-		float& operator[](int index) {
-			return posicion[index];
-		}
-
-		const float& operator[](int index) const {
-			return posicion[index];
-		}*/
-
 		Foton();
 
 		void serializar(std::ostream& stream) const {
 			stream.write(reinterpret_cast<const char*>(&posicion), sizeof(vec3));
-			stream.write(reinterpret_cast<const char*>(&potencia), sizeof(RGBQUAD));
+			stream.write(reinterpret_cast<const char*>(&potencia), sizeof(vec3));
 			stream.write(reinterpret_cast<const char*>(&direccionIncidente), sizeof(vec3));
 		}
 
 		void deserializar(std::istream& stream) {
 			stream.read(reinterpret_cast<char*>(&posicion), sizeof(vec3));
-			stream.read(reinterpret_cast<char*>(&potencia), sizeof(RGBQUAD));
+			stream.read(reinterpret_cast<char*>(&potencia), sizeof(vec3));
 			stream.read(reinterpret_cast<char*>(&direccionIncidente), sizeof(vec3));
 		}
 };

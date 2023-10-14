@@ -6,9 +6,7 @@
 using namespace glm;
 
 class Luz {
-
 	public:
-
 		Luz(vec3 posicion, vec3 intesidad, RGBQUAD color, int watts);
 		~Luz();
 
