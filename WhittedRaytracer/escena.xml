@@ -1,4 +1,4 @@
-<escena cantidadDeFotones="1000" generarMapas="false">
+<escena cantidadDeFotones="1000" generarMapas="true">
     <pantalla ancho="600" altura="400" />
 
     <camara fovHorizontal="120" distanciaMalla="1">
@@ -54,17 +54,17 @@
             <coeficienteReflexionEspecular r="0" g="0" b="0" />
         </objeto>
 		
-		<objeto archivo="diablo.obj">
+		<objeto archivo="sphere.obj" indiceRefraccion="1.46"> 
             <color r="250" g="250" b="250" />
             <posicion x="-4" y="0" z="5" />
             <coeficienteReflexionDifusa r="0.5" g="0.5" b="0.5" />
             <coeficienteReflexionEspecular r="0" g="0" b="0" />
         </objeto>
-		<objeto archivo="diablo.obj">
+		<!--<objeto archivo="diablo.obj">
             <color r="250" g="250" b="250" />
             <posicion x="4" y="0" z="5" />
             <coeficienteReflexionDifusa r="0.5" g="0.5" b="0.5" />
             <coeficienteReflexionEspecular r="0" g="0" b="0" />
-        </objeto>
+        </objeto>-->
     </elementos>
 </escena>

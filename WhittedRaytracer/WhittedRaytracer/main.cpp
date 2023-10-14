@@ -72,35 +72,14 @@ int _tmain(int argc, _TCHAR* argv[])
 
 
     cout << "Generacion de mapas de fotones \n\n";
-    PointCloud mapaGlobal;
-    if (escena->generarMapas) {
-        photonMapper.generarMapaGlobal(mapaGlobal, scene);
-
-        // Guardar lista de fotones a binario
-        std::ofstream outfile("Mapas\\foton_list.dat", std::ios::binary);
-        for (const Foton& foton : mapaGlobal.pts) {
-            foton.serializar(outfile);
-        }
-        outfile.close();
-
-    } else {
-        // Cargar lista de fotones de binario
-        std::ifstream infile("Mapas\\foton_list.dat", std::ios::binary);
-        mapaGlobal.pts.clear();
-        while (!infile.eof()) {
-            Foton foton;
-            foton.deserializar(infile);
-            if (!infile.eof()) {
-                mapaGlobal.pts.push_back(foton);
-            }
-        }
-        infile.close();
-    }
+    PointCloud mapaGlobal, mapaCausticas;
+    photonMapper.generacionDeMapas(escena, mapaGlobal, mapaCausticas, scene);
 
 
     cout << "Generacion de KDTs a partir de los mapas \n\n";
     using CustomKDTree = nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<float, PointCloud>, PointCloud, 3>;
-    CustomKDTree index(3 /*dim*/, mapaGlobal, { 10 /* max leaf */ }); // PROBAR CAMBIANDO LA CANTIDAD MAXIMA DE HOJAS
+    CustomKDTree indexGlobal(3 /*dim*/, mapaGlobal, { 10 /* max leaf */ }); // PROBAR CAMBIANDO LA CANTIDAD MAXIMA DE HOJAS
+    CustomKDTree indexCausticas(3 /*dim*/, mapaCausticas, { 10 /* max leaf */ }); // PROBAR CAMBIANDO LA CANTIDAD MAXIMA DE HOJAS
 
 
     cout << "Calculos de radiancia y generacion de imagenes \n\n";
@@ -123,22 +102,24 @@ int _tmain(int argc, _TCHAR* argv[])
             rtcIntersect1(scene, &context, &rayhit);
 
             // iluminacion directa
-            RGBQUAD colorIluminacionDirecta = rayTracer.iluminacionDirecta(scene, rayhit, escena);
-            FreeImage_SetPixelColor(pantalla->bitmapDirecta, x, y, &colorIluminacionDirecta);
+            /*RGBQUAD colorIluminacionDirecta = rayTracer.iluminacionDirecta(scene, rayhit, escena);
+            FreeImage_SetPixelColor(pantalla->bitmapDirecta, x, y, &colorIluminacionDirecta);*/
 
             // iluminacion indirecta
-            RGBQUAD colorIluminacionIndirecta = rayTracer.iluminacionIndirecta(scene, rayhit, escena, mapaGlobal, &index);
-            FreeImage_SetPixelColor(pantalla->bitmapIndirecta, x, y, &colorIluminacionIndirecta);
+            /*RGBQUAD colorIluminacionIndirecta = rayTracer.iluminacionIndirecta(scene, rayhit, escena, mapaGlobal, &indexGlobal);
+            FreeImage_SetPixelColor(pantalla->bitmapIndirecta, x, y, &colorIluminacionIndirecta);*/
 
             // causticas
+            RGBQUAD colorIluminacionCausticas = rayTracer.iluminacionCausticas(scene, rayhit, escena, mapaCausticas, &indexCausticas);
+            FreeImage_SetPixelColor(pantalla->bitmapCausticas, x, y, &colorIluminacionCausticas);
 
             // especular
             
             // resultado
             RGBQUAD total;
-            total.rgbRed = std::min((int)(colorIluminacionDirecta.rgbRed + colorIluminacionIndirecta.rgbRed), 255);
+            /*total.rgbRed = std::min((int)(colorIluminacionDirecta.rgbRed + colorIluminacionIndirecta.rgbRed), 255);
             total.rgbGreen = std::min((int)(colorIluminacionDirecta.rgbGreen + colorIluminacionIndirecta.rgbGreen), 255);
-            total.rgbBlue = std::min((int)(colorIluminacionDirecta.rgbBlue + colorIluminacionIndirecta.rgbBlue), 255);
+            total.rgbBlue = std::min((int)(colorIluminacionDirecta.rgbBlue + colorIluminacionIndirecta.rgbBlue), 255);*/
             FreeImage_SetPixelColor(pantalla->bitmapResultado, x, y, &total);
         }
         
@@ -150,9 +131,10 @@ int _tmain(int argc, _TCHAR* argv[])
     rtcReleaseScene(scene);
     rtcReleaseDevice(device);
 
-    FreeImage_Save(FIF_PNG, pantalla->bitmapDirecta, "Final\\Directa.png", 0);
-    FreeImage_Save(FIF_PNG, pantalla->bitmapIndirecta, "Final\\Indirecta.png", 0);
-    FreeImage_Save(FIF_PNG, pantalla->bitmapResultado, "Final\\Resultado.png", 0);
+    FreeImage_Save(FIF_PNG, pantalla->bitmapDirecta, "Final\\1-Directa.png", 0);
+    FreeImage_Save(FIF_PNG, pantalla->bitmapIndirecta, "Final\\2-Indirecta.png", 0);
+    FreeImage_Save(FIF_PNG, pantalla->bitmapCausticas, "Final\\3-Causticas.png", 0);
+    FreeImage_Save(FIF_PNG, pantalla->bitmapResultado, "Final\\4-Resultado.png", 0);
 
     FreeImage_DeInitialise();
 
