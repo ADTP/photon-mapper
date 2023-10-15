@@ -1,8 +1,8 @@
-<escena cantidadDeFotones="1000" generarMapas="true">
-    <pantalla ancho="600" altura="400" />
+<escena cantidadDeFotones="10000" generarMapas="true">
+    <pantalla ancho="200" altura="200" />
 
     <camara fovHorizontal="120" distanciaMalla="1">
-        <posicion x="0" y="0" z="-5" />
+        <posicion x="0" y="0" z="0" />
         <arriba x="0" y="1" z="0" />
         <adelante x="0" y="0" z="1" />
     </camara>
@@ -10,8 +10,8 @@
     <luces>
         <luz watts="50">
             <color r="255" g="255" b="255" />
-            <posicion x="0" y="6" z="5" />
-        </luz>
+			<posicion x="4" y="7" z="9" />        
+		</luz>
 		<!--<luz watts="50">
             <color r="255" g="255" b="255" />
             <posicion x="4" y="7" z="3" />
@@ -23,48 +23,43 @@
     </luces>
 
     <elementos>
-        <objeto archivo="pared-adelante.obj">
+        <objeto nombre="hola" archivo="pared-adelante.obj">
             <color r="255" g="255" b="255" />
             <posicion x="0" y="0" z="10" />
             <coeficienteReflexionDifusa r="0.1" g="0.1" b="0.1" />
             <coeficienteReflexionEspecular r="0" g="0" b="0" />
         </objeto>
-        <objeto archivo="pared-derecha.obj">
+        <objeto nombre="hola" archivo="pared-derecha.obj">
             <color r="0" g="255" b="0" />
             <posicion x="-10" y="0" z="5" />
             <coeficienteReflexionDifusa r="0" g="1" b="0" />
             <coeficienteReflexionEspecular r="0" g="0" b="0" />
         </objeto>
-        <objeto archivo="pared-izquierda.obj">
+        <objeto nombre="hola" archivo="pared-izquierda.obj">
             <color r="255" g="0" b="0" />
             <posicion x="10" y="0" z="5" />
             <coeficienteReflexionDifusa r="1" g="0" b="0" />
             <coeficienteReflexionEspecular r="0" g="0" b="0" />
         </objeto>
-        <objeto archivo="piso.obj">
+        <objeto nombre="hola" archivo="piso.obj">
             <color r="255" g="255" b="255" />
             <posicion x="0" y="-4" z="5" />
             <coeficienteReflexionDifusa r="0.1" g="0.1" b="0.1" />
             <coeficienteReflexionEspecular r="0" g="0" b="0" />
         </objeto>
-        <objeto archivo="techo.obj">
+        <objeto nombre="hola" archivo="techo.obj">
             <color r="255" g="255" b="255" />
             <posicion x="0" y="10" z="5" />
             <coeficienteReflexionDifusa r="0.1" g="0.1" b="0.1" />
             <coeficienteReflexionEspecular r="0" g="0" b="0" />
         </objeto>
 		
-		<objeto archivo="sphere.obj" indiceRefraccion="1.46"> 
+		<objeto nombre="hola" archivo="untitled.obj" indiceRefraccion="1.3"> 
             <color r="250" g="250" b="250" />
-            <posicion x="-4" y="0" z="5" />
+            <posicion x="0" y="-3" z="6" />
             <coeficienteReflexionDifusa r="0.5" g="0.5" b="0.5" />
             <coeficienteReflexionEspecular r="0" g="0" b="0" />
         </objeto>
-		<!--<objeto archivo="diablo.obj">
-            <color r="250" g="250" b="250" />
-            <posicion x="4" y="0" z="5" />
-            <coeficienteReflexionDifusa r="0.5" g="0.5" b="0.5" />
-            <coeficienteReflexionEspecular r="0" g="0" b="0" />
-        </objeto>-->
+	
     </elementos>
 </escena>

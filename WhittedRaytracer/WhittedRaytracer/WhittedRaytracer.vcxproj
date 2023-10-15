@@ -155,6 +155,7 @@
     <ClCompile Include="Camara.cpp" />
     <ClCompile Include="Elemento.cpp" />
     <ClCompile Include="Escena.cpp" />
+    <ClCompile Include="Esfera.cpp" />
     <ClCompile Include="Foton.cpp" />
     <ClCompile Include="Luz.cpp" />
     <ClCompile Include="Pantalla.cpp" />
@@ -165,6 +166,7 @@
     <ClInclude Include="Camara.h" />
     <ClInclude Include="Elemento.h" />
     <ClInclude Include="Escena.h" />
+    <ClInclude Include="Esfera.h" />
     <ClInclude Include="Foton.h" />
     <ClInclude Include="Luz.h" />
     <ClInclude Include="nanoflann\nanoflann.h" />
@@ -175,10 +177,17 @@
     <ClInclude Include="pugiconfig.hpp" />
     <ClInclude Include="pugixml.hpp" />
     <ClInclude Include="RayTracer.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="tiny_obj_loader.h" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\escena.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Final\1-Directa.png" />
+    <Image Include="Final\2-Indirecta.png" />
+    <Image Include="Final\3-Causticas.png" />
+    <Image Include="Final\4-Resultado.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

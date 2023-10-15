@@ -33,7 +33,7 @@ class RayTracer {
             RGBQUAD resultadoFinal = negro;
 
             for (Luz* luz : escena->luces) {
-                int cantidadDeRayos = 300;
+                int cantidadDeRayos = 1;
                 for (int i = 0; i < cantidadDeRayos; i++) {
                     vec3 offsetLuz;
                     do {
@@ -70,7 +70,6 @@ class RayTracer {
             resultadoFinal.rgbRed = std::min((int)resultadoFinal.rgbRed, 255) * elementoIntersecado->color.rgbRed / 255;
             resultadoFinal.rgbGreen = std::min((int)resultadoFinal.rgbGreen, 255) * elementoIntersecado->color.rgbGreen / 255;
             resultadoFinal.rgbBlue = std::min((int)resultadoFinal.rgbBlue, 255) * elementoIntersecado->color.rgbBlue / 255;
-
             return resultadoFinal;
         }
 
@@ -107,9 +106,9 @@ class RayTracer {
                     float productoPunto = dot(normalize(foton.direccionIncidente), normalize(-normalRayoIncidente));
 
                     if (productoPunto > 0) {
-                        flujoAcumulado.r += foton.potencia.r * 1500;
-                        flujoAcumulado.g += foton.potencia.g * 1500;
-                        flujoAcumulado.b += foton.potencia.b * 1500;
+                        flujoAcumulado.r += foton.potencia.r*1500;
+                        flujoAcumulado.g += foton.potencia.g*1500;
+                        flujoAcumulado.b += foton.potencia.b*1500;
                     }
                 }
                 int minFotones = std::min(knn, (int)mapaGlobal.pts.size());
@@ -137,40 +136,50 @@ class RayTracer {
             vec3 normalRayoIncidente = { rayoIncidente.hit.Ng_x, rayoIncidente.hit.Ng_y, rayoIncidente.hit.Ng_z };
 
             const float consulta[3] = { interseccionRayoIncidente.x, interseccionRayoIncidente.y, interseccionRayoIncidente.z };
-            const float radioEsfera = 0.01; // VER SI HACERLO CUSTOMIZABLE
+            const float radioEsfera = 1; // VER SI HACERLO CUSTOMIZABLE
             std::vector <nanoflann::ResultItem<uint32_t, float>> fotonesResultantes;
 
             nanoflann::SearchParameters params;
             params.sorted = true;
+            index->radiusSearch(&consulta[0], radioEsfera, fotonesResultantes, params); // Devuelve en fotonesResultantes un vector de pares con el siguiente formato: (indice, distancia
 
             int knn = 500;
             std::vector<uint32_t> ret_index(knn);
             std::vector<float>    out_dist_sqr(knn);
-            index->radiusSearch(&consulta[0], radioEsfera, fotonesResultantes, params); // Devuelve en fotonesResultantes un vector de pares con el siguiente formato: (indice, distancia
+            index->knnSearch(&consulta[0], knn, &ret_index[0], &out_dist_sqr[0]); // Devuelve en fotonesResultantes un vector de pares con el siguiente formato: (indice, distancia
+            int minFotones = std::min(knn, (int)mapaCausticas.pts.size());
 
-            if (fotonesResultantes.size() > 0) {
+            int cantFotonesResultantes = knn;
+            if (cantFotonesResultantes > 0) {
                 vec3 flujoAcumulado = { 0,0,0 };
-                //for (int i = 0; i < ret_index.size(); i++) {
+                for (int i = 0; i < minFotones; i++) {
                     /*for (int i = 0; i < cantFotonesResultantes; i++) {*/
-                    Foton foton = mapaCausticas.pts[fotonesResultantes[0].first];
+                    Foton foton = mapaCausticas.pts[ret_index[i]];
+                    //Foton foton = mapaCausticas.pts[fotonesResultantes[0].first];
 
                     float productoPunto = dot(normalize(foton.direccionIncidente), normalize(-normalRayoIncidente));
 
                     if (productoPunto > 0) {
-                        flujoAcumulado.r += foton.potencia.r * 1500;
-                        flujoAcumulado.g += foton.potencia.g * 1500;
-                        flujoAcumulado.b += foton.potencia.b * 1500;
+                        flujoAcumulado.r += foton.potencia.r;
+                        flujoAcumulado.g += foton.potencia.g;
+                        flujoAcumulado.b += foton.potencia.b;
                     }
-                //}
+                }
+                flujoAcumulado.r = flujoAcumulado.r;
+                flujoAcumulado.g = flujoAcumulado.g;
+                flujoAcumulado.b = flujoAcumulado.b;
                 /*int minFotones = std::min(knn, (int)mapaCausticas.pts.size());
 
-                float distanciaFotonMasLejano = length(mapaCausticas.pts[ret_index[minFotones - 1]].posicion - interseccionRayoIncidente);
+                float distanciaFotonMasLejano = length(mapaCausticas.pts[bet_index[minFotones - 1]].posicion - interseccionRayoIncidente);
                 float pi = 3.14159265358979323846;*/
+                float distanciaFotonMasLejano = length(mapaCausticas.pts[ret_index[minFotones - 1]].posicion - interseccionRayoIncidente);
+                float pi = 3.14159265358979323846;
 
                 RGBQUAD resultado;
-                resultado.rgbRed = std::min((int)(flujoAcumulado.r ), 255);
-                resultado.rgbGreen = std::min((int)(flujoAcumulado.g ), 255);
-                resultado.rgbBlue = std::min((int)(flujoAcumulado.b ), 255);
+                float valor = flujoAcumulado.r / (3 * pow(distanciaFotonMasLejano, 8));
+                resultado.rgbRed = std::min((int)(flujoAcumulado.r / (3 * pow(distanciaFotonMasLejano, 8))), 255);
+                resultado.rgbGreen = std::min((int)(flujoAcumulado.g / (3 * pow(distanciaFotonMasLejano, 8))), 255);
+                resultado.rgbBlue = std::min((int)(flujoAcumulado.b / (3 * pow(distanciaFotonMasLejano, 8))), 255);
 
                 return resultado;
             }

@@ -171,7 +171,7 @@ class PhotonMapper {
                 potenciaReflejada = { potenciaReflejada.rgbRed, potenciaReflejada.rgbGreen, potenciaReflejada.rgbBlue };
                 direccionReflejada = reflect(rayHitDir, normalInterseccion);
                 direccionReflejada = interseccionMasCercana - direccionReflejada;
-                trazarFoton(potenciaReflejada, interseccionMasCercana, direccionReflejada, mapaGlobal, profundidad + 1, scene);
+                //trazarFoton(potenciaReflejada, interseccionMasCercana, direccionReflejada, mapaGlobal, profundidad + 1, scene);
 
             }
             else {
@@ -199,7 +199,7 @@ class PhotonMapper {
         // Iterar sobre todas las luces de la escena emitiendo fotones
         vec3 dirFoton = { 0, 0, 0 };
         for (int i = 0; i < escena->luces.size(); i++) {
-            int fotonesAEmitir = escena->luces[i]->watts * escena->cantidadDeFotones * 1000 / potenciaTotal;
+            int fotonesAEmitir = escena->luces[i]->watts * escena->cantidadDeFotones * 100 / potenciaTotal;
             int fotonesEmitidos = 0;
 
             //cout << "Fotones emitidos: " << fotonesEmitidos << "\n\n";
@@ -247,9 +247,8 @@ class PhotonMapper {
         vec3 origenRayo = { rayoIncidente.ray.org_x, rayoIncidente.ray.org_y, rayoIncidente.ray.org_z };
         
         vec3 direccionRayo = { rayoIncidente.ray.dir_x, rayoIncidente.ray.dir_y, rayoIncidente.ray.dir_z };
-        direccionRayo = normalize(direccionRayo);
-        
         vec3 interseccionRayo = origenRayo + direccionRayo * rayoIncidente.ray.tfar;
+        direccionRayo = normalize(direccionRayo);
 
         vec3 normalInterseccion = { rayoIncidente.hit.Ng_x, rayoIncidente.hit.Ng_y, rayoIncidente.hit.Ng_z };
         normalInterseccion = normalize(normalInterseccion);
@@ -282,16 +281,23 @@ class PhotonMapper {
                         // UNA FORMA SERIA MIRAR LA NORMAL DE LA CARA INTERSECTADA Y SI TIENE MISMA DIR QUE EL RAYO INCIDENTE ASUMIR QUE EL PROXIMO MEDIO ES EL AIRE
                         float indiceRefraccionProximo = productoPuntoConNormal > 0 ? 1.f : elementoIntersectado->indiceRefraccion;
 
-                        float anguloIncidencia = acos(dot(normalInterseccion, -direccionRayo)) * 180 / PI_PANTALLA;
+                        float anguloIncidencia = acos(dot(normalInterseccion, direccionRayo)) * 180 / PI_PANTALLA;
+                        if (anguloIncidencia > 90) { anguloIncidencia = anguloIncidencia - 90; }
                         float anguloCritico = asin(indiceRefraccionProximo / indiceRefraccionActual) * 180 / PI_PANTALLA;
-
-                        if ((indiceRefraccionActual > indiceRefraccionProximo) && (anguloIncidencia > anguloCritico)) { // REFLEXION INTERNA TOTAL
-                            vec3 direccionReflejada = reflect(direccionRayo, -normalInterseccion);
+                        vec3 direccionRefractada = refract(direccionRayo, normalInterseccion, indiceRefraccionProximo / indiceRefraccionActual);
+                        if (indiceRefraccionProximo < indiceRefraccionActual && anguloIncidencia > anguloCritico) { // REFLEXION INTERNA TOTAL
+                            vec3 direccionReflejada;
+                            if (productoPuntoConNormal > 0) {
+                                direccionReflejada = reflect(direccionRayo, -normalInterseccion);
+                            }
+                            else {
+                                direccionReflejada = reflect(direccionRayo, normalInterseccion);
+                            }
 
                             RTCRayHit rayoReflejado;
-                            rayoReflejado.ray.org_x = interseccionRayo.x;
-                            rayoReflejado.ray.org_y = interseccionRayo.y;
-                            rayoReflejado.ray.org_z = interseccionRayo.z;
+                            rayoReflejado.ray.org_x = interseccionRayo.x + -normalInterseccion.x * 0.1;
+                            rayoReflejado.ray.org_y = interseccionRayo.y + -normalInterseccion.y * 0.1;
+                            rayoReflejado.ray.org_z = interseccionRayo.z + -normalInterseccion.z * 0.1;
                             rayoReflejado.ray.dir_x = direccionReflejada.x;
                             rayoReflejado.ray.dir_y = direccionReflejada.y;
                             rayoReflejado.ray.dir_z = direccionReflejada.z;
@@ -303,10 +309,15 @@ class PhotonMapper {
                             rtcInitIntersectContext(&context);
                             rtcIntersect1(scene, &context, &rayoReflejado);
 
-                            trazarFotonCaustica(rayoReflejado, mapaCausticas, escena, scene, colorAcumulado, indiceRefraccionActual, colorLuz);
+                            //trazarFotonCaustica(rayoReflejado, mapaCausticas, escena, scene, colorAcumulado, indiceRefraccionActual, colorLuz);
                         }
                         else {
-                            vec3 direccionRefractada = refract(direccionRayo, normalInterseccion, indiceRefraccionActual / indiceRefraccionProximo);
+                            if (productoPuntoConNormal > 0) {
+                                direccionRefractada = refract(direccionRayo, -normalInterseccion, indiceRefraccionProximo / indiceRefraccionActual);
+                            }
+                            else {
+                                direccionRefractada = refract(direccionRayo, normalInterseccion, indiceRefraccionProximo / indiceRefraccionActual);
+                            }
 
                             RTCRayHit rayoRefractado;
                             rayoRefractado.ray.org_x = interseccionRayo.x + normalInterseccion.x * margenEnDirNormal;

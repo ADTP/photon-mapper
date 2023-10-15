@@ -8,6 +8,7 @@
 #include <tchar.h>
 
 #include "Escena.h"
+#include "Esfera.h"
 #include "Pantalla.h"
 #include "Camara.h"
 #include "Foton.h"
@@ -28,8 +29,45 @@
 #include "nanoflann/utils.h"
 
 #include <embree3/rtcore.h>
+#include <embree3/rtcore_geometry.h>
 
 using namespace std;
+//
+//void sphereBoundsFunction(const struct RTCBoundsFunctionArguments* args)
+//{
+//    Esfera* esfera = (Esfera*)args->geometryUserPtr;
+//    vec3 posicion = esfera->posicion;
+//    float radio = esfera->radio;
+//    RTCBounds bounds_o = *args->bounds_o;
+//    bounds_o.lower_x = posicion.x - radio;
+//    bounds_o.lower_y = posicion.y - radio;
+//    bounds_o.lower_z = posicion.z - radio;
+//    bounds_o.upper_x = posicion.x + radio;
+//    bounds_o.upper_y = posicion.y + radio;
+//    bounds_o.upper_z = posicion.z + radio;
+//}
+//
+//void sphereIntersectionFunction(const struct RTCIntersectFunctionNArguments* args) {
+//    Esfera* esfera = (Esfera*)args->geometryUserPtr;
+//    RTCRayHitN* rayo = (RTCRayHitN*)args->rayhit;
+//    RTCRay* rayo2 = (RTCRay*)rayo;
+//    RTCHit* rayo3 = (RTCHit*)rayo;
+//    vec3 origenRayo = { rayo2->org_x, rayo2->org_y, rayo2->org_z };
+//    vec3 direccionRayo = { rayo2->dir_x, rayo2->dir_y, rayo2->dir_z };
+//    float A = dot(direccionRayo, direccionRayo);
+//    float B = 2 * dot(origenRayo - esfera->posicion, direccionRayo);
+//    float C = dot(origenRayo - esfera->posicion, origenRayo - esfera->posicion) - (esfera->radio * esfera->radio);
+//    
+//    float raizCuadrada = B * B - 4 * A * C;
+//    if (raizCuadrada > 0) {
+//        float t1 = (-B - sqrt(raizCuadrada)) / (2 * A);
+//        float t2 = (-B + sqrt(raizCuadrada)) / (2 * A);
+//        float masCercano = (t1 < t2) ? t1 : t2;
+//        rayo2->tfar = masCercano;
+//        rayo3->primID = args->primID;
+//    }
+//
+//}
 
 int _tmain(int argc, _TCHAR* argv[])
 {
@@ -37,7 +75,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
     Escena* escena = Escena::getInstance();
     Camara* camara = Camara::getInstance();
-    
+
     PhotonMapper photonMapper;
     RayTracer rayTracer;
     ObjectLoader objectLoader;
@@ -51,7 +89,7 @@ int _tmain(int argc, _TCHAR* argv[])
     RTCScene scene = rtcNewScene(device);
     for (Elemento* objeto : escena->elementos) {
         RTCGeometry geom = rtcNewGeometry(device, RTC_GEOMETRY_TYPE_TRIANGLE);
-        
+
         vector<float> vertices = {};
         int caras = objectLoader.cargarObjeto(vertices, objeto);
 
@@ -68,8 +106,23 @@ int _tmain(int argc, _TCHAR* argv[])
         rtcAttachGeometry(scene, geom);
         rtcReleaseGeometry(geom);
     }
-    rtcCommitScene(scene);
 
+    //RTCGeometry geometry = rtcNewGeometry(device, RTC_GEOMETRY_TYPE_USER);
+    //rtcSetGeometryUserPrimitiveCount(geometry, numPrimitives);
+    //rtcSetGeometryUserData(geometry, userGeometryRepresentation);
+    //rtcSetGeometryBoundsFunction(geometry, boundsFunction);
+    //rtcSetGeometryIntersectFunction(geometry, intersectFunction);
+    //rtcSetGeometryOccludedFunction(geometry, occludedFunction);
+
+ /*   vec3 pos = { 0,0,0 };
+    Esfera esfera(pos, 1);
+
+    RTCGeometry sphere = rtcNewGeometry(device, RTC_GEOMETRY_TYPE_USER);
+    rtcSetGeometryUserPrimitiveCount(sphere, 1);
+    rtcSetGeometryUserData(sphere, &esfera);
+    rtcSetGeometryBoundsFunction(sphere, (RTCBoundsFunction)sphereBoundsFunction, &esfera);
+    rtcCommitScene(scene);*/
+    rtcCommitScene(scene);
 
     cout << "Generacion de mapas de fotones \n\n";
     PointCloud mapaGlobal, mapaCausticas;
@@ -84,8 +137,8 @@ int _tmain(int argc, _TCHAR* argv[])
 
     cout << "Calculos de radiancia y generacion de imagenes \n\n";
     for (int y = 0; y < pantalla->altura; y++) {
+        cout << "HOLA";
         for (int x = 0; x < pantalla->ancho; x++) {
-
             RTCRayHit rayhit;
             rayhit.ray.org_x = camara->posicion.x;
             rayhit.ray.org_y = camara->posicion.y;
@@ -101,13 +154,15 @@ int _tmain(int argc, _TCHAR* argv[])
             rtcInitIntersectContext(&context);
             rtcIntersect1(scene, &context, &rayhit);
 
-            // iluminacion directa
-            /*RGBQUAD colorIluminacionDirecta = rayTracer.iluminacionDirecta(scene, rayhit, escena);
-            FreeImage_SetPixelColor(pantalla->bitmapDirecta, x, y, &colorIluminacionDirecta);*/
+            // iluminacion indirecta
+            RGBQUAD colorIluminacionDirecta = rayTracer.iluminacionDirecta(scene, rayhit, escena);
+            FreeImage_SetPixelColor(pantalla->bitmapDirecta, x, y, &colorIluminacionDirecta);
 
             // iluminacion indirecta
             /*RGBQUAD colorIluminacionIndirecta = rayTracer.iluminacionIndirecta(scene, rayhit, escena, mapaGlobal, &indexGlobal);
             FreeImage_SetPixelColor(pantalla->bitmapIndirecta, x, y, &colorIluminacionIndirecta);*/
+            RGBQUAD colorIluminacionIndirecta = rayTracer.iluminacionIndirecta(scene, rayhit, escena, mapaGlobal, &indexGlobal);
+            FreeImage_SetPixelColor(pantalla->bitmapIndirecta, x, y, &colorIluminacionIndirecta);
 
             // causticas
             RGBQUAD colorIluminacionCausticas = rayTracer.iluminacionCausticas(scene, rayhit, escena, mapaCausticas, &indexCausticas);
@@ -117,9 +172,9 @@ int _tmain(int argc, _TCHAR* argv[])
             
             // resultado
             RGBQUAD total;
-            /*total.rgbRed = std::min((int)(colorIluminacionDirecta.rgbRed + colorIluminacionIndirecta.rgbRed), 255);
-            total.rgbGreen = std::min((int)(colorIluminacionDirecta.rgbGreen + colorIluminacionIndirecta.rgbGreen), 255);
-            total.rgbBlue = std::min((int)(colorIluminacionDirecta.rgbBlue + colorIluminacionIndirecta.rgbBlue), 255);*/
+            total.rgbRed = std::min((int)(colorIluminacionDirecta.rgbRed + colorIluminacionIndirecta.rgbRed + colorIluminacionCausticas.rgbRed), 255);
+            total.rgbGreen = std::min((int)(colorIluminacionDirecta.rgbGreen + colorIluminacionIndirecta.rgbGreen + colorIluminacionCausticas.rgbGreen), 255);
+            total.rgbBlue = std::min((int)(colorIluminacionDirecta.rgbBlue + colorIluminacionIndirecta.rgbBlue + colorIluminacionCausticas.rgbBlue), 255);
             FreeImage_SetPixelColor(pantalla->bitmapResultado, x, y, &total);
         }
         
