@@ -9,7 +9,7 @@ using namespace glm;
 
 class Elemento {
 	public:
-		Elemento(std::string nombreArchivo, RGBQUAD color, vec3 posicion, vec3 coeficienteReflexionDifusa, vec3 coeficienteReflexionEspecular, float indiceRefraccion);
+		Elemento(std::string nombreArchivo, RGBQUAD color, vec3 posicion, vec3 coeficienteReflexionDifusa, vec3 coeficienteReflexionEspecular, float indiceRefraccion, float radio);
 		~Elemento();
 
 		std::string nombreArchivo;
@@ -22,14 +22,5 @@ class Elemento {
 		vec3 coeficienteReflexionEspecular;
 
 		float indiceRefraccion;
-
-		/*
-		float ambiente;
-		float difusa;
-		float especular;
-
-		float reflexion;
-		float refraccion;
-		float transmision;
-		*/
+		float radio;
 };

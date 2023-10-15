@@ -81,11 +81,11 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\embree3;..\kd-tree-master;$(ExternalIncludePath)</ExternalIncludePath>
+    <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\embree3;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\embree3;..\kd-tree-master;$(ExternalIncludePath)</ExternalIncludePath>
+    <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\embree3;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -129,8 +129,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>..\pugixml;..\SDL2-2.0.12\lib\x64;..\Freeimage;..\embree3\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>FreeImage.lib;SDL2.lib;pugixml.lib;embree3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\pugixml;..\Freeimage;..\embree3\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>FreeImage.lib;pugixml.lib;embree3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -147,8 +147,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>FreeImage.lib;SDL2.lib;pugixml.lib;embree3.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\pugixml;..\SDL2-2.0.12\lib\x64;..\Freeimage;..\embree3\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>FreeImage.lib;pugixml.lib;embree3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\pugixml;..\Freeimage;..\embree3\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -182,12 +182,6 @@
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\escena.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="Final\1-Directa.png" />
-    <Image Include="Final\2-Indirecta.png" />
-    <Image Include="Final\3-Causticas.png" />
-    <Image Include="Final\4-Resultado.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

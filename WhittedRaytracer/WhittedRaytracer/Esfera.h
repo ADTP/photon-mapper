@@ -9,11 +9,10 @@ class Esfera
 {
 public:
 	Esfera(vec3 posicion, float radio);
-	~Esfera();
+	
 	vec3 posicion;
 	float radio;
 
-	void sphereBoundsFunction(const struct RTCBoundsFunctionArguments args);
-	bool sphereIntersectFunction();
+	~Esfera();
 };
 

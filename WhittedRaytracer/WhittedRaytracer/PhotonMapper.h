@@ -285,8 +285,9 @@ class PhotonMapper {
                         if (anguloIncidencia > 90) { anguloIncidencia = anguloIncidencia - 90; }
                         float anguloCritico = asin(indiceRefraccionProximo / indiceRefraccionActual) * 180 / PI_PANTALLA;
                         vec3 direccionRefractada = refract(direccionRayo, normalInterseccion, indiceRefraccionProximo / indiceRefraccionActual);
+                        
                         if (indiceRefraccionProximo < indiceRefraccionActual && anguloIncidencia > anguloCritico) { // REFLEXION INTERNA TOTAL
-                            vec3 direccionReflejada;
+                            /*vec3 direccionReflejada;
                             if (productoPuntoConNormal > 0) {
                                 direccionReflejada = reflect(direccionRayo, -normalInterseccion);
                             }
@@ -309,7 +310,7 @@ class PhotonMapper {
                             rtcInitIntersectContext(&context);
                             rtcIntersect1(scene, &context, &rayoReflejado);
 
-                            //trazarFotonCaustica(rayoReflejado, mapaCausticas, escena, scene, colorAcumulado, indiceRefraccionActual, colorLuz);
+                            trazarFotonCaustica(rayoReflejado, mapaCausticas, escena, scene, colorAcumulado, indiceRefraccionActual, colorLuz);*/
                         }
                         else {
                             if (productoPuntoConNormal > 0) {

@@ -94,13 +94,13 @@ class RayTracer {
             int knn = 500;
             std::vector<uint32_t> ret_index(knn);
             std::vector<float>    out_dist_sqr(knn);
-            index->knnSearch(&consulta[0], knn, &ret_index[0], &out_dist_sqr[0]); // Devuelve en fotonesResultantes un vector de pares con el siguiente formato: (indice, distancia
+            index->knnSearch(&consulta[0], knn, &ret_index[0], &out_dist_sqr[0]);
             int cantFotonesResultantes = knn;
 
             if (cantFotonesResultantes > 0) {
                 vec3 flujoAcumulado = { 0,0,0 };
+
                 for (int i = 0; i < ret_index.size(); i++) {
-                /*for (int i = 0; i < cantFotonesResultantes; i++) {*/
                     Foton foton = mapaGlobal.pts[ret_index[i]];
 
                     float productoPunto = dot(normalize(foton.direccionIncidente), normalize(-normalRayoIncidente));
@@ -111,6 +111,7 @@ class RayTracer {
                         flujoAcumulado.b += foton.potencia.b*1500;
                     }
                 }
+
                 int minFotones = std::min(knn, (int)mapaGlobal.pts.size());
 
                 float distanciaFotonMasLejano = length(mapaGlobal.pts[ret_index[minFotones-1]].posicion - interseccionRayoIncidente);
@@ -146,7 +147,7 @@ class RayTracer {
             int knn = 500;
             std::vector<uint32_t> ret_index(knn);
             std::vector<float>    out_dist_sqr(knn);
-            index->knnSearch(&consulta[0], knn, &ret_index[0], &out_dist_sqr[0]); // Devuelve en fotonesResultantes un vector de pares con el siguiente formato: (indice, distancia
+            index->knnSearch(&consulta[0], knn, &ret_index[0], &out_dist_sqr[0]);
             int minFotones = std::min(knn, (int)mapaCausticas.pts.size());
 
             int cantFotonesResultantes = knn;

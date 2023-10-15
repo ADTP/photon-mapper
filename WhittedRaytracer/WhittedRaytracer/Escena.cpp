@@ -60,7 +60,9 @@ Escena::Escena() {
 	xml_node_iterator iteradorElementos = nodoElementos.begin();
 	while (iteradorElementos != nodoElementos.end()) {
 		string nombreArchivo = iteradorElementos->attribute("archivo").as_string();
-		
+		float indiceRefraccion = iteradorElementos->attribute("indiceRefraccion").as_float();
+		float radio = iteradorElementos->attribute("radio").as_float();
+
 		xml_node color = iteradorElementos->child("color");
 		RGBQUAD colorElemento;
 		colorElemento.rgbRed = color.attribute("r").as_float();
@@ -76,11 +78,9 @@ Escena::Escena() {
 		xml_node coefEspecular = iteradorElementos->child("coeficienteReflexionEspecular");
 		vec3 coeficienteReflexionEspecular = { coefEspecular.attribute("r").as_float(), coefEspecular.attribute("g").as_float(), coefEspecular.attribute("b").as_float() };
 
-		float indiceRefraccion;
-		indiceRefraccion = iteradorElementos->attribute("indiceRefraccion").as_float();
-
-		Elemento* elemento = new Elemento(nombreArchivo, colorElemento, pos, coeficienteReflexionDifusa, coeficienteReflexionEspecular, indiceRefraccion);
+		Elemento* elemento = new Elemento(nombreArchivo, colorElemento, pos, coeficienteReflexionDifusa, coeficienteReflexionEspecular, indiceRefraccion, radio);
 		elementos.push_back(elemento);
+		
 		iteradorElementos++;
 	}
 }
