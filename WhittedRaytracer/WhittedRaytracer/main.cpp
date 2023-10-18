@@ -122,17 +122,19 @@ int _tmain(int argc, _TCHAR* argv[])
             FreeImage_SetPixelColor(pantalla->bitmapIndirecta, x, y, &colorIluminacionIndirecta);
 
             // causticas
-            RGBQUAD colorIluminacionCausticas = rayTracer.iluminacionCausticas(scene, rayhit, escena, mapaCausticas, &indexCausticas);
-            FreeImage_SetPixelColor(pantalla->bitmapCausticas, x, y, &colorIluminacionCausticas);
+            /*RGBQUAD colorIluminacionCausticas = rayTracer.iluminacionCausticas(scene, rayhit, escena, mapaCausticas, &indexCausticas);
+            FreeImage_SetPixelColor(pantalla->bitmapCausticas, x, y, &colorIluminacionCausticas);*/
 
             // especular
+            RGBQUAD colorIluminacionEspecular = rayTracer.iluminacionEspecular(scene, rayhit, escena, 0, 1.f);
+            FreeImage_SetPixelColor(pantalla->bitmapEspecular, x, y, &colorIluminacionEspecular);
             
             // resultado
-            RGBQUAD total;
+            /*RGBQUAD total;
             total.rgbRed = std::min((int)(colorIluminacionDirecta.rgbRed + colorIluminacionIndirecta.rgbRed + colorIluminacionCausticas.rgbRed), 255);
             total.rgbGreen = std::min((int)(colorIluminacionDirecta.rgbGreen + colorIluminacionIndirecta.rgbGreen + colorIluminacionCausticas.rgbGreen), 255);
             total.rgbBlue = std::min((int)(colorIluminacionDirecta.rgbBlue + colorIluminacionIndirecta.rgbBlue + colorIluminacionCausticas.rgbBlue), 255);
-            FreeImage_SetPixelColor(pantalla->bitmapResultado, x, y, &total);
+            FreeImage_SetPixelColor(pantalla->bitmapResultado, x, y, &total);*/
         }
         
         if (y % 50 == 0) {
@@ -146,7 +148,8 @@ int _tmain(int argc, _TCHAR* argv[])
     FreeImage_Save(FIF_PNG, pantalla->bitmapDirecta, "Final\\1-Directa.png", 0);
     FreeImage_Save(FIF_PNG, pantalla->bitmapIndirecta, "Final\\2-Indirecta.png", 0);
     FreeImage_Save(FIF_PNG, pantalla->bitmapCausticas, "Final\\3-Causticas.png", 0);
-    FreeImage_Save(FIF_PNG, pantalla->bitmapResultado, "Final\\4-Resultado.png", 0);
+    FreeImage_Save(FIF_PNG, pantalla->bitmapEspecular, "Final\\4-Especular.png", 0);
+    FreeImage_Save(FIF_PNG, pantalla->bitmapResultado, "Final\\5-Resultado.png", 0);
 
     FreeImage_DeInitialise();
 

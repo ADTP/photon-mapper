@@ -1,26 +1,11 @@
-// ======================================================================== //
-// Copyright 2009-2018 Intel Corporation                                    //
-//                                                                          //
-// Licensed under the Apache License, Version 2.0 (the "License");          //
-// you may not use this file except in compliance with the License.         //
-// You may obtain a copy of the License at                                  //
-//                                                                          //
-//     http://www.apache.org/licenses/LICENSE-2.0                           //
-//                                                                          //
-// Unless required by applicable law or agreed to in writing, software      //
-// distributed under the License is distributed on an "AS IS" BASIS,        //
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. //
-// See the License for the specific language governing permissions and      //
-// limitations under the License.                                           //
-// ======================================================================== //
+// Copyright 2009-2020 Intel Corporation
+// SPDX-License-Identifier: Apache-2.0
 
 #pragma once
 
 #include "rtcore_scene.h"
 
-#if defined(__cplusplus)
-extern "C" {
-#endif
+RTC_NAMESPACE_BEGIN
   
 /* Opaque BVH type */
 typedef struct RTCBVHTy* RTCBVH;
@@ -58,7 +43,12 @@ enum RTCBuildFlags
   RTC_BUILD_FLAG_NONE    = 0,
   RTC_BUILD_FLAG_DYNAMIC = (1 << 0),
 };
-  
+
+enum RTCBuildConstants
+{
+  RTC_BUILD_MAX_PRIMITIVES_PER_LEAF = 32
+};
+
 /* Input for builders */
 struct RTCBuildArguments
 {
@@ -99,7 +89,7 @@ RTC_FORCEINLINE struct RTCBuildArguments rtcDefaultBuildArguments()
   args.maxDepth = 32;
   args.sahBlockSize = 1;
   args.minLeafSize = 1;
-  args.maxLeafSize = 32;
+  args.maxLeafSize = RTC_BUILD_MAX_PRIMITIVES_PER_LEAF;
   args.traversalCost = 1.0f;
   args.intersectionCost = 1.0f;
   args.bvh = NULL;
@@ -131,6 +121,5 @@ RTC_API void rtcRetainBVH(RTCBVH bvh);
 /* Releases the BVH (decrements reference count). */
 RTC_API void rtcReleaseBVH(RTCBVH bvh);
 
-#if defined(__cplusplus)
-}
-#endif
+RTC_NAMESPACE_END
+

@@ -1,18 +1,5 @@
-// ======================================================================== //
-// Copyright 2009-2018 Intel Corporation                                    //
-//                                                                          //
-// Licensed under the Apache License, Version 2.0 (the "License");          //
-// you may not use this file except in compliance with the License.         //
-// You may obtain a copy of the License at                                  //
-//                                                                          //
-//     http://www.apache.org/licenses/LICENSE-2.0                           //
-//                                                                          //
-// Unless required by applicable law or agreed to in writing, software      //
-// distributed under the License is distributed on an "AS IS" BASIS,        //
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. //
-// See the License for the specific language governing permissions and      //
-// limitations under the License.                                           //
-// ======================================================================== //
+// Copyright 2009-2020 Intel Corporation
+// SPDX-License-Identifier: Apache-2.0
 
 #ifndef __RTC_RAY_ISPH__
 #define __RTC_RAY_ISPH__
@@ -39,7 +26,7 @@ struct RTC_ALIGN(16) RTCRay
 };
 
 /* Hit structure */
-struct RTCHit
+struct RTC_ALIGN(16) RTCHit
 {
   float Ng_x;          // x coordinate of geometry normal
   float Ng_y;          // y coordinate of geometry normal
@@ -88,7 +75,7 @@ RTC_FORCEINLINE varying float& RTCHitN_u   (const RTCHitN* uniform hit, uniform 
 RTC_FORCEINLINE varying float& RTCHitN_v   (const RTCHitN* uniform hit, uniform unsigned int N, uniform unsigned int i) { return *((varying float* uniform) &((float* uniform)hit)[4*N+i]); }
 RTC_FORCEINLINE varying unsigned int& RTCHitN_primID(const RTCHitN* uniform hit, uniform unsigned int N, uniform unsigned int i) { return *((varying unsigned int* uniform) &((unsigned int* uniform  )hit)[5*N+i]); }
 RTC_FORCEINLINE varying unsigned int& RTCHitN_geomID(const RTCHitN* uniform hit, uniform unsigned int N, uniform unsigned int i) { return *((varying unsigned int* uniform) &((unsigned int* uniform  )hit)[6*N+i]); }
-RTC_FORCEINLINE varying unsigned int& RTCHitN_instID(const RTCHitN* uniform hit, uniform unsigned int N, uniform unsigned int i, uniform unsigned int l) { return *((varying unsigned int* uniform) &((unsigned int* uniform)hit)[7*N+i+l*N]); }
+RTC_FORCEINLINE varying unsigned int& RTCHitN_instID(const RTCHitN* uniform hit, uniform unsigned int N, uniform unsigned int i, uniform unsigned int l) { return *((varying unsigned int* uniform) &((unsigned int* uniform  )hit)[7*N+i+l*N]); }
 
 /* Helper functions to extract RTCRayN and RTCHitN from RTCRayHitN */
 RTC_FORCEINLINE RTCRayN* uniform RTCRayHitN_RayN(RTCRayHitN* uniform rayhit, uniform unsigned int N) { return (RTCRayN* uniform)&((uniform float* uniform)rayhit)[0*N]; }

@@ -1,26 +1,11 @@
-// ======================================================================== //
-// Copyright 2009-2018 Intel Corporation                                    //
-//                                                                          //
-// Licensed under the Apache License, Version 2.0 (the "License");          //
-// you may not use this file except in compliance with the License.         //
-// You may obtain a copy of the License at                                  //
-//                                                                          //
-//     http://www.apache.org/licenses/LICENSE-2.0                           //
-//                                                                          //
-// Unless required by applicable law or agreed to in writing, software      //
-// distributed under the License is distributed on an "AS IS" BASIS,        //
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. //
-// See the License for the specific language governing permissions and      //
-// limitations under the License.                                           //
-// ======================================================================== //
+// Copyright 2009-2020 Intel Corporation
+// SPDX-License-Identifier: Apache-2.0
 
 #pragma once
 
 #include "rtcore_device.h"
 
-#if defined(__cplusplus)
-extern "C" {
-#endif
+RTC_NAMESPACE_BEGIN
 
 /* Types of buffers */
 enum RTCBufferType
@@ -30,6 +15,7 @@ enum RTCBufferType
   RTC_BUFFER_TYPE_VERTEX_ATTRIBUTE = 2,
   RTC_BUFFER_TYPE_NORMAL           = 3,
   RTC_BUFFER_TYPE_TANGENT          = 4,
+  RTC_BUFFER_TYPE_NORMAL_DERIVATIVE = 5,
 
   RTC_BUFFER_TYPE_GRID                 = 8,
 
@@ -62,6 +48,4 @@ RTC_API void rtcRetainBuffer(RTCBuffer buffer);
 /* Releases the buffer (decrements the reference count). */
 RTC_API void rtcReleaseBuffer(RTCBuffer buffer);
 
-#if defined(__cplusplus)
-}
-#endif
+RTC_NAMESPACE_END

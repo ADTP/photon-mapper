@@ -30,7 +30,7 @@ class PhotonMapper {
     void generacionDeMapas(Escena* escena, PointCloud &mapaGlobal, PointCloud &mapaCausticas, RTCScene &scene) {
         if (escena->generarMapas) {
             generarMapaGlobal(escena, mapaGlobal, scene);
-            generarMapaCausticas(escena, mapaCausticas, scene);
+            //generarMapaCausticas(escena, mapaCausticas, scene);
 
             // Guardar mapa global
             std::ofstream salidaGlobal("Mapas\\mapaGlobal.dat", std::ios::binary);
