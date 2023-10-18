@@ -24,13 +24,52 @@ static auto generator1 = std::bind(distribution1, engine);
 uniform_real_distribution<double> distribution2(-1.0, 1.0);
 static auto generator2 = std::bind(distribution2, engine);
 
+
 class PhotonMapper {
+    RTCRayHit trazarRayo(RTCScene scene, vec3 origen, vec3 destino) {
+        RTCRayHit rayo;
+        rayo.ray.org_x = origen.x;
+        rayo.ray.org_y = origen.y;
+        rayo.ray.org_z = origen.z;
+        rayo.ray.dir_x = destino.x - origen.x;
+        rayo.ray.dir_y = destino.y - origen.y;
+        rayo.ray.dir_z = destino.z - origen.z;
+        rayo.ray.tnear = 0.f;
+        rayo.ray.tfar = std::numeric_limits<float>::infinity();
+        rayo.hit.geomID = RTC_INVALID_GEOMETRY_ID;
+
+        RTCIntersectContext context;
+        rtcInitIntersectContext(&context);
+        rtcIntersect1(scene, &context, &rayo);
+
+        return rayo;
+    }
+
+    RTCRayHit trazarRayoConDireccion(RTCScene scene, vec3 origen, vec3 direccion) {
+        RTCRayHit rayo;
+        rayo.ray.org_x = origen.x;
+        rayo.ray.org_y = origen.y;
+        rayo.ray.org_z = origen.z;
+        rayo.ray.dir_x = direccion.x;
+        rayo.ray.dir_y = direccion.y;
+        rayo.ray.dir_z = direccion.z;
+        rayo.ray.tnear = 0.f;
+        rayo.ray.tfar = std::numeric_limits<float>::infinity();
+        rayo.hit.geomID = RTC_INVALID_GEOMETRY_ID;
+
+        RTCIntersectContext context;
+        rtcInitIntersectContext(&context);
+        rtcIntersect1(scene, &context, &rayo);
+
+        return rayo;
+    }
+
     public:
 
     void generacionDeMapas(Escena* escena, PointCloud &mapaGlobal, PointCloud &mapaCausticas, RTCScene &scene) {
         if (escena->generarMapas) {
             generarMapaGlobal(escena, mapaGlobal, scene);
-            //generarMapaCausticas(escena, mapaCausticas, scene);
+            generarMapaCausticas(escena, mapaCausticas, scene);
 
             // Guardar mapa global
             std::ofstream salidaGlobal("Mapas\\mapaGlobal.dat", std::ios::binary);
@@ -129,7 +168,6 @@ class PhotonMapper {
             vec3 reflexionDifusa = escena->elementos[rayhit.hit.geomID]->coeficienteReflexionDifusa;
             vec3 normalInterseccion = { rayhit.hit.Ng_x, rayhit.hit.Ng_y, rayhit.hit.Ng_z };
             normalInterseccion = normalize(normalInterseccion);
-
             double a = generator1();
 
             double dividendoDifusa = max({ reflexionDifusa.r * color.rgbRed, reflexionDifusa.g * color.rgbGreen, reflexionDifusa.b * color.rgbBlue });
@@ -141,49 +179,52 @@ class PhotonMapper {
             double factorPotenciaEspecular = dividendoEspecular / divisorEspecular; // Ps
 
             vec3 direccionReflejada{};
-            if (a < factorPotenciaDifusa) {
-                RGBQUAD potenciaReflejada = { color.rgbRed * reflexionDifusa.r / factorPotenciaDifusa, color.rgbGreen * reflexionDifusa.g / factorPotenciaDifusa, color.rgbBlue * reflexionDifusa.b / factorPotenciaDifusa };
-                potenciaReflejada = { potenciaReflejada.rgbRed, potenciaReflejada.rgbGreen, potenciaReflejada.rgbBlue };
-                if (profundidad > 0) {
-                    vec3 colorVector;
-                    colorVector.x = color.rgbRed;
-                    colorVector.x = colorVector.x / (float)escena->cantidadDeFotones * elementoIntersecado->color.rgbRed / 255;
-                    colorVector.y = color.rgbGreen;
-                    colorVector.y = colorVector.y / (float)escena->cantidadDeFotones * elementoIntersecado->color.rgbGreen / 255;
-                    colorVector.z = color.rgbBlue;
-                    colorVector.z = colorVector.z / (float)escena->cantidadDeFotones * elementoIntersecado->color.rgbBlue / 255;
+            if (dot(normalInterseccion, rayHitDir) < 0) {
+                if (a < factorPotenciaDifusa) {
+                    RGBQUAD potenciaReflejada = { color.rgbRed * reflexionDifusa.r / factorPotenciaDifusa, color.rgbGreen * reflexionDifusa.g / factorPotenciaDifusa, color.rgbBlue * reflexionDifusa.b / factorPotenciaDifusa };
+                    potenciaReflejada = { potenciaReflejada.rgbRed, potenciaReflejada.rgbGreen, potenciaReflejada.rgbBlue };
+                    if (profundidad > 0) {
+                        vec3 colorVector;
+                        colorVector.x = color.rgbRed;
+                        colorVector.x = colorVector.x / (float)escena->cantidadDeFotones * elementoIntersecado->color.rgbRed / 255;
+                        colorVector.y = color.rgbGreen;
+                        colorVector.y = colorVector.y / (float)escena->cantidadDeFotones * elementoIntersecado->color.rgbGreen / 255;
+                        colorVector.z = color.rgbBlue;
+                        colorVector.z = colorVector.z / (float)escena->cantidadDeFotones * elementoIntersecado->color.rgbBlue / 255;
 
-                    mapaGlobal.pts.push_back(Foton(interseccionMasCercana, colorVector, rayHitDir, 0, 0, 0));
+                        mapaGlobal.pts.push_back(Foton(interseccionMasCercana, colorVector, rayHitDir, 0, 0, 0));
+                    }
+
+                    vec3 centroEsfera = interseccionMasCercana + normalInterseccion;
+                    vec3 direccionAletoriaEsfera;
+                    do {
+                        direccionAletoriaEsfera = { generator2(), generator2(), generator2() };
+                    } while (pow(direccionAletoriaEsfera.x, 2) + pow(direccionAletoriaEsfera.y, 2) + pow(direccionAletoriaEsfera.z, 2) > 1);
+                    vec3 puntoAleatorioEsfera = centroEsfera + direccionAletoriaEsfera;
+
+                    trazarFoton(potenciaReflejada, interseccionMasCercana + 0.01f * normalInterseccion, puntoAleatorioEsfera - interseccionMasCercana, mapaGlobal, profundidad + 1, scene);
+
                 }
+                else if (a < factorPotenciaDifusa + factorPotenciaEspecular) {
+                    RGBQUAD potenciaReflejada = { color.rgbRed * reflexionEspecular.r / factorPotenciaEspecular, color.rgbGreen * reflexionEspecular.g / factorPotenciaEspecular, color.rgbBlue * reflexionEspecular.b / factorPotenciaEspecular };
+                    potenciaReflejada = { potenciaReflejada.rgbRed, potenciaReflejada.rgbGreen, potenciaReflejada.rgbBlue };
+                    rayHitDir = normalize(rayHitDir);
+                    direccionReflejada = reflect(rayHitDir, normalInterseccion);
+                    //direccionReflejada = interseccionMasCercana - direccionReflejada;
+                    trazarFoton(potenciaReflejada, interseccionMasCercana + normalInterseccion * 0.1f, direccionReflejada, mapaGlobal, profundidad + 1, scene);
 
-                vec3 centroEsfera = interseccionMasCercana + normalInterseccion;
-                vec3 direccionAletoriaEsfera;
-                do {
-                    direccionAletoriaEsfera = { generator2(), generator2(), generator2() };
-                } while (pow(direccionAletoriaEsfera.x, 2) + pow(direccionAletoriaEsfera.y, 2) + pow(direccionAletoriaEsfera.z, 2) > 1);
-                vec3 puntoAleatorioEsfera = centroEsfera + direccionAletoriaEsfera;
-
-                trazarFoton(potenciaReflejada, interseccionMasCercana + 0.01f * normalInterseccion, puntoAleatorioEsfera - interseccionMasCercana, mapaGlobal, profundidad + 1, scene);
-
-            }
-            else if (a < factorPotenciaDifusa + factorPotenciaEspecular) {
-                RGBQUAD potenciaReflejada = { color.rgbRed * reflexionEspecular.r / factorPotenciaEspecular, color.rgbGreen * reflexionEspecular.g / factorPotenciaEspecular, color.rgbBlue * reflexionEspecular.b / factorPotenciaEspecular };
-                potenciaReflejada = { potenciaReflejada.rgbRed, potenciaReflejada.rgbGreen, potenciaReflejada.rgbBlue };
-                direccionReflejada = reflect(rayHitDir, normalInterseccion);
-                direccionReflejada = interseccionMasCercana - direccionReflejada;
-                //trazarFoton(potenciaReflejada, interseccionMasCercana, direccionReflejada, mapaGlobal, profundidad + 1, scene);
-
-            }
-            else {
-                if (profundidad > 0) {
-                    vec3 colorVector;
-                    colorVector.x = color.rgbRed;
-                    colorVector.x = colorVector.x / (float)escena->cantidadDeFotones * elementoIntersecado->color.rgbRed / 255;
-                    colorVector.y = color.rgbGreen;
-                    colorVector.y = colorVector.y / (float)escena->cantidadDeFotones * elementoIntersecado->color.rgbGreen / 255;
-                    colorVector.z = color.rgbBlue;
-                    colorVector.z = colorVector.z / (float)escena->cantidadDeFotones * elementoIntersecado->color.rgbBlue / 255;
-                    mapaGlobal.pts.push_back(Foton(interseccionMasCercana, colorVector, rayHitDir, 0, 0, 0));
+                }
+                else {
+                    if (profundidad > 0 && length(elementoIntersecado->coeficienteReflexionEspecular) == 0) {
+                        vec3 colorVector;
+                        colorVector.x = color.rgbRed;
+                        colorVector.x = colorVector.x / (float)escena->cantidadDeFotones * elementoIntersecado->color.rgbRed / 255;
+                        colorVector.y = color.rgbGreen;
+                        colorVector.y = colorVector.y / (float)escena->cantidadDeFotones * elementoIntersecado->color.rgbGreen / 255;
+                        colorVector.z = color.rgbBlue;
+                        colorVector.z = colorVector.z / (float)escena->cantidadDeFotones * elementoIntersecado->color.rgbBlue / 255;
+                        mapaGlobal.pts.push_back(Foton(interseccionMasCercana, colorVector, rayHitDir, 0, 0, 0));
+                    }
                 }
             }
         }
@@ -234,7 +275,7 @@ class PhotonMapper {
 
                     if (especular || transparente) {
                         vec3 colorLuz = { escena->luces[i]->color.rgbRed, escena->luces[i]->color.rgbGreen, escena->luces[i]->color.rgbBlue };
-                        trazarFotonCaustica(rayoPrueba, mapaCausticas, escena, scene, { 0,0,0 }, 1, colorLuz);
+                        trazarFotonCaustica(rayoPrueba, mapaCausticas, escena, scene, colorLuz, 1);
                     }
                 }
 
@@ -243,15 +284,15 @@ class PhotonMapper {
         }
     }
 
-    void trazarFotonCaustica(RTCRayHit rayoIncidente, PointCloud& mapaCausticas, Escena* escena, RTCScene& scene, vec3 colorAcumulado, float indiceRefraccionActual, vec3 colorLuz) {
+    void trazarFotonCaustica(RTCRayHit rayoIncidente, PointCloud& mapaCausticas, Escena* escena, RTCScene& scene, vec3 colorAcumulado, float indiceRefraccionActual) {
         vec3 origenRayo = { rayoIncidente.ray.org_x, rayoIncidente.ray.org_y, rayoIncidente.ray.org_z };
-        
         vec3 direccionRayo = { rayoIncidente.ray.dir_x, rayoIncidente.ray.dir_y, rayoIncidente.ray.dir_z };
         vec3 interseccionRayo = origenRayo + direccionRayo * rayoIncidente.ray.tfar;
         direccionRayo = normalize(direccionRayo);
-
         vec3 normalInterseccion = { rayoIncidente.hit.Ng_x, rayoIncidente.hit.Ng_y, rayoIncidente.hit.Ng_z };
         normalInterseccion = normalize(normalInterseccion);
+        vec3 normalRayoInvertida = dot(normalInterseccion, direccionRayo) <= 0 ? normalInterseccion : -normalInterseccion;
+
 
         if (rayoIncidente.hit.geomID != RTC_INVALID_GEOMETRY_ID) {
             Elemento* elementoIntersectado = escena->elementos[rayoIncidente.hit.geomID];
@@ -260,113 +301,66 @@ class PhotonMapper {
 
             if (!especular && !transparente) {
                 // PUSE * ACA PARA QUE LA LUZ BLANCA CAMBIE DE COLOR SI EL OBJETO TRANSPARENTE ES DE COLOR
-                vec3 colorFinal = { std::min((int)(colorLuz.r * colorAcumulado.r), 255), std::min((int)(colorLuz.g * colorAcumulado.g), 255), std::min((int)(colorLuz.b * colorAcumulado.b), 255) };
-                mapaCausticas.pts.push_back(Foton(interseccionRayo, colorFinal, direccionRayo, 0, 0, 0));
+                //vec3 colorFinal = { std::min((int)(colorLuz.r * colorAcumulado.r), 255), std::min((int)(colorLuz.g * colorAcumulado.g), 255), std::min((int)(colorLuz.b * colorAcumulado.b), 255) };
+                colorAcumulado.r = colorAcumulado.r / (float)escena->cantidadDeFotones;
+                colorAcumulado.g = colorAcumulado.g / (float)escena->cantidadDeFotones;
+                colorAcumulado.b = colorAcumulado.b / (float)escena->cantidadDeFotones;
+                mapaCausticas.pts.push_back(Foton(interseccionRayo, colorAcumulado, direccionRayo, 0, 0, 0));
 
             } else {
 
                 if (transparente) { // transparencia perfecta
-
                     double rollAbsorcion = generator1();
-
-                    if (rollAbsorcion > 0.9) {
-                        // HABRIA QUE VER QUE COLOR SUMARLE A ESTA ALTURA
-                        //mapaCausticas.pts.push_back(Foton(interseccionRayo, colorAcumulado, direccionRayo, 0, 0, 0));
-
-                    } else {
+                    if (rollAbsorcion > 0.1) {
                         float productoPuntoConNormal = dot(normalInterseccion, direccionRayo);
-                        float margenEnDirNormal = productoPuntoConNormal > 0 ? 0.1f : -0.1f;
-
-                        // CUANDO QUEREMOS SALIR DE LA ESFERA INTERSECTAMOS CON ELLA MISMA NO CON EL AIRE, COMO CONSEGUIMOS EL INDICE CORRECTO?
-                        // UNA FORMA SERIA MIRAR LA NORMAL DE LA CARA INTERSECTADA Y SI TIENE MISMA DIR QUE EL RAYO INCIDENTE ASUMIR QUE EL PROXIMO MEDIO ES EL AIRE
                         float indiceRefraccionProximo = productoPuntoConNormal > 0 ? 1.f : elementoIntersectado->indiceRefraccion;
-
                         float anguloIncidencia = acos(dot(normalInterseccion, direccionRayo)) * 180 / PI_PANTALLA;
                         if (anguloIncidencia > 90) { anguloIncidencia = anguloIncidencia - 90; }
                         float anguloCritico = asin(indiceRefraccionProximo / indiceRefraccionActual) * 180 / PI_PANTALLA;
-                        vec3 direccionRefractada = refract(direccionRayo, normalInterseccion, indiceRefraccionProximo / indiceRefraccionActual);
-                        
+
                         if (indiceRefraccionProximo < indiceRefraccionActual && anguloIncidencia > anguloCritico) { // REFLEXION INTERNA TOTAL
-                            /*vec3 direccionReflejada;
-                            if (productoPuntoConNormal > 0) {
-                                direccionReflejada = reflect(direccionRayo, -normalInterseccion);
-                            }
-                            else {
-                                direccionReflejada = reflect(direccionRayo, normalInterseccion);
-                            }
-
-                            RTCRayHit rayoReflejado;
-                            rayoReflejado.ray.org_x = interseccionRayo.x + -normalInterseccion.x * 0.1;
-                            rayoReflejado.ray.org_y = interseccionRayo.y + -normalInterseccion.y * 0.1;
-                            rayoReflejado.ray.org_z = interseccionRayo.z + -normalInterseccion.z * 0.1;
-                            rayoReflejado.ray.dir_x = direccionReflejada.x;
-                            rayoReflejado.ray.dir_y = direccionReflejada.y;
-                            rayoReflejado.ray.dir_z = direccionReflejada.z;
-                            rayoReflejado.ray.tnear = 0.f;
-                            rayoReflejado.ray.tfar = std::numeric_limits<float>::infinity();
-                            rayoReflejado.hit.geomID = RTC_INVALID_GEOMETRY_ID;
-
-                            RTCIntersectContext context;
-                            rtcInitIntersectContext(&context);
-                            rtcIntersect1(scene, &context, &rayoReflejado);
-
-                            trazarFotonCaustica(rayoReflejado, mapaCausticas, escena, scene, colorAcumulado, indiceRefraccionActual, colorLuz);*/
+                            vec3 direccionReflejada = reflect(direccionRayo, -normalInterseccion);
+                            RTCRayHit rayoReflejado = trazarRayoConDireccion(scene, interseccionRayo + -normalInterseccion * 0.1f, direccionReflejada);
+                            colorAcumulado.r = colorAcumulado.r * elementoIntersectado->color.rgbRed / 255;
+                            colorAcumulado.g = colorAcumulado.g * elementoIntersectado->color.rgbGreen / 255;
+                            colorAcumulado.b = colorAcumulado.b * elementoIntersectado->color.rgbBlue / 255;
+                            trazarFotonCaustica(rayoReflejado, mapaCausticas, escena, scene, colorAcumulado, indiceRefraccionProximo);
                         }
                         else {
-                            if (productoPuntoConNormal > 0) {
-                                direccionRefractada = refract(direccionRayo, -normalInterseccion, indiceRefraccionProximo / indiceRefraccionActual);
-                            }
-                            else {
-                                direccionRefractada = refract(direccionRayo, normalInterseccion, indiceRefraccionProximo / indiceRefraccionActual);
-                            }
-
-                            RTCRayHit rayoRefractado;
-                            rayoRefractado.ray.org_x = interseccionRayo.x + normalInterseccion.x * margenEnDirNormal;
-                            rayoRefractado.ray.org_y = interseccionRayo.y + normalInterseccion.y * margenEnDirNormal;
-                            rayoRefractado.ray.org_z = interseccionRayo.z + normalInterseccion.z * margenEnDirNormal;
-                            rayoRefractado.ray.dir_x = direccionRefractada.x;
-                            rayoRefractado.ray.dir_y = direccionRefractada.y;
-                            rayoRefractado.ray.dir_z = direccionRefractada.z;
-                            rayoRefractado.ray.tnear = 0.f;
-                            rayoRefractado.ray.tfar = std::numeric_limits<float>::infinity();
-                            rayoRefractado.hit.geomID = RTC_INVALID_GEOMETRY_ID;
-
-                            RTCIntersectContext context;
-                            rtcInitIntersectContext(&context);
-                            rtcIntersect1(scene, &context, &rayoRefractado);
-
-                            colorAcumulado.r += elementoIntersectado->color.rgbRed * 0.3;
-                            colorAcumulado.g += elementoIntersectado->color.rgbGreen * 0.3;
-                            colorAcumulado.b += elementoIntersectado->color.rgbBlue * 0.3;
-
-                            trazarFotonCaustica(rayoRefractado, mapaCausticas, escena, scene, colorAcumulado, indiceRefraccionProximo, colorLuz);
+                            float eta = indiceRefraccionActual / indiceRefraccionProximo;
+                            vec3 direccionRefractada = refract(direccionRayo, normalRayoInvertida, eta);
+                            RTCRayHit rayoRefractado = trazarRayoConDireccion(scene, interseccionRayo + -normalRayoInvertida * 0.00001f, direccionRefractada);
+                            colorAcumulado.r = colorAcumulado.r * elementoIntersectado->color.rgbRed/255;
+                            colorAcumulado.g = colorAcumulado.g * elementoIntersectado->color.rgbGreen/255;
+                            colorAcumulado.b = colorAcumulado.b * elementoIntersectado->color.rgbBlue/255;
+                            trazarFotonCaustica(rayoRefractado, mapaCausticas, escena, scene, colorAcumulado, indiceRefraccionProximo);
                         }
-                    }
+                    }   
+                }
+                else { // reflexion perfecta
+                    //vec3 direccionReflejada = reflect(direccionRayo, normalInterseccion);
 
-                } else { // reflexion perfecta
-                    vec3 direccionReflejada = reflect(direccionRayo, normalInterseccion);
+                    //RTCRayHit rayoReflejado;
+                    //rayoReflejado.ray.org_x = interseccionRayo.x;
+                    //rayoReflejado.ray.org_y = interseccionRayo.y;
+                    //rayoReflejado.ray.org_z = interseccionRayo.z;
+                    //rayoReflejado.ray.dir_x = direccionReflejada.x;
+                    //rayoReflejado.ray.dir_y = direccionReflejada.y;
+                    //rayoReflejado.ray.dir_z = direccionReflejada.z;
+                    //rayoReflejado.ray.tnear = 0.f;
+                    //rayoReflejado.ray.tfar = std::numeric_limits<float>::infinity();
+                    //rayoReflejado.hit.geomID = RTC_INVALID_GEOMETRY_ID;
 
-                    RTCRayHit rayoReflejado;
-                    rayoReflejado.ray.org_x = interseccionRayo.x;
-                    rayoReflejado.ray.org_y = interseccionRayo.y;
-                    rayoReflejado.ray.org_z = interseccionRayo.z;
-                    rayoReflejado.ray.dir_x = direccionReflejada.x;
-                    rayoReflejado.ray.dir_y = direccionReflejada.y;
-                    rayoReflejado.ray.dir_z = direccionReflejada.z;
-                    rayoReflejado.ray.tnear = 0.f;
-                    rayoReflejado.ray.tfar = std::numeric_limits<float>::infinity();
-                    rayoReflejado.hit.geomID = RTC_INVALID_GEOMETRY_ID;
+                    //RTCIntersectContext context;
+                    //rtcInitIntersectContext(&context);
+                    //rtcIntersect1(scene, &context, &rayoReflejado);
 
-                    RTCIntersectContext context;
-                    rtcInitIntersectContext(&context);
-                    rtcIntersect1(scene, &context, &rayoReflejado);
+                    //// LA REFLEXION PERFECTA NO DEBERIA CAMBIAR EL COLOR DE LA LUZ, PERO SI TENER EN CUENTA SI VIENE CAMBIADA POR UN OBJ TRANSPARENTE ANTERIOR
+                    ////colorAcumulado.r += elementoIntersectado->color.rgbRed * elementoIntersectado->coeficienteReflexionEspecular.r;
+                    ////colorAcumulado.g += elementoIntersectado->color.rgbGreen * elementoIntersectado->coeficienteReflexionEspecular.g;
+                    ////colorAcumulado.b += elementoIntersectado->color.rgbBlue * elementoIntersectado->coeficienteReflexionEspecular.b;
 
-                    // LA REFLEXION PERFECTA NO DEBERIA CAMBIAR EL COLOR DE LA LUZ, PERO SI TENER EN CUENTA SI VIENE CAMBIADA POR UN OBJ TRANSPARENTE ANTERIOR
-                    //colorAcumulado.r += elementoIntersectado->color.rgbRed * elementoIntersectado->coeficienteReflexionEspecular.r;
-                    //colorAcumulado.g += elementoIntersectado->color.rgbGreen * elementoIntersectado->coeficienteReflexionEspecular.g;
-                    //colorAcumulado.b += elementoIntersectado->color.rgbBlue * elementoIntersectado->coeficienteReflexionEspecular.b;
-
-                    trazarFotonCaustica(rayoReflejado, mapaCausticas, escena, scene, colorAcumulado, indiceRefraccionActual, colorLuz);
+                    //trazarFotonCaustica(rayoReflejado, mapaCausticas, escena, scene, colorAcumulado, indiceRefraccionActual);
                 }
             }
         }

@@ -28,47 +28,45 @@ class RayTracer {
             vec3 rayHitOrg = { rayoIncidente.ray.org_x, rayoIncidente.ray.org_y, rayoIncidente.ray.org_z };
             vec3 rayHitDir = { rayoIncidente.ray.dir_x, rayoIncidente.ray.dir_y, rayoIncidente.ray.dir_z };
             vec3 interseccionRayoIncidente = rayHitOrg + rayHitDir * rayoIncidente.ray.tfar;
-
+            Elemento* elementoIntersecado = escena->elementos[rayoIncidente.hit.geomID];
             vec3 normalRayoIncidente = { rayoIncidente.hit.Ng_x, rayoIncidente.hit.Ng_y, rayoIncidente.hit.Ng_z };
             normalRayoIncidente = normalize(normalRayoIncidente);
             vec3 resultadoIntermedio = { 0,0, 0 };
             RGBQUAD resultadoFinal = negro;
+            if (elementoIntersecado->indiceRefraccion == 0 && length(elementoIntersecado->coeficienteReflexionEspecular) == 0) {
+                for (Luz* luz : escena->luces) {
+                    int cantidadDeRayos = 300;
+                    for (int i = 0; i < cantidadDeRayos; i++) {
+                        vec3 offsetLuz;
+                        do {
+                            offsetLuz.x = generator2() * 0.1;
+                            offsetLuz.y = generator2() * 0;
+                            offsetLuz.z = generator2() * 0.1;
+                        } while (pow(offsetLuz.x, 2) + pow(offsetLuz.y, 2) + pow(offsetLuz.z, 2) > 1);
 
-            for (Luz* luz : escena->luces) {
-                int cantidadDeRayos = 1;
-                for (int i = 0; i < cantidadDeRayos; i++) {
-                    vec3 offsetLuz;
-                    do {
-                        offsetLuz.x = generator2() * 0.1;
-                        offsetLuz.y = generator2() * 0;
-                        offsetLuz.z = generator2() * 0.1;
-                    } while (pow(offsetLuz.x, 2) + pow(offsetLuz.y, 2) + pow(offsetLuz.z, 2) > 1);
+                        RTCRayHit rayoSombra = trazarRayo(scene, interseccionRayoIncidente + normalRayoIncidente * 0.1f, luz->posicion + offsetLuz);
+                        vec3 origenRayoSombra = { rayoSombra.ray.org_x, rayoSombra.ray.org_y, rayoSombra.ray.org_z };
+                        vec3 direccionRayoSombra = { rayoSombra.ray.dir_x , rayoSombra.ray.dir_y , rayoSombra.ray.dir_z };
 
-                    RTCRayHit rayoSombra = trazarRayo(scene, interseccionRayoIncidente + normalRayoIncidente * 0.1f, luz->posicion + offsetLuz);
-                    vec3 origenRayoSombra = { rayoSombra.ray.org_x, rayoSombra.ray.org_y, rayoSombra.ray.org_z };
-                    vec3 direccionRayoSombra = { rayoSombra.ray.dir_x , rayoSombra.ray.dir_y , rayoSombra.ray.dir_z };
+                        if (dot(normalRayoIncidente, direccionRayoSombra) > 0) { // Si la luz incide directo sobre el punto de interseccion
+                            float distanciaLuz = length(luz->posicion + offsetLuz - interseccionRayoIncidente);
+                            float distanciaInterseccion = length((origenRayoSombra + direccionRayoSombra * rayoSombra.ray.tfar) - origenRayoSombra);
 
-                    if (dot(normalRayoIncidente, direccionRayoSombra) > 0) { // Si la luz incide directo sobre el punto de interseccion
-                        float distanciaLuz = length(luz->posicion + offsetLuz - interseccionRayoIncidente);
-                        float distanciaInterseccion = length((origenRayoSombra + direccionRayoSombra * rayoSombra.ray.tfar) - origenRayoSombra);
+                            if (distanciaInterseccion > distanciaLuz) { // Si no hay objetos intermedios
+                                float escala = dot(normalize(normalRayoIncidente), normalize(direccionRayoSombra));
+                                resultadoIntermedio.x = std::min(255.f, (resultadoIntermedio.x + luz->color.rgbRed * (1 / distanciaLuz) * escala * luz->watts / (20 * cantidadDeRayos)));
+                                resultadoIntermedio.y = std::min(255.f, (resultadoIntermedio.y + luz->color.rgbGreen * (1 / distanciaLuz) * escala * luz->watts / (20 * cantidadDeRayos)));
+                                resultadoIntermedio.z = std::min(255.f, (resultadoIntermedio.z + luz->color.rgbBlue * (1 / distanciaLuz) * escala * luz->watts / (20 * cantidadDeRayos)));
 
-                        if (distanciaInterseccion > distanciaLuz) { // Si no hay objetos intermedios
-                            float escala = dot(normalize(normalRayoIncidente), normalize(direccionRayoSombra));
-                            resultadoIntermedio.x = std::min(255.f, (resultadoIntermedio.x + luz->color.rgbRed * (1 / distanciaLuz) * escala * luz->watts / (20*cantidadDeRayos)));
-                            resultadoIntermedio.y = std::min(255.f, (resultadoIntermedio.y + luz->color.rgbGreen * (1 / distanciaLuz) * escala * luz->watts / (20 * cantidadDeRayos)));
-                            resultadoIntermedio.z = std::min(255.f, (resultadoIntermedio.z + luz->color.rgbBlue * (1 / distanciaLuz) * escala * luz->watts / (20 * cantidadDeRayos)));
-                    
+                            }
                         }
                     }
+                    resultadoFinal.rgbRed = trunc(resultadoIntermedio.x);
+                    resultadoFinal.rgbGreen = trunc(resultadoIntermedio.y);
+                    resultadoFinal.rgbBlue = trunc(resultadoIntermedio.z);
+
                 }
-                resultadoFinal.rgbRed = trunc(resultadoIntermedio.x);
-                resultadoFinal.rgbGreen = trunc(resultadoIntermedio.y);
-                resultadoFinal.rgbBlue = trunc(resultadoIntermedio.z);
-                
             }
-
-            Elemento* elementoIntersecado = escena->elementos[rayoIncidente.hit.geomID];
-
             resultadoFinal.rgbRed = std::min((int)resultadoFinal.rgbRed, 255) * elementoIntersecado->color.rgbRed / 255;
             resultadoFinal.rgbGreen = std::min((int)resultadoFinal.rgbGreen, 255) * elementoIntersecado->color.rgbGreen / 255;
             resultadoFinal.rgbBlue = std::min((int)resultadoFinal.rgbBlue, 255) * elementoIntersecado->color.rgbBlue / 255;
@@ -88,39 +86,40 @@ class RayTracer {
             Elemento* elementoIntersecado = escena->elementos[rayoIncidente.hit.geomID];
             
             const float consulta[3] = { interseccionRayoIncidente.x, interseccionRayoIncidente.y, interseccionRayoIncidente.z };
+            if (elementoIntersecado->indiceRefraccion == 0 && length(elementoIntersecado->coeficienteReflexionEspecular) == 0) {
+                int knn = 500;
+                std::vector<uint32_t> ret_index(knn);
+                std::vector<float>    out_dist_sqr(knn);
+                index->knnSearch(&consulta[0], knn, &ret_index[0], &out_dist_sqr[0]);
+                int cantFotonesResultantes = knn;
 
-            int knn = 500;
-            std::vector<uint32_t> ret_index(knn);
-            std::vector<float>    out_dist_sqr(knn);
-            index->knnSearch(&consulta[0], knn, &ret_index[0], &out_dist_sqr[0]);
-            int cantFotonesResultantes = knn;
+                if (cantFotonesResultantes > 0) {
+                    vec3 flujoAcumulado = { 0,0,0 };
 
-            if (cantFotonesResultantes > 0) {
-                vec3 flujoAcumulado = { 0,0,0 };
+                    for (int i = 0; i < ret_index.size(); i++) {
+                        Foton foton = mapaGlobal.pts[ret_index[i]];
 
-                for (int i = 0; i < ret_index.size(); i++) {
-                    Foton foton = mapaGlobal.pts[ret_index[i]];
+                        float productoPunto = dot(normalize(foton.direccionIncidente), normalize(-normalRayoIncidente));
 
-                    float productoPunto = dot(normalize(foton.direccionIncidente), normalize(-normalRayoIncidente));
-
-                    if (productoPunto > 0) {
-                        flujoAcumulado.r += foton.potencia.r*1500;
-                        flujoAcumulado.g += foton.potencia.g*1500;
-                        flujoAcumulado.b += foton.potencia.b*1500;
+                        if (productoPunto > 0) {
+                            flujoAcumulado.r += foton.potencia.r * 1500;
+                            flujoAcumulado.g += foton.potencia.g * 1500;
+                            flujoAcumulado.b += foton.potencia.b * 1500;
+                        }
                     }
+
+                    int minFotones = std::min(knn, (int)mapaGlobal.pts.size());
+
+                    float distanciaFotonMasLejano = length(mapaGlobal.pts[ret_index[minFotones - 1]].posicion - interseccionRayoIncidente);
+                    float pi = 3.14159265358979323846;
+
+                    RGBQUAD resultado;
+                    resultado.rgbRed = std::min((int)(flujoAcumulado.r * (elementoIntersecado->color.rgbRed / 255) / (pi * pow(distanciaFotonMasLejano, 2))), 255);
+                    resultado.rgbGreen = std::min((int)(flujoAcumulado.g * (elementoIntersecado->color.rgbGreen / 255) / (pi * pow(distanciaFotonMasLejano, 2))), 255);
+                    resultado.rgbBlue = std::min((int)(flujoAcumulado.b * (elementoIntersecado->color.rgbBlue / 255) / (pi * pow(distanciaFotonMasLejano, 2))), 255);
+
+                    return resultado;
                 }
-
-                int minFotones = std::min(knn, (int)mapaGlobal.pts.size());
-
-                float distanciaFotonMasLejano = length(mapaGlobal.pts[ret_index[minFotones-1]].posicion - interseccionRayoIncidente);
-                float pi = 3.14159265358979323846;
-
-                RGBQUAD resultado;
-                resultado.rgbRed = std::min((int)(flujoAcumulado.r * (elementoIntersecado->color.rgbRed / 255) / (pi * pow(distanciaFotonMasLejano, 2))), 255);
-                resultado.rgbGreen = std::min((int)(flujoAcumulado.g * (elementoIntersecado->color.rgbGreen / 255) / (pi * pow(distanciaFotonMasLejano, 2))), 255);
-                resultado.rgbBlue = std::min((int)(flujoAcumulado.b * (elementoIntersecado->color.rgbBlue / 255) / (pi * pow(distanciaFotonMasLejano, 2))), 255);
-
-                return resultado;
             }
         }
 
@@ -141,44 +140,43 @@ class RayTracer {
             nanoflann::SearchParameters params;
             params.sorted = true;
             index->radiusSearch(&consulta[0], radioEsfera, fotonesResultantes, params); // Devuelve en fotonesResultantes un vector de pares: (indice, distancia)
-
             int knn = 500;
+            /*int knn = 1;
             std::vector<uint32_t> ret_index(knn);
             std::vector<float>    out_dist_sqr(knn);
             index->knnSearch(&consulta[0], knn, &ret_index[0], &out_dist_sqr[0]);
-            int minFotones = std::min(knn, (int)mapaCausticas.pts.size());
-
-            int cantFotonesResultantes = knn;
-            if (cantFotonesResultantes > 0) {
+            int minFotones = std::min(knn, (int)mapaCausticas.pts.size());*/
+            //int cantFotonesResultantes = knn;
+            int iMaximo = 0;
+            if (fotonesResultantes.size() > 0) {
                 vec3 flujoAcumulado = { 0,0,0 };
-                for (int i = 0; i < minFotones; i++) {
+                for (int i = 0; i < fotonesResultantes.size() && i < knn; i++) {
+                    iMaximo = i;
                     /*for (int i = 0; i < cantFotonesResultantes; i++) {*/
-                    Foton foton = mapaCausticas.pts[ret_index[i]];
+                    Foton foton = mapaCausticas.pts[fotonesResultantes[i].first];
                     //Foton foton = mapaCausticas.pts[fotonesResultantes[0].first];
 
-                    float productoPunto = dot(normalize(foton.direccionIncidente), normalize(-normalRayoIncidente));
+                    //float productoPunto = dot(normalize(foton.direccionIncidente), normalize(-normalRayoIncidente));
 
-                    if (productoPunto > 0) {
-                        flujoAcumulado.r += foton.potencia.r;
-                        flujoAcumulado.g += foton.potencia.g;
-                        flujoAcumulado.b += foton.potencia.b;
-                    }
+                    //if (productoPunto > 0) {
+                    flujoAcumulado.r += foton.potencia.r;
+                    flujoAcumulado.g += foton.potencia.g;
+                    flujoAcumulado.b += foton.potencia.b;
+                    //}
                 }
-                flujoAcumulado.r = flujoAcumulado.r;
-                flujoAcumulado.g = flujoAcumulado.g;
-                flujoAcumulado.b = flujoAcumulado.b;
-                /*int minFotones = std::min(knn, (int)mapaCausticas.pts.size());
-
-                float distanciaFotonMasLejano = length(mapaCausticas.pts[bet_index[minFotones - 1]].posicion - interseccionRayoIncidente);
-                float pi = 3.14159265358979323846;*/
-                float distanciaFotonMasLejano = length(mapaCausticas.pts[ret_index[minFotones - 1]].posicion - interseccionRayoIncidente);
+                /*if (fotonesResultantes.size() > 100) {
+                    float distanciaFotonMasLejano1 = length(mapaCausticas.pts[fotonesResultantes[iMaximo].first].posicion - interseccionRayoIncidente);
+                    float distanciaFotonMasLejano2 = length(mapaCausticas.pts[fotonesResultantes[0].first].posicion - interseccionRayoIncidente);
+                    int hola = 1;
+                }*/
+                float distanciaFotonMasLejano = length(mapaCausticas.pts[fotonesResultantes[std::min(iMaximo,knn)].first].posicion - interseccionRayoIncidente);
                 float pi = 3.14159265358979323846;
 
                 RGBQUAD resultado;
                 float valor = flujoAcumulado.r / (3 * pow(distanciaFotonMasLejano, 8));
-                resultado.rgbRed = std::min((int)(flujoAcumulado.r / (3 * pow(distanciaFotonMasLejano, 8))), 255);
-                resultado.rgbGreen = std::min((int)(flujoAcumulado.g / (3 * pow(distanciaFotonMasLejano, 8))), 255);
-                resultado.rgbBlue = std::min((int)(flujoAcumulado.b / (3 * pow(distanciaFotonMasLejano, 8))), 255);
+                resultado.rgbRed = std::min((int)(flujoAcumulado.r / (3 * pow(distanciaFotonMasLejano, 2))), 255);
+                resultado.rgbGreen = std::min((int)(flujoAcumulado.g / (3 * pow(distanciaFotonMasLejano, 2))), 255);
+                resultado.rgbBlue = std::min((int)(flujoAcumulado.b / (3 * pow(distanciaFotonMasLejano, 2))), 255);
 
                 return resultado;
             }
@@ -187,32 +185,29 @@ class RayTracer {
         return negro;
     }
 
-    RGBQUAD iluminacionEspecular(RTCScene scene, RTCRayHit rayoIncidente, Escena* escena, int profundidadActual, float indiceRefraccionActual) {
+    RGBQUAD iluminacionEspecular(RTCScene scene, RTCRayHit rayoIncidente, Escena* escena, int profundidadActual, float indiceRefraccionActual, PointCloud mapaGlobal, CustomKDTree* index) {
         if (rayoIncidente.ray.tfar != std::numeric_limits<float>::infinity()) {
             vec3 rayHitOrg = { rayoIncidente.ray.org_x, rayoIncidente.ray.org_y, rayoIncidente.ray.org_z };
-            
-            vec3 rayHitDir = { rayoIncidente.ray.dir_x, rayoIncidente.ray.dir_y, rayoIncidente.ray.dir_z };
-            rayHitDir = normalize(rayHitDir);
-
-            vec3 interseccionRayoIncidente = rayHitOrg + rayHitDir * rayoIncidente.ray.tfar;
-
+            vec3 direccionRayo = { rayoIncidente.ray.dir_x, rayoIncidente.ray.dir_y, rayoIncidente.ray.dir_z };
+            vec3 interseccionRayoIncidente = rayHitOrg + direccionRayo * rayoIncidente.ray.tfar;
             vec3 normalRayoIncidente = { rayoIncidente.hit.Ng_x, rayoIncidente.hit.Ng_y, rayoIncidente.hit.Ng_z };
             normalRayoIncidente = normalize(normalRayoIncidente);
-            normalRayoIncidente = dot(normalRayoIncidente, rayHitDir) < 0 ? normalRayoIncidente : -normalRayoIncidente;
+            vec3 normalRayoInvertida = dot(normalRayoIncidente, direccionRayo) <= 0 ? normalRayoIncidente : -normalRayoIncidente;
+            direccionRayo = normalize(direccionRayo);
 
             RGBQUAD resultadoFinal = negro;
+
 
             Elemento* elementoIntersecado = escena->elementos[rayoIncidente.hit.geomID];
             bool especular = elementoIntersecado->coeficienteReflexionEspecular.r + elementoIntersecado->coeficienteReflexionEspecular.g + elementoIntersecado->coeficienteReflexionEspecular.b;
             bool transparente = elementoIntersecado->indiceRefraccion > 0;
 
-            if (profundidadActual < PROFUNDIDAD_MAXIMA) {
-
+            if (profundidadActual < PROFUNDIDAD_MAXIMA && (especular||transparente)) {
                 if (especular) {
 
-                    vec3 direccionReflejada = reflect(rayHitDir, normalRayoIncidente);
+                    vec3 direccionReflejada = reflect(direccionRayo, normalRayoIncidente);
                     RTCRayHit rayoReflejado = trazarRayoConDireccion(scene, interseccionRayoIncidente + normalRayoIncidente * 0.1f, direccionReflejada);
-                    RGBQUAD colorReflejado = iluminacionEspecular(scene, rayoReflejado, escena, profundidadActual + 1, indiceRefraccionActual);
+                    RGBQUAD colorReflejado = iluminacionEspecular(scene, rayoReflejado, escena, profundidadActual + 1, indiceRefraccionActual, mapaGlobal, index);
 
                     resultadoFinal.rgbRed = std::min(255.f, resultadoFinal.rgbRed + colorReflejado.rgbRed * elementoIntersecado->coeficienteReflexionEspecular.r);
                     resultadoFinal.rgbGreen = std::min(255.f, resultadoFinal.rgbGreen + colorReflejado.rgbGreen * elementoIntersecado->coeficienteReflexionEspecular.g);
@@ -220,43 +215,87 @@ class RayTracer {
 
                     return resultadoFinal;
                 }
+                else {
 
-                if (transparente) {
-
-                    float productoPuntoConNormal = dot(normalRayoIncidente, rayHitDir);
-                    float margenEnDirNormal = productoPuntoConNormal > 0 ? 0.1f : -0.1f;
-
+                    float productoPuntoConNormal = dot(normalRayoIncidente, direccionRayo);
                     float indiceRefraccionProximo = productoPuntoConNormal > 0 ? 1.f : elementoIntersecado->indiceRefraccion;
-
                     float anguloIncidencia = acos(productoPuntoConNormal) * 180 / PI_PANTALLA;
-                    if (anguloIncidencia > 90) { anguloIncidencia = anguloIncidencia - 90; }
+                    //if (anguloIncidencia > 90) { anguloIncidencia = anguloIncidencia - 90; }
 
                     float anguloCritico = asin(indiceRefraccionProximo / indiceRefraccionActual) * 180 / PI_PANTALLA;
                     
                     if (indiceRefraccionProximo < indiceRefraccionActual && anguloIncidencia > anguloCritico) { // REFLEXION INTERNA TOTAL
-                        // EN PRINCIPIO ACA NO HACEMOS NADA
+                        vec3 direccionReflejada = reflect(direccionRayo, normalRayoInvertida);
+                        RTCRayHit rayoReflejado = trazarRayoConDireccion(scene, interseccionRayoIncidente + normalRayoInvertida * 0.01f, direccionReflejada);
+                        RGBQUAD colorReflejado = iluminacionEspecular(scene, rayoReflejado, escena, profundidadActual + 1, indiceRefraccionActual, mapaGlobal, index);
+
+                        resultadoFinal.rgbRed = std::min(255.f, resultadoFinal.rgbRed + colorReflejado.rgbRed * elementoIntersecado->coeficienteReflexionEspecular.r);
+                        resultadoFinal.rgbGreen = std::min(255.f, resultadoFinal.rgbGreen + colorReflejado.rgbGreen * elementoIntersecado->coeficienteReflexionEspecular.g);
+                        resultadoFinal.rgbBlue = std::min(255.f, resultadoFinal.rgbBlue + colorReflejado.rgbBlue * elementoIntersecado->coeficienteReflexionEspecular.b);
+
+                        return resultadoFinal;
 
                     } else {
-                        vec3 direccionRefractada = refract(rayHitDir, normalRayoIncidente, indiceRefraccionProximo / indiceRefraccionActual);
-                        RTCRayHit rayoRefractado = trazarRayoConDireccion(scene, interseccionRayoIncidente + normalRayoIncidente * margenEnDirNormal, direccionRefractada);
-                        RGBQUAD colorRefractado = iluminacionEspecular(scene, rayoRefractado, escena, profundidadActual + 1, indiceRefraccionProximo);
+                        if (profundidadActual >= 2) {
+                            int hola = 1;
+                        }
+                        if (indiceRefraccionActual == indiceRefraccionProximo) {
+                            int hola = 1;
+                        }
+                        //float eta = indiceRefraccionActual / indiceRefraccionProximo;
+                        float eta = indiceRefraccionActual / indiceRefraccionProximo;
+                        //if (profundidadActual == 0) { cout << "\n"; }
+                        //cout << eta << "\n";
+                      
+                        vec3 direccionRefractada = refract(direccionRayo, normalRayoInvertida, eta);
+                        RTCRayHit rayoRefractado = trazarRayoConDireccion(scene, interseccionRayoIncidente + -normalRayoInvertida * 0.1f, direccionRefractada);
+                        RGBQUAD colorRefractado = iluminacionEspecular(scene, rayoRefractado, escena, profundidadActual + 1, indiceRefraccionProximo, mapaGlobal, index);
 
-                        resultadoFinal.rgbRed = std::min(255, resultadoFinal.rgbRed + colorRefractado.rgbRed);
-                        resultadoFinal.rgbGreen = std::min(255, resultadoFinal.rgbGreen + colorRefractado.rgbGreen);
-                        resultadoFinal.rgbBlue = std::min(255, resultadoFinal.rgbBlue + colorRefractado.rgbBlue);
+                        resultadoFinal.rgbRed = std::min(255, resultadoFinal.rgbRed * colorRefractado.rgbRed / 255);
+                        resultadoFinal.rgbGreen = std::min(255, resultadoFinal.rgbGreen * colorRefractado.rgbGreen / 255);
+                        resultadoFinal.rgbBlue = std::min(255, resultadoFinal.rgbBlue * colorRefractado.rgbBlue / 255);
 
                         return resultadoFinal;
                     }
                 }
             }
-            
+
             if (profundidadActual >= 1) {
-                return iluminacionDirecta(scene, rayoIncidente, escena);
+                resultadoFinal.rgbRed = std::min(iluminacionDirecta(scene, rayoIncidente, escena).rgbRed + iluminacionIndirecta(scene, rayoIncidente, escena, mapaGlobal, index).rgbRed, 255);
+                resultadoFinal.rgbGreen = std::min(iluminacionDirecta(scene, rayoIncidente, escena).rgbGreen + iluminacionIndirecta(scene, rayoIncidente, escena, mapaGlobal, index).rgbGreen, 255);
+                resultadoFinal.rgbBlue = std::min(iluminacionDirecta(scene, rayoIncidente, escena).rgbBlue + iluminacionIndirecta(scene, rayoIncidente, escena, mapaGlobal, index).rgbBlue, 255);
+                return resultadoFinal;
             }
         }
 
         return negro;
     };
+
+    RGBQUAD imagenMapaGlobal(RTCScene scene, RTCRayHit rayoIncidente, Escena* escena, PointCloud mapaGlobal, CustomKDTree* index) {
+        if (rayoIncidente.ray.tfar != std::numeric_limits<float>::infinity()) {
+            vec3 rayHitOrg = { rayoIncidente.ray.org_x, rayoIncidente.ray.org_y, rayoIncidente.ray.org_z };
+            vec3 rayHitDir = { rayoIncidente.ray.dir_x, rayoIncidente.ray.dir_y, rayoIncidente.ray.dir_z };
+            vec3 interseccionRayoIncidente = rayHitOrg + rayHitDir * rayoIncidente.ray.tfar;
+            vec3 normalRayoIncidente = { rayoIncidente.hit.Ng_x, rayoIncidente.hit.Ng_y, rayoIncidente.hit.Ng_z };
+
+            const float consulta[3] = { interseccionRayoIncidente.x, interseccionRayoIncidente.y, interseccionRayoIncidente.z };
+            const float radioEsfera = 0.01; // VER SI HACERLO CUSTOMIZABLE
+            std::vector <nanoflann::ResultItem<uint32_t, float>> fotonesResultantes;
+
+            nanoflann::SearchParameters params;
+            params.sorted = true;
+            index->radiusSearch(&consulta[0], radioEsfera, fotonesResultantes, params); // Devuelve en fotonesResultantes un vector de pares: (indice, distancia)
+
+            if (fotonesResultantes.size() > 0) {
+                vec3 flujoAcumulado = { 0,0,0 };
+                Foton foton = mapaGlobal.pts[fotonesResultantes[0].first];
+                RGBQUAD resultado = { foton.potencia.b * escena->cantidadDeFotones, foton.potencia.g * escena->cantidadDeFotones, foton.potencia.r * escena->cantidadDeFotones };
+                return resultado;
+            }
+        }
+
+        return negro;
+    }
 
     RTCRayHit trazarRayo(RTCScene scene, vec3 origen, vec3 destino) {
         RTCRayHit rayo;

@@ -45,6 +45,8 @@ int _tmain(int argc, _TCHAR* argv[])
 
     Pantalla* pantalla = Pantalla::getInstance();
     pantalla->cargarMalla(camara);
+    FIBITMAP* bitmapMapaGlobal = FreeImage_Allocate(pantalla->ancho, pantalla->altura, 24);
+    FIBITMAP* bitmapMapaCausticas = FreeImage_Allocate(pantalla->ancho, pantalla->altura, 24);
 
 
     cout << "Cargado de objetos a la escena de Embree \n\n";
@@ -112,6 +114,7 @@ int _tmain(int argc, _TCHAR* argv[])
             RTCIntersectContext context;
             rtcInitIntersectContext(&context);
             rtcIntersect1(scene, &context, &rayhit);
+            RGBQUAD total;
 
             // iluminacion directa
             RGBQUAD colorIluminacionDirecta = rayTracer.iluminacionDirecta(scene, rayhit, escena);
@@ -121,14 +124,26 @@ int _tmain(int argc, _TCHAR* argv[])
             RGBQUAD colorIluminacionIndirecta = rayTracer.iluminacionIndirecta(scene, rayhit, escena, mapaGlobal, &indexGlobal);
             FreeImage_SetPixelColor(pantalla->bitmapIndirecta, x, y, &colorIluminacionIndirecta);
 
+            if (x == 13 && y == 20) {
+                int hola = 1;
+            }
             // causticas
-            /*RGBQUAD colorIluminacionCausticas = rayTracer.iluminacionCausticas(scene, rayhit, escena, mapaCausticas, &indexCausticas);
-            FreeImage_SetPixelColor(pantalla->bitmapCausticas, x, y, &colorIluminacionCausticas);*/
+            RGBQUAD colorIluminacionCausticas = rayTracer.iluminacionCausticas(scene, rayhit, escena, mapaCausticas, &indexCausticas);
+            FreeImage_SetPixelColor(pantalla->bitmapCausticas, x, y, &colorIluminacionCausticas);
 
             // especular
-            RGBQUAD colorIluminacionEspecular = rayTracer.iluminacionEspecular(scene, rayhit, escena, 0, 1.f);
+            RGBQUAD colorIluminacionEspecular = rayTracer.iluminacionEspecular(scene, rayhit, escena, 0, 1.f, mapaGlobal, &indexGlobal);
             FreeImage_SetPixelColor(pantalla->bitmapEspecular, x, y, &colorIluminacionEspecular);
             
+            total.rgbRed = std::min((int)(colorIluminacionDirecta.rgbRed + colorIluminacionEspecular.rgbRed + colorIluminacionIndirecta.rgbRed + colorIluminacionCausticas.rgbRed), 255);
+            total.rgbGreen = std::min((int)(colorIluminacionDirecta.rgbGreen + colorIluminacionEspecular.rgbGreen + colorIluminacionIndirecta.rgbGreen + colorIluminacionCausticas.rgbGreen), 255);
+            total.rgbBlue = std::min((int)(colorIluminacionDirecta.rgbBlue + colorIluminacionEspecular.rgbBlue + colorIluminacionIndirecta.rgbBlue + colorIluminacionCausticas.rgbBlue), 255);
+            FreeImage_SetPixelColor(pantalla->bitmapResultado, x, y, &total);
+
+            RGBQUAD imagenMapaGlobal = rayTracer.imagenMapaGlobal(scene, rayhit, escena, mapaGlobal, &indexGlobal);
+            RGBQUAD imagenMapaCausticas = rayTracer.imagenMapaGlobal(scene, rayhit, escena, mapaCausticas, &indexCausticas);
+            FreeImage_SetPixelColor(bitmapMapaGlobal, x, y, &imagenMapaGlobal);
+            FreeImage_SetPixelColor(bitmapMapaCausticas, x, y, &imagenMapaCausticas);
             // resultado
             /*RGBQUAD total;
             total.rgbRed = std::min((int)(colorIluminacionDirecta.rgbRed + colorIluminacionIndirecta.rgbRed + colorIluminacionCausticas.rgbRed), 255);
@@ -150,6 +165,8 @@ int _tmain(int argc, _TCHAR* argv[])
     FreeImage_Save(FIF_PNG, pantalla->bitmapCausticas, "Final\\3-Causticas.png", 0);
     FreeImage_Save(FIF_PNG, pantalla->bitmapEspecular, "Final\\4-Especular.png", 0);
     FreeImage_Save(FIF_PNG, pantalla->bitmapResultado, "Final\\5-Resultado.png", 0);
+    FreeImage_Save(FIF_PNG, bitmapMapaGlobal, "Final\\6-MapaGlobal.png", 0);
+    FreeImage_Save(FIF_PNG, bitmapMapaCausticas, "Final\\7-MapaCausticas.png", 0);
 
     FreeImage_DeInitialise();
 
