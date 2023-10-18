@@ -1,20 +1,4 @@
-﻿  Camara.cpp
-  Elemento.cpp
-  Escena.cpp
-C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\Escena.cpp(46,50): warning C4244: '=': conversion from 'float' to 'BYTE', possible loss of data
-C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\Escena.cpp(47,52): warning C4244: '=': conversion from 'float' to 'BYTE', possible loss of data
-C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\Escena.cpp(48,51): warning C4244: '=': conversion from 'float' to 'BYTE', possible loss of data
-C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\Escena.cpp(68,55): warning C4244: '=': conversion from 'float' to 'BYTE', possible loss of data
-C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\Escena.cpp(69,57): warning C4244: '=': conversion from 'float' to 'BYTE', possible loss of data
-C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\Escena.cpp(70,56): warning C4244: '=': conversion from 'float' to 'BYTE', possible loss of data
-  Esfera.cpp
-  Foton.cpp
-  Luz.cpp
-  Pantalla.cpp
-C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\Pantalla.cpp(40,24): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\Pantalla.cpp(41,22): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-  pugixml.cpp
-  main.cpp
+﻿  main.cpp
 C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\PhotonMapper.h(94,44): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
           with
           [
@@ -113,21 +97,6 @@ C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTrac
           ]
 C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(227,44): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(230,41): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(240,57): warning C4244: '=': conversion from 'const _Ty' to 'BYTE', possible loss of data
-          with
-          [
-              _Ty=float
-          ]
-C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(241,59): warning C4244: '=': conversion from 'const _Ty' to 'BYTE', possible loss of data
-          with
-          [
-              _Ty=float
-          ]
-C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(242,58): warning C4244: '=': conversion from 'const _Ty' to 'BYTE', possible loss of data
-          with
-          [
-              _Ty=float
-          ]
 C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\ObjectLoader.h(81,56): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
 C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\nanoflann\nanoflann.h(1694,65): warning C4267: '=': conversion from 'size_t' to '_Ty', possible loss of data
           with
@@ -165,7 +134,8 @@ C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTrac
               T=float
           ]
   Generating code
-  Previous IPDB not found, fall back to full compilation.
-  All 2953 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  2 of 2953 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    6 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   WhittedRaytracer.vcxproj -> C:\Users\sebac\Desktop\CGA\path-tracer\WhittedRaytracer\x64\Release\WhittedRaytracer.exe

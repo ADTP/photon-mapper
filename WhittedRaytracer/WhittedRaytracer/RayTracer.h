@@ -190,11 +190,15 @@ class RayTracer {
     RGBQUAD iluminacionEspecular(RTCScene scene, RTCRayHit rayoIncidente, Escena* escena, int profundidadActual, float indiceRefraccionActual) {
         if (rayoIncidente.ray.tfar != std::numeric_limits<float>::infinity()) {
             vec3 rayHitOrg = { rayoIncidente.ray.org_x, rayoIncidente.ray.org_y, rayoIncidente.ray.org_z };
+            
             vec3 rayHitDir = { rayoIncidente.ray.dir_x, rayoIncidente.ray.dir_y, rayoIncidente.ray.dir_z };
+            rayHitDir = normalize(rayHitDir);
+
             vec3 interseccionRayoIncidente = rayHitOrg + rayHitDir * rayoIncidente.ray.tfar;
 
             vec3 normalRayoIncidente = { rayoIncidente.hit.Ng_x, rayoIncidente.hit.Ng_y, rayoIncidente.hit.Ng_z };
             normalRayoIncidente = normalize(normalRayoIncidente);
+            normalRayoIncidente = dot(normalRayoIncidente, rayHitDir) < 0 ? normalRayoIncidente : -normalRayoIncidente;
 
             RGBQUAD resultadoFinal = negro;
 
@@ -237,9 +241,9 @@ class RayTracer {
                         RTCRayHit rayoRefractado = trazarRayoConDireccion(scene, interseccionRayoIncidente + normalRayoIncidente * margenEnDirNormal, direccionRefractada);
                         RGBQUAD colorRefractado = iluminacionEspecular(scene, rayoRefractado, escena, profundidadActual + 1, indiceRefraccionProximo);
 
-                        resultadoFinal.rgbRed = std::min(255.f, resultadoFinal.rgbRed + colorRefractado.rgbRed * elementoIntersecado->coeficienteReflexionEspecular.r);
-                        resultadoFinal.rgbGreen = std::min(255.f, resultadoFinal.rgbGreen + colorRefractado.rgbGreen * elementoIntersecado->coeficienteReflexionEspecular.g);
-                        resultadoFinal.rgbBlue = std::min(255.f, resultadoFinal.rgbBlue + colorRefractado.rgbBlue * elementoIntersecado->coeficienteReflexionEspecular.b);
+                        resultadoFinal.rgbRed = std::min(255, resultadoFinal.rgbRed + colorRefractado.rgbRed);
+                        resultadoFinal.rgbGreen = std::min(255, resultadoFinal.rgbGreen + colorRefractado.rgbGreen);
+                        resultadoFinal.rgbBlue = std::min(255, resultadoFinal.rgbBlue + colorRefractado.rgbBlue);
 
                         return resultadoFinal;
                     }
