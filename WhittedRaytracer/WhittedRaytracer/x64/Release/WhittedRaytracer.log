@@ -63,67 +63,67 @@ D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(64,50): warni
 D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(65,52): warning C4244: '=': conversión de 'float' a 'BYTE'; posible pérdida de datos
 D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(66,51): warning C4244: '=': conversión de 'float' a 'BYTE'; posible pérdida de datos
 D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(114,30): warning C4305: 'inicializando': truncamiento de 'double' a 'float'
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(173,26): warning C4305: 'inicializando': truncamiento de 'double' a 'float'
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(176,29): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(212,53): warning C4244: '=': conversión de 'const _Ty' a 'BYTE'; posible pérdida de datos
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(163,26): warning C4305: 'inicializando': truncamiento de 'double' a 'float'
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(166,29): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(202,53): warning C4244: '=': conversión de 'const _Ty' a 'BYTE'; posible pérdida de datos
           with
           [
               _Ty=float
           ]
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(213,55): warning C4244: '=': conversión de 'const _Ty' a 'BYTE'; posible pérdida de datos
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(203,55): warning C4244: '=': conversión de 'const _Ty' a 'BYTE'; posible pérdida de datos
           with
           [
               _Ty=float
           ]
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(214,54): warning C4244: '=': conversión de 'const _Ty' a 'BYTE'; posible pérdida de datos
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(204,54): warning C4244: '=': conversión de 'const _Ty' a 'BYTE'; posible pérdida de datos
           with
           [
               _Ty=float
           ]
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(222,44): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(225,41): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(232,57): warning C4244: '=': conversión de 'const _Ty' a 'BYTE'; posible pérdida de datos
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(212,44): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(215,41): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(222,57): warning C4244: '=': conversión de 'const _Ty' a 'BYTE'; posible pérdida de datos
           with
           [
               _Ty=float
           ]
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(233,59): warning C4244: '=': conversión de 'const _Ty' a 'BYTE'; posible pérdida de datos
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(223,59): warning C4244: '=': conversión de 'const _Ty' a 'BYTE'; posible pérdida de datos
           with
           [
               _Ty=float
           ]
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(234,58): warning C4244: '=': conversión de 'const _Ty' a 'BYTE'; posible pérdida de datos
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(224,58): warning C4244: '=': conversión de 'const _Ty' a 'BYTE'; posible pérdida de datos
           with
           [
               _Ty=float
           ]
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(282,39): warning C4305: 'inicializando': truncamiento de 'double' a 'float'
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(292,56): warning C4838: la conversión de 'T' en 'BYTE' requiere una conversión de restricción
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(272,39): warning C4305: 'inicializando': truncamiento de 'double' a 'float'
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(282,56): warning C4838: la conversión de 'T' en 'BYTE' requiere una conversión de restricción
           with
           [
               T=float
           ]
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(292,56): warning C4244: 'inicializando': conversión de 'T' a 'BYTE'; posible pérdida de datos
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(282,56): warning C4244: 'inicializando': conversión de 'T' a 'BYTE'; posible pérdida de datos
           with
           [
               T=float
           ]
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(292,102): warning C4838: la conversión de 'T' en 'BYTE' requiere una conversión de restricción
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(282,102): warning C4838: la conversión de 'T' en 'BYTE' requiere una conversión de restricción
           with
           [
               T=float
           ]
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(292,102): warning C4244: 'inicializando': conversión de 'T' a 'BYTE'; posible pérdida de datos
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(282,102): warning C4244: 'inicializando': conversión de 'T' a 'BYTE'; posible pérdida de datos
           with
           [
               T=float
           ]
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(292,148): warning C4838: la conversión de 'T' en 'BYTE' requiere una conversión de restricción
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(282,148): warning C4838: la conversión de 'T' en 'BYTE' requiere una conversión de restricción
           with
           [
               T=float
           ]
-D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(292,148): warning C4244: 'inicializando': conversión de 'T' a 'BYTE'; posible pérdida de datos
+D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(282,148): warning C4244: 'inicializando': conversión de 'T' a 'BYTE'; posible pérdida de datos
           with
           [
               T=float
@@ -167,6 +167,6 @@ D:\Repos\path-tracer\WhittedRaytracer\WhittedRaytracer\RayTracer.h(93,1): messag
   Generando código
   2 of 3083 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    6 functions had inline decision re-evaluated but remain unchanged
+    9 functions had inline decision re-evaluated but remain unchanged
   Generación de código finalizada
   WhittedRaytracer.vcxproj -> D:\Repos\path-tracer\WhittedRaytracer\x64\Release\WhittedRaytracer.exe

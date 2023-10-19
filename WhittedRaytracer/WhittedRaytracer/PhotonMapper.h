@@ -215,7 +215,7 @@ class PhotonMapper {
 
                 }
                 else {
-                    if (profundidad > 0 && length(elementoIntersecado->coeficienteReflexionEspecular) == 0) {
+                    if (profundidad > 0 && length(elementoIntersecado->coeficienteReflexionEspecular) == 0 && elementoIntersecado->indiceRefraccion == 0) {
                         vec3 colorVector;
                         colorVector.x = color.rgbRed;
                         colorVector.x = colorVector.x / (float)escena->cantidadDeFotones * elementoIntersecado->color.rgbRed / 255;
@@ -338,6 +338,13 @@ class PhotonMapper {
                     }   
                 }
                 else { // reflexion perfecta
+                    direccionRayo = normalize(direccionRayo);
+                    vec3 direccionReflejada = reflect(direccionRayo, normalRayoInvertida);
+                    RTCRayHit rayoReflejado = trazarRayoConDireccion(scene, interseccionRayo + normalRayoInvertida * 0.1f, direccionReflejada);
+                    colorAcumulado.r = colorAcumulado.r * elementoIntersectado->color.rgbRed / 255;
+                    colorAcumulado.g = colorAcumulado.g * elementoIntersectado->color.rgbGreen / 255;
+                    colorAcumulado.b = colorAcumulado.b * elementoIntersectado->color.rgbBlue / 255;
+                    trazarFotonCaustica(rayoReflejado, mapaCausticas, escena, scene, colorAcumulado, 1.0f);
                     //vec3 direccionReflejada = reflect(direccionRayo, normalInterseccion);
 
                     //RTCRayHit rayoReflejado;

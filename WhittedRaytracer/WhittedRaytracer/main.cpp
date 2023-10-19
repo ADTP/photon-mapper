@@ -132,7 +132,7 @@ int _tmain(int argc, _TCHAR* argv[])
             FreeImage_SetPixelColor(pantalla->bitmapCausticas, x, y, &colorIluminacionCausticas);
 
             // especular
-            RGBQUAD colorIluminacionEspecular = rayTracer.iluminacionEspecular(scene, rayhit, escena, 0, 1.f, mapaGlobal, &indexGlobal);
+            RGBQUAD colorIluminacionEspecular = rayTracer.iluminacionEspecular(scene, rayhit, escena, 0, 1.f, mapaGlobal, &indexGlobal, mapaCausticas, &indexCausticas);
             FreeImage_SetPixelColor(pantalla->bitmapEspecular, x, y, &colorIluminacionEspecular);
             
             total.rgbRed = std::min((int)(colorIluminacionDirecta.rgbRed + colorIluminacionEspecular.rgbRed + colorIluminacionIndirecta.rgbRed + colorIluminacionCausticas.rgbRed), 255);

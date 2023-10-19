@@ -132,9 +132,9 @@ class RayTracer {
             vec3 rayHitDir = { rayoIncidente.ray.dir_x, rayoIncidente.ray.dir_y, rayoIncidente.ray.dir_z };
             vec3 interseccionRayoIncidente = rayHitOrg + rayHitDir * rayoIncidente.ray.tfar;
             vec3 normalRayoIncidente = { rayoIncidente.hit.Ng_x, rayoIncidente.hit.Ng_y, rayoIncidente.hit.Ng_z };
-
+            Elemento* elementoIntersecado = escena->elementos[rayoIncidente.hit.geomID];
             const float consulta[3] = { interseccionRayoIncidente.x, interseccionRayoIncidente.y, interseccionRayoIncidente.z };
-            const float radioEsfera = 1; // VER SI HACERLO CUSTOMIZABLE
+            const float radioEsfera = 30; // VER SI HACERLO CUSTOMIZABLE
             std::vector <nanoflann::ResultItem<uint32_t, float>> fotonesResultantes;
 
             nanoflann::SearchParameters params;
@@ -150,33 +150,23 @@ class RayTracer {
             int iMaximo = 0;
             if (fotonesResultantes.size() > 0) {
                 vec3 flujoAcumulado = { 0,0,0 };
+
+                // Tomo los fotones de una esfera. Si hay más de KNN fotones, me quedo con los KNN más cercanos.
                 for (int i = 0; i < fotonesResultantes.size() && i < knn; i++) {
                     iMaximo = i;
-                    /*for (int i = 0; i < cantFotonesResultantes; i++) {*/
                     Foton foton = mapaCausticas.pts[fotonesResultantes[i].first];
-                    //Foton foton = mapaCausticas.pts[fotonesResultantes[0].first];
-
-                    //float productoPunto = dot(normalize(foton.direccionIncidente), normalize(-normalRayoIncidente));
-
-                    //if (productoPunto > 0) {
-                    flujoAcumulado.r += foton.potencia.r;
-                    flujoAcumulado.g += foton.potencia.g;
-                    flujoAcumulado.b += foton.potencia.b;
-                    //}
+                    flujoAcumulado.r += foton.potencia.r*50;
+                    flujoAcumulado.g += foton.potencia.g*50;
+                    flujoAcumulado.b += foton.potencia.b*50;
                 }
-                /*if (fotonesResultantes.size() > 100) {
-                    float distanciaFotonMasLejano1 = length(mapaCausticas.pts[fotonesResultantes[iMaximo].first].posicion - interseccionRayoIncidente);
-                    float distanciaFotonMasLejano2 = length(mapaCausticas.pts[fotonesResultantes[0].first].posicion - interseccionRayoIncidente);
-                    int hola = 1;
-                }*/
                 float distanciaFotonMasLejano = length(mapaCausticas.pts[fotonesResultantes[std::min(iMaximo,knn)].first].posicion - interseccionRayoIncidente);
                 float pi = 3.14159265358979323846;
 
                 RGBQUAD resultado;
-                float valor = flujoAcumulado.r / (3 * pow(distanciaFotonMasLejano, 8));
-                resultado.rgbRed = std::min((int)(flujoAcumulado.r / (3 * pow(distanciaFotonMasLejano, 2))), 255);
-                resultado.rgbGreen = std::min((int)(flujoAcumulado.g / (3 * pow(distanciaFotonMasLejano, 2))), 255);
-                resultado.rgbBlue = std::min((int)(flujoAcumulado.b / (3 * pow(distanciaFotonMasLejano, 2))), 255);
+                float valor = flujoAcumulado.r / (pi * pow(distanciaFotonMasLejano, 8));
+                resultado.rgbRed = std::min((int)(flujoAcumulado.r * elementoIntersecado->color.rgbRed / 255 / (pi * pow(distanciaFotonMasLejano, 2))), 255);
+                resultado.rgbGreen = std::min((int)(flujoAcumulado.g * elementoIntersecado->color.rgbGreen / 255 / (pi * pow(distanciaFotonMasLejano, 2))), 255);
+                resultado.rgbBlue = std::min((int)(flujoAcumulado.b * elementoIntersecado->color.rgbBlue / 255 / (pi * pow(distanciaFotonMasLejano, 2))), 255);
 
                 return resultado;
             }
@@ -185,7 +175,7 @@ class RayTracer {
         return negro;
     }
 
-    RGBQUAD iluminacionEspecular(RTCScene scene, RTCRayHit rayoIncidente, Escena* escena, int profundidadActual, float indiceRefraccionActual, PointCloud mapaGlobal, CustomKDTree* index) {
+    RGBQUAD iluminacionEspecular(RTCScene scene, RTCRayHit rayoIncidente, Escena* escena, int profundidadActual, float indiceRefraccionActual, PointCloud mapaGlobal, CustomKDTree* indexGlobal, PointCloud mapaCausticas, CustomKDTree* indexCausticas) {
         if (rayoIncidente.ray.tfar != std::numeric_limits<float>::infinity()) {
             vec3 rayHitOrg = { rayoIncidente.ray.org_x, rayoIncidente.ray.org_y, rayoIncidente.ray.org_z };
             vec3 direccionRayo = { rayoIncidente.ray.dir_x, rayoIncidente.ray.dir_y, rayoIncidente.ray.dir_z };
@@ -207,7 +197,7 @@ class RayTracer {
 
                     vec3 direccionReflejada = reflect(direccionRayo, normalRayoIncidente);
                     RTCRayHit rayoReflejado = trazarRayoConDireccion(scene, interseccionRayoIncidente + normalRayoIncidente * 0.1f, direccionReflejada);
-                    RGBQUAD colorReflejado = iluminacionEspecular(scene, rayoReflejado, escena, profundidadActual + 1, indiceRefraccionActual, mapaGlobal, index);
+                    RGBQUAD colorReflejado = iluminacionEspecular(scene, rayoReflejado, escena, profundidadActual + 1, indiceRefraccionActual, mapaGlobal, indexGlobal, mapaCausticas, indexCausticas);
 
                     resultadoFinal.rgbRed = std::min(255.f, resultadoFinal.rgbRed + colorReflejado.rgbRed * elementoIntersecado->coeficienteReflexionEspecular.r);
                     resultadoFinal.rgbGreen = std::min(255.f, resultadoFinal.rgbGreen + colorReflejado.rgbGreen * elementoIntersecado->coeficienteReflexionEspecular.g);
@@ -227,7 +217,7 @@ class RayTracer {
                     if (indiceRefraccionProximo < indiceRefraccionActual && anguloIncidencia > anguloCritico) { // REFLEXION INTERNA TOTAL
                         vec3 direccionReflejada = reflect(direccionRayo, normalRayoInvertida);
                         RTCRayHit rayoReflejado = trazarRayoConDireccion(scene, interseccionRayoIncidente + normalRayoInvertida * 0.01f, direccionReflejada);
-                        RGBQUAD colorReflejado = iluminacionEspecular(scene, rayoReflejado, escena, profundidadActual + 1, indiceRefraccionActual, mapaGlobal, index);
+                        RGBQUAD colorReflejado = iluminacionEspecular(scene, rayoReflejado, escena, profundidadActual + 1, indiceRefraccionActual, mapaGlobal, indexGlobal, mapaCausticas, indexCausticas);
 
                         resultadoFinal.rgbRed = std::min(255.f, resultadoFinal.rgbRed + colorReflejado.rgbRed * elementoIntersecado->coeficienteReflexionEspecular.r);
                         resultadoFinal.rgbGreen = std::min(255.f, resultadoFinal.rgbGreen + colorReflejado.rgbGreen * elementoIntersecado->coeficienteReflexionEspecular.g);
@@ -249,8 +239,8 @@ class RayTracer {
                       
                         vec3 direccionRefractada = refract(direccionRayo, normalRayoInvertida, eta);
                         RTCRayHit rayoRefractado = trazarRayoConDireccion(scene, interseccionRayoIncidente + -normalRayoInvertida * 0.1f, direccionRefractada);
-                        RGBQUAD colorRefractado = iluminacionEspecular(scene, rayoRefractado, escena, profundidadActual + 1, indiceRefraccionProximo, mapaGlobal, index);
-
+                        RGBQUAD colorRefractado = iluminacionEspecular(scene, rayoRefractado, escena, profundidadActual + 1, indiceRefraccionProximo, mapaGlobal, indexGlobal, mapaCausticas, indexCausticas);
+                        resultadoFinal = elementoIntersecado->color;
                         resultadoFinal.rgbRed = std::min(255, resultadoFinal.rgbRed * colorRefractado.rgbRed / 255);
                         resultadoFinal.rgbGreen = std::min(255, resultadoFinal.rgbGreen * colorRefractado.rgbGreen / 255);
                         resultadoFinal.rgbBlue = std::min(255, resultadoFinal.rgbBlue * colorRefractado.rgbBlue / 255);
@@ -261,9 +251,9 @@ class RayTracer {
             }
 
             if (profundidadActual >= 1) {
-                resultadoFinal.rgbRed = std::min(iluminacionDirecta(scene, rayoIncidente, escena).rgbRed + iluminacionIndirecta(scene, rayoIncidente, escena, mapaGlobal, index).rgbRed, 255);
-                resultadoFinal.rgbGreen = std::min(iluminacionDirecta(scene, rayoIncidente, escena).rgbGreen + iluminacionIndirecta(scene, rayoIncidente, escena, mapaGlobal, index).rgbGreen, 255);
-                resultadoFinal.rgbBlue = std::min(iluminacionDirecta(scene, rayoIncidente, escena).rgbBlue + iluminacionIndirecta(scene, rayoIncidente, escena, mapaGlobal, index).rgbBlue, 255);
+                resultadoFinal.rgbRed = std::min(iluminacionDirecta(scene, rayoIncidente, escena).rgbRed + iluminacionIndirecta(scene, rayoIncidente, escena, mapaGlobal, indexGlobal).rgbRed + iluminacionCausticas(scene, rayoIncidente, escena, mapaCausticas, indexCausticas).rgbRed, 255);
+                resultadoFinal.rgbGreen = std::min(iluminacionDirecta(scene, rayoIncidente, escena).rgbGreen + iluminacionIndirecta(scene, rayoIncidente, escena, mapaGlobal, indexGlobal).rgbGreen + iluminacionCausticas(scene, rayoIncidente, escena, mapaCausticas, indexCausticas).rgbGreen, 255);
+                resultadoFinal.rgbBlue = std::min(iluminacionDirecta(scene, rayoIncidente, escena).rgbBlue + iluminacionIndirecta(scene, rayoIncidente, escena, mapaGlobal, indexGlobal).rgbBlue + iluminacionCausticas(scene, rayoIncidente, escena, mapaCausticas, indexCausticas).rgbBlue, 255);
                 return resultadoFinal;
             }
         }
