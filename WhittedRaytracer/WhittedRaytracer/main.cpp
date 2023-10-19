@@ -23,6 +23,7 @@
 #include <list> 
 #include <limits>
 #include <iostream>
+#include <chrono>
 
 #include "nanoflann/nanoflann.h"
 #include "nanoflann/utils.h"
@@ -48,8 +49,13 @@ int _tmain(int argc, _TCHAR* argv[])
     FIBITMAP* bitmapMapaGlobal = FreeImage_Allocate(pantalla->ancho, pantalla->altura, 24);
     FIBITMAP* bitmapMapaCausticas = FreeImage_Allocate(pantalla->ancho, pantalla->altura, 24);
 
+    // Inicializar clock
+    using std::chrono::high_resolution_clock;
+    using std::chrono::duration_cast;
+    using std::chrono::milliseconds;
+    auto t1 = high_resolution_clock::now();
 
-    cout << "Cargado de objetos a la escena de Embree \n\n";
+    cout << "Cargado de objetos a la escena de Embree \n";
     RTCDevice device = rtcNewDevice(NULL);
     RTCScene scene = rtcNewScene(device);
     for (Elemento* objeto : escena->elementos) {
@@ -84,17 +90,26 @@ int _tmain(int argc, _TCHAR* argv[])
         }
     }
     rtcCommitScene(scene);
+    auto t2 = high_resolution_clock::now();
+    auto cargadoDeObjMs = duration_cast<milliseconds>(t2 - t1);
+    std::cout << "Tiempo: " << cargadoDeObjMs.count() << "ms\n\n";
 
 
-    cout << "Generacion de mapas de fotones \n\n";
+    cout << "Generacion de mapas de fotones \n";
     PointCloud mapaGlobal, mapaCausticas;
     photonMapper.generacionDeMapas(escena, mapaGlobal, mapaCausticas, scene);
+    auto t3 = high_resolution_clock::now();
+    auto mapGenMs = duration_cast<milliseconds>(t3 - t2);
+    std::cout << "Tiempo: " << mapGenMs.count() << "ms\n\n";
 
 
-    cout << "Generacion de KDTs a partir de los mapas \n\n";
+    cout << "Generacion de KDTs a partir de los mapas \n";
     using CustomKDTree = nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<float, PointCloud>, PointCloud, 3>;
     CustomKDTree indexGlobal(3 /*dim*/, mapaGlobal, { 10 /* max leaf */ }); // PROBAR CAMBIANDO LA CANTIDAD MAXIMA DE HOJAS
     CustomKDTree indexCausticas(3 /*dim*/, mapaCausticas, { 10 /* max leaf */ }); // PROBAR CAMBIANDO LA CANTIDAD MAXIMA DE HOJAS
+    auto t4 = high_resolution_clock::now();
+    auto kdTreeGenMs = duration_cast<milliseconds>(t4 - t3);
+    std::cout << "Tiempo: " << kdTreeGenMs.count() << "ms\n\n";
 
 
     cout << "Calculos de radiancia y generacion de imagenes \n\n";
@@ -114,7 +129,6 @@ int _tmain(int argc, _TCHAR* argv[])
             RTCIntersectContext context;
             rtcInitIntersectContext(&context);
             rtcIntersect1(scene, &context, &rayhit);
-            RGBQUAD total;
 
             // iluminacion directa
             RGBQUAD colorIluminacionDirecta = rayTracer.iluminacionDirecta(scene, rayhit, escena);
@@ -124,9 +138,6 @@ int _tmain(int argc, _TCHAR* argv[])
             RGBQUAD colorIluminacionIndirecta = rayTracer.iluminacionIndirecta(scene, rayhit, escena, mapaGlobal, &indexGlobal);
             FreeImage_SetPixelColor(pantalla->bitmapIndirecta, x, y, &colorIluminacionIndirecta);
 
-            if (x == 13 && y == 20) {
-                int hola = 1;
-            }
             // causticas
             RGBQUAD colorIluminacionCausticas = rayTracer.iluminacionCausticas(scene, rayhit, escena, mapaCausticas, &indexCausticas);
             FreeImage_SetPixelColor(pantalla->bitmapCausticas, x, y, &colorIluminacionCausticas);
@@ -135,27 +146,29 @@ int _tmain(int argc, _TCHAR* argv[])
             RGBQUAD colorIluminacionEspecular = rayTracer.iluminacionEspecular(scene, rayhit, escena, 0, 1.f, mapaGlobal, &indexGlobal, mapaCausticas, &indexCausticas);
             FreeImage_SetPixelColor(pantalla->bitmapEspecular, x, y, &colorIluminacionEspecular);
             
+            // resultado
+            RGBQUAD total;
             total.rgbRed = std::min((int)(colorIluminacionDirecta.rgbRed + colorIluminacionEspecular.rgbRed + colorIluminacionIndirecta.rgbRed + colorIluminacionCausticas.rgbRed), 255);
             total.rgbGreen = std::min((int)(colorIluminacionDirecta.rgbGreen + colorIluminacionEspecular.rgbGreen + colorIluminacionIndirecta.rgbGreen + colorIluminacionCausticas.rgbGreen), 255);
             total.rgbBlue = std::min((int)(colorIluminacionDirecta.rgbBlue + colorIluminacionEspecular.rgbBlue + colorIluminacionIndirecta.rgbBlue + colorIluminacionCausticas.rgbBlue), 255);
             FreeImage_SetPixelColor(pantalla->bitmapResultado, x, y, &total);
 
-            RGBQUAD imagenMapaGlobal = rayTracer.imagenMapaGlobal(scene, rayhit, escena, mapaGlobal, &indexGlobal);
-            RGBQUAD imagenMapaCausticas = rayTracer.imagenMapaGlobal(scene, rayhit, escena, mapaCausticas, &indexCausticas);
+            // mapa global
+            RGBQUAD imagenMapaGlobal = rayTracer.imagenMapaFotones(scene, rayhit, escena, mapaGlobal, &indexGlobal);
             FreeImage_SetPixelColor(bitmapMapaGlobal, x, y, &imagenMapaGlobal);
+            
+            // mapa causticas
+            RGBQUAD imagenMapaCausticas = rayTracer.imagenMapaFotones(scene, rayhit, escena, mapaCausticas, &indexCausticas);
             FreeImage_SetPixelColor(bitmapMapaCausticas, x, y, &imagenMapaCausticas);
-            // resultado
-            /*RGBQUAD total;
-            total.rgbRed = std::min((int)(colorIluminacionDirecta.rgbRed + colorIluminacionIndirecta.rgbRed + colorIluminacionCausticas.rgbRed), 255);
-            total.rgbGreen = std::min((int)(colorIluminacionDirecta.rgbGreen + colorIluminacionIndirecta.rgbGreen + colorIluminacionCausticas.rgbGreen), 255);
-            total.rgbBlue = std::min((int)(colorIluminacionDirecta.rgbBlue + colorIluminacionIndirecta.rgbBlue + colorIluminacionCausticas.rgbBlue), 255);
-            FreeImage_SetPixelColor(pantalla->bitmapResultado, x, y, &total);*/
         }
         
         if (y % 50 == 0) {
             cout << y << " / " << pantalla->altura << "\n\n";
         }
     }
+    auto t5 = high_resolution_clock::now();
+    auto genFotoMs = duration_cast<milliseconds>(t5 - t4);
+    std::cout << "Tiempo: " << genFotoMs.count() << "ms\n";
 
     rtcReleaseScene(scene);
     rtcReleaseDevice(device);

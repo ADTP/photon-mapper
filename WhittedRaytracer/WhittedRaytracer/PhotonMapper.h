@@ -240,7 +240,7 @@ class PhotonMapper {
         // Iterar sobre todas las luces de la escena emitiendo fotones
         vec3 dirFoton = { 0, 0, 0 };
         for (int i = 0; i < escena->luces.size(); i++) {
-            int fotonesAEmitir = escena->luces[i]->watts * escena->cantidadDeFotones * 100 / potenciaTotal;
+            int fotonesAEmitir = escena->luces[i]->watts * escena->cantidadDeFotones * 10 / potenciaTotal;
             int fotonesEmitidos = 0;
 
             //cout << "Fotones emitidos: " << fotonesEmitidos << "\n\n";

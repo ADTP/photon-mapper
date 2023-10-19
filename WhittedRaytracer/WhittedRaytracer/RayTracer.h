@@ -133,21 +133,18 @@ class RayTracer {
             vec3 interseccionRayoIncidente = rayHitOrg + rayHitDir * rayoIncidente.ray.tfar;
             vec3 normalRayoIncidente = { rayoIncidente.hit.Ng_x, rayoIncidente.hit.Ng_y, rayoIncidente.hit.Ng_z };
             Elemento* elementoIntersecado = escena->elementos[rayoIncidente.hit.geomID];
+            
             const float consulta[3] = { interseccionRayoIncidente.x, interseccionRayoIncidente.y, interseccionRayoIncidente.z };
-            const float radioEsfera = 30; // VER SI HACERLO CUSTOMIZABLE
+            const float radioEsfera = 30;
             std::vector <nanoflann::ResultItem<uint32_t, float>> fotonesResultantes;
 
             nanoflann::SearchParameters params;
             params.sorted = true;
-            index->radiusSearch(&consulta[0], radioEsfera, fotonesResultantes, params); // Devuelve en fotonesResultantes un vector de pares: (indice, distancia)
+            index->radiusSearch(&consulta[0], radioEsfera, fotonesResultantes, params);
+            
             int knn = 500;
-            /*int knn = 1;
-            std::vector<uint32_t> ret_index(knn);
-            std::vector<float>    out_dist_sqr(knn);
-            index->knnSearch(&consulta[0], knn, &ret_index[0], &out_dist_sqr[0]);
-            int minFotones = std::min(knn, (int)mapaCausticas.pts.size());*/
-            //int cantFotonesResultantes = knn;
             int iMaximo = 0;
+
             if (fotonesResultantes.size() > 0) {
                 vec3 flujoAcumulado = { 0,0,0 };
 
@@ -226,16 +223,8 @@ class RayTracer {
                         return resultadoFinal;
 
                     } else {
-                        if (profundidadActual >= 2) {
-                            int hola = 1;
-                        }
-                        if (indiceRefraccionActual == indiceRefraccionProximo) {
-                            int hola = 1;
-                        }
-                        //float eta = indiceRefraccionActual / indiceRefraccionProximo;
+
                         float eta = indiceRefraccionActual / indiceRefraccionProximo;
-                        //if (profundidadActual == 0) { cout << "\n"; }
-                        //cout << eta << "\n";
                       
                         vec3 direccionRefractada = refract(direccionRayo, normalRayoInvertida, eta);
                         RTCRayHit rayoRefractado = trazarRayoConDireccion(scene, interseccionRayoIncidente + -normalRayoInvertida * 0.1f, direccionRefractada);
@@ -261,7 +250,7 @@ class RayTracer {
         return negro;
     };
 
-    RGBQUAD imagenMapaGlobal(RTCScene scene, RTCRayHit rayoIncidente, Escena* escena, PointCloud mapaGlobal, CustomKDTree* index) {
+    RGBQUAD imagenMapaFotones(RTCScene scene, RTCRayHit rayoIncidente, Escena* escena, PointCloud mapaGlobal, CustomKDTree* index) {
         if (rayoIncidente.ray.tfar != std::numeric_limits<float>::infinity()) {
             vec3 rayHitOrg = { rayoIncidente.ray.org_x, rayoIncidente.ray.org_y, rayoIncidente.ray.org_z };
             vec3 rayHitDir = { rayoIncidente.ray.dir_x, rayoIncidente.ray.dir_y, rayoIncidente.ray.dir_z };
@@ -269,12 +258,12 @@ class RayTracer {
             vec3 normalRayoIncidente = { rayoIncidente.hit.Ng_x, rayoIncidente.hit.Ng_y, rayoIncidente.hit.Ng_z };
 
             const float consulta[3] = { interseccionRayoIncidente.x, interseccionRayoIncidente.y, interseccionRayoIncidente.z };
-            const float radioEsfera = 0.01; // VER SI HACERLO CUSTOMIZABLE
+            const float radioEsfera = 0.001;
             std::vector <nanoflann::ResultItem<uint32_t, float>> fotonesResultantes;
 
             nanoflann::SearchParameters params;
             params.sorted = true;
-            index->radiusSearch(&consulta[0], radioEsfera, fotonesResultantes, params); // Devuelve en fotonesResultantes un vector de pares: (indice, distancia)
+            index->radiusSearch(&consulta[0], radioEsfera, fotonesResultantes, params);
 
             if (fotonesResultantes.size() > 0) {
                 vec3 flujoAcumulado = { 0,0,0 };
