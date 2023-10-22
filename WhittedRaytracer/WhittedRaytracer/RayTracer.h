@@ -152,9 +152,9 @@ class RayTracer {
                 for (int i = 0; i < fotonesResultantes.size() && i < knn; i++) {
                     iMaximo = i;
                     Foton foton = mapaCausticas.pts[fotonesResultantes[i].first];
-                    flujoAcumulado.r += foton.potencia.r*50;
-                    flujoAcumulado.g += foton.potencia.g*50;
-                    flujoAcumulado.b += foton.potencia.b*50;
+                    flujoAcumulado.r += foton.potencia.r * 500;
+                    flujoAcumulado.g += foton.potencia.g * 500;
+                    flujoAcumulado.b += foton.potencia.b * 500;
                 }
                 float distanciaFotonMasLejano = length(mapaCausticas.pts[fotonesResultantes[std::min(iMaximo,knn)].first].posicion - interseccionRayoIncidente);
                 float pi = 3.14159265358979323846;
@@ -250,7 +250,7 @@ class RayTracer {
         return negro;
     };
 
-    RGBQUAD imagenMapaFotones(RTCScene scene, RTCRayHit rayoIncidente, Escena* escena, PointCloud mapaGlobal, CustomKDTree* index) {
+    RGBQUAD imagenMapaFotones(RTCScene scene, RTCRayHit rayoIncidente, Escena* escena, PointCloud mapaGlobal, CustomKDTree* index, int cantidadFotones) {
         if (rayoIncidente.ray.tfar != std::numeric_limits<float>::infinity()) {
             vec3 rayHitOrg = { rayoIncidente.ray.org_x, rayoIncidente.ray.org_y, rayoIncidente.ray.org_z };
             vec3 rayHitDir = { rayoIncidente.ray.dir_x, rayoIncidente.ray.dir_y, rayoIncidente.ray.dir_z };
@@ -258,7 +258,7 @@ class RayTracer {
             vec3 normalRayoIncidente = { rayoIncidente.hit.Ng_x, rayoIncidente.hit.Ng_y, rayoIncidente.hit.Ng_z };
 
             const float consulta[3] = { interseccionRayoIncidente.x, interseccionRayoIncidente.y, interseccionRayoIncidente.z };
-            const float radioEsfera = 0.001;
+            const float radioEsfera = 0.0001;
             std::vector <nanoflann::ResultItem<uint32_t, float>> fotonesResultantes;
 
             nanoflann::SearchParameters params;
@@ -268,7 +268,7 @@ class RayTracer {
             if (fotonesResultantes.size() > 0) {
                 vec3 flujoAcumulado = { 0,0,0 };
                 Foton foton = mapaGlobal.pts[fotonesResultantes[0].first];
-                RGBQUAD resultado = { foton.potencia.b * escena->cantidadDeFotones, foton.potencia.g * escena->cantidadDeFotones, foton.potencia.r * escena->cantidadDeFotones };
+                RGBQUAD resultado = { foton.potencia.b * cantidadFotones, foton.potencia.g * cantidadFotones, foton.potencia.r * cantidadFotones };
                 return resultado;
             }
         }

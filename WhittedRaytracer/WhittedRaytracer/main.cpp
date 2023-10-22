@@ -117,7 +117,8 @@ int _tmain(int argc, _TCHAR* argv[])
 
 
     cout << "Calculos de radiancia y generacion de imagenes \n\n";
-    #pragma omp parallel for
+    int progreso = 0;
+    #pragma omp parallel for shared(progreso)
     for (int y = 0; y < pantalla->altura; y++) {
         for (int x = 0; x < pantalla->ancho; x++) {
             RTCRayHit rayhit;
@@ -159,16 +160,17 @@ int _tmain(int argc, _TCHAR* argv[])
             FreeImage_SetPixelColor(pantalla->bitmapResultado, x, y, &total);
 
             // mapa global
-            RGBQUAD imagenMapaGlobal = rayTracer.imagenMapaFotones(scene, rayhit, escena, mapaGlobal, &indexGlobal);
+            RGBQUAD imagenMapaGlobal = rayTracer.imagenMapaFotones(scene, rayhit, escena, mapaGlobal, &indexGlobal, escena->cantidadFotonesGlobal);
             FreeImage_SetPixelColor(bitmapMapaGlobal, x, y, &imagenMapaGlobal);
             
             // mapa causticas
-            RGBQUAD imagenMapaCausticas = rayTracer.imagenMapaFotones(scene, rayhit, escena, mapaCausticas, &indexCausticas);
+            RGBQUAD imagenMapaCausticas = rayTracer.imagenMapaFotones(scene, rayhit, escena, mapaCausticas, &indexCausticas, escena->cantidadFotonesCausticas);
             FreeImage_SetPixelColor(bitmapMapaCausticas, x, y, &imagenMapaCausticas);
         }
         
-        if (y % 50 == 0) {
-            cout << y << " / " << pantalla->altura << "\n\n";
+        progreso++;
+        if (progreso % 50 == 0) {
+            cout << progreso << " / " << pantalla->altura << "\n\n";
         }
     }
 

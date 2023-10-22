@@ -124,7 +124,7 @@ class PhotonMapper {
 
         // Iterar sobre todas las luces de la escena emitiendo fotones
         for (int i = 0; i < escena->luces.size(); i++) {
-            int fotonesAEmitir = escena->luces[i]->watts * escena->cantidadDeFotones / potenciaTotal;
+            int fotonesAEmitir = escena->luces[i]->watts * escena->cantidadFotonesGlobal / potenciaTotal;
             int fotonesEmitidos = 0;
 
             //cout << "Fotones emitidos: " << fotonesEmitidos << "\n\n";
@@ -186,11 +186,11 @@ class PhotonMapper {
                     if (profundidad > 0) {
                         vec3 colorVector;
                         colorVector.x = color.rgbRed;
-                        colorVector.x = colorVector.x / (float)escena->cantidadDeFotones * elementoIntersecado->color.rgbRed / 255;
+                        colorVector.x = colorVector.x / (float)escena->cantidadFotonesGlobal * elementoIntersecado->color.rgbRed / 255;
                         colorVector.y = color.rgbGreen;
-                        colorVector.y = colorVector.y / (float)escena->cantidadDeFotones * elementoIntersecado->color.rgbGreen / 255;
+                        colorVector.y = colorVector.y / (float)escena->cantidadFotonesGlobal * elementoIntersecado->color.rgbGreen / 255;
                         colorVector.z = color.rgbBlue;
-                        colorVector.z = colorVector.z / (float)escena->cantidadDeFotones * elementoIntersecado->color.rgbBlue / 255;
+                        colorVector.z = colorVector.z / (float)escena->cantidadFotonesGlobal * elementoIntersecado->color.rgbBlue / 255;
 
                         mapaGlobal.pts.push_back(Foton(interseccionMasCercana, colorVector, rayHitDir, 0, 0, 0));
                     }
@@ -218,11 +218,11 @@ class PhotonMapper {
                     if (profundidad > 0 && length(elementoIntersecado->coeficienteReflexionEspecular) == 0 && elementoIntersecado->indiceRefraccion == 0) {
                         vec3 colorVector;
                         colorVector.x = color.rgbRed;
-                        colorVector.x = colorVector.x / (float)escena->cantidadDeFotones * elementoIntersecado->color.rgbRed / 255;
+                        colorVector.x = colorVector.x / (float)escena->cantidadFotonesGlobal * elementoIntersecado->color.rgbRed / 255;
                         colorVector.y = color.rgbGreen;
-                        colorVector.y = colorVector.y / (float)escena->cantidadDeFotones * elementoIntersecado->color.rgbGreen / 255;
+                        colorVector.y = colorVector.y / (float)escena->cantidadFotonesGlobal * elementoIntersecado->color.rgbGreen / 255;
                         colorVector.z = color.rgbBlue;
-                        colorVector.z = colorVector.z / (float)escena->cantidadDeFotones * elementoIntersecado->color.rgbBlue / 255;
+                        colorVector.z = colorVector.z / (float)escena->cantidadFotonesGlobal * elementoIntersecado->color.rgbBlue / 255;
                         mapaGlobal.pts.push_back(Foton(interseccionMasCercana, colorVector, rayHitDir, 0, 0, 0));
                     }
                 }
@@ -240,7 +240,7 @@ class PhotonMapper {
         // Iterar sobre todas las luces de la escena emitiendo fotones
         vec3 dirFoton = { 0, 0, 0 };
         for (int i = 0; i < escena->luces.size(); i++) {
-            int fotonesAEmitir = escena->luces[i]->watts * escena->cantidadDeFotones * 10 / potenciaTotal;
+            int fotonesAEmitir = escena->luces[i]->watts * escena->cantidadFotonesCausticas / potenciaTotal;
             int fotonesEmitidos = 0;
 
             //cout << "Fotones emitidos: " << fotonesEmitidos << "\n\n";
@@ -300,11 +300,9 @@ class PhotonMapper {
             bool transparente = elementoIntersectado->indiceRefraccion > 0;
 
             if (!especular && !transparente) {
-                // PUSE * ACA PARA QUE LA LUZ BLANCA CAMBIE DE COLOR SI EL OBJETO TRANSPARENTE ES DE COLOR
-                //vec3 colorFinal = { std::min((int)(colorLuz.r * colorAcumulado.r), 255), std::min((int)(colorLuz.g * colorAcumulado.g), 255), std::min((int)(colorLuz.b * colorAcumulado.b), 255) };
-                colorAcumulado.r = colorAcumulado.r / (float)escena->cantidadDeFotones;
-                colorAcumulado.g = colorAcumulado.g / (float)escena->cantidadDeFotones;
-                colorAcumulado.b = colorAcumulado.b / (float)escena->cantidadDeFotones;
+                colorAcumulado.r = colorAcumulado.r / (float)escena->cantidadFotonesCausticas;
+                colorAcumulado.g = colorAcumulado.g / (float)escena->cantidadFotonesCausticas;
+                colorAcumulado.b = colorAcumulado.b / (float)escena->cantidadFotonesCausticas;
                 mapaCausticas.pts.push_back(Foton(interseccionRayo, colorAcumulado, direccionRayo, 0, 0, 0));
 
             } else {

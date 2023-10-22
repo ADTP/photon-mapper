@@ -10,7 +10,8 @@ Escena::Escena() {
 	xml_node escena = doc.child("escena");
 
 	// ESCENA
-	cantidadDeFotones = escena.attribute("cantidadDeFotones").as_int();
+	cantidadFotonesGlobal = escena.attribute("cantidadFotonesGlobal").as_int();
+	cantidadFotonesCausticas = escena.attribute("cantidadFotonesCausticas").as_int();
 	generarMapas = escena.attribute("generarMapas").as_bool();
 
 	// PANTALLA
