@@ -5,6 +5,7 @@
 #include <time.h>
 #include <direct.h>
 #include <tchar.h>
+#include <omp.h> 
 
 #include "Escena.h"
 #include "Esfera.h"
@@ -90,6 +91,7 @@ int _tmain(int argc, _TCHAR* argv[])
         }
     }
     rtcCommitScene(scene);
+    
     auto t2 = high_resolution_clock::now();
     auto cargadoDeObjMs = duration_cast<milliseconds>(t2 - t1);
     std::cout << "Tiempo: " << cargadoDeObjMs.count() << "ms\n\n";
@@ -98,6 +100,7 @@ int _tmain(int argc, _TCHAR* argv[])
     cout << "Generacion de mapas de fotones \n";
     PointCloud mapaGlobal, mapaCausticas;
     photonMapper.generacionDeMapas(escena, mapaGlobal, mapaCausticas, scene);
+    
     auto t3 = high_resolution_clock::now();
     auto mapGenMs = duration_cast<milliseconds>(t3 - t2);
     std::cout << "Tiempo: " << mapGenMs.count() << "ms\n\n";
@@ -107,12 +110,14 @@ int _tmain(int argc, _TCHAR* argv[])
     using CustomKDTree = nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<float, PointCloud>, PointCloud, 3>;
     CustomKDTree indexGlobal(3 /*dim*/, mapaGlobal, { 10 /* max leaf */ }); // PROBAR CAMBIANDO LA CANTIDAD MAXIMA DE HOJAS
     CustomKDTree indexCausticas(3 /*dim*/, mapaCausticas, { 10 /* max leaf */ }); // PROBAR CAMBIANDO LA CANTIDAD MAXIMA DE HOJAS
+    
     auto t4 = high_resolution_clock::now();
     auto kdTreeGenMs = duration_cast<milliseconds>(t4 - t3);
     std::cout << "Tiempo: " << kdTreeGenMs.count() << "ms\n\n";
 
 
     cout << "Calculos de radiancia y generacion de imagenes \n\n";
+    #pragma omp parallel for
     for (int y = 0; y < pantalla->altura; y++) {
         for (int x = 0; x < pantalla->ancho; x++) {
             RTCRayHit rayhit;
@@ -166,6 +171,7 @@ int _tmain(int argc, _TCHAR* argv[])
             cout << y << " / " << pantalla->altura << "\n\n";
         }
     }
+
     auto t5 = high_resolution_clock::now();
     auto genFotoMs = duration_cast<milliseconds>(t5 - t4);
     std::cout << "Tiempo: " << genFotoMs.count() << "ms\n";
