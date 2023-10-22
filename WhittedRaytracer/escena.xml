@@ -10,7 +10,19 @@
     <luces>
         <luz watts="50">
             <color r="255" g="255" b="255" />
-			<posicion x="2" y="7" z="0" />        
+			<posicion x="-4" y="7" z="7" />        
+		</luz>
+		<luz watts="50">
+			<color r="255" g="255" b="255" />
+			<posicion x="4" y="7" z="7" />
+		</luz>
+		<luz watts="50">
+			<color r="255" g="255" b="255" />
+			<posicion x="-4" y="7" z="-7" />
+		</luz>
+		<luz watts="50">
+			<color r="255" g="255" b="255" />
+			<posicion x="4" y="7" z="-7" />
 		</luz>
 		<!--<luz watts="50">
             <color r="255" g="255" b="255" />

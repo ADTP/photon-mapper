@@ -36,12 +36,13 @@ class RayTracer {
             if (elementoIntersecado->indiceRefraccion == 0 && length(elementoIntersecado->coeficienteReflexionEspecular) == 0) {
                 for (Luz* luz : escena->luces) {
                     int cantidadDeRayos = 300;
+                    bool iluminado = true;
                     for (int i = 0; i < cantidadDeRayos; i++) {
                         vec3 offsetLuz;
                         do {
-                            offsetLuz.x = generator2() * 0.1;
+                            offsetLuz.x = generator2() * 2;
                             offsetLuz.y = generator2() * 0;
-                            offsetLuz.z = generator2() * 0.1;
+                            offsetLuz.z = generator2() * 2;
                         } while (pow(offsetLuz.x, 2) + pow(offsetLuz.y, 2) + pow(offsetLuz.z, 2) > 1);
 
                         RTCRayHit rayoSombra = trazarRayo(scene, interseccionRayoIncidente + normalRayoIncidente * 0.1f, luz->posicion + offsetLuz);
@@ -51,13 +52,26 @@ class RayTracer {
                         if (dot(normalRayoIncidente, direccionRayoSombra) > 0) { // Si la luz incide directo sobre el punto de interseccion
                             float distanciaLuz = length(luz->posicion + offsetLuz - interseccionRayoIncidente);
                             float distanciaInterseccion = length((origenRayoSombra + direccionRayoSombra * rayoSombra.ray.tfar) - origenRayoSombra);
-
+                            
                             if (distanciaInterseccion > distanciaLuz) { // Si no hay objetos intermedios
                                 float escala = dot(normalize(normalRayoIncidente), normalize(direccionRayoSombra));
+
+                                if (iluminado && i == 10) {
+                                    distanciaLuz = length(luz->posicion - interseccionRayoIncidente);
+                                    escala = dot(normalize(normalRayoIncidente), normalize(luz->posicion - interseccionRayoIncidente));
+
+                                    resultadoIntermedio.x = std::min(255.f, (resultadoIntermedio.x + luz->color.rgbRed * (1 / distanciaLuz) * escala * luz->watts / 20));
+                                    resultadoIntermedio.y = std::min(255.f, (resultadoIntermedio.y + luz->color.rgbGreen * (1 / distanciaLuz) * escala * luz->watts / 20));
+                                    resultadoIntermedio.z = std::min(255.f, (resultadoIntermedio.z + luz->color.rgbBlue * (1 / distanciaLuz) * escala * luz->watts / 20));
+                                    break;
+                                }
+
                                 resultadoIntermedio.x = std::min(255.f, (resultadoIntermedio.x + luz->color.rgbRed * (1 / distanciaLuz) * escala * luz->watts / (20 * cantidadDeRayos)));
                                 resultadoIntermedio.y = std::min(255.f, (resultadoIntermedio.y + luz->color.rgbGreen * (1 / distanciaLuz) * escala * luz->watts / (20 * cantidadDeRayos)));
                                 resultadoIntermedio.z = std::min(255.f, (resultadoIntermedio.z + luz->color.rgbBlue * (1 / distanciaLuz) * escala * luz->watts / (20 * cantidadDeRayos)));
-
+                            
+                            } else {
+                                iluminado = false;
                             }
                         }
                     }
