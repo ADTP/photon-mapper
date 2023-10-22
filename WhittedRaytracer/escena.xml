@@ -1,5 +1,5 @@
 <escena cantidadDeFotones="100000" generarMapas="true">
-    <pantalla ancho="1920" altura="1080" />
+    <pantalla ancho="100" altura="100" />
 
     <camara fovHorizontal="90" distanciaMalla="1">
         <posicion x="0" y="0" z="-10" />
@@ -56,15 +56,15 @@
 		</objeto>
 
 		<!-- MODELOS -->
-		<objeto archivo="diablo.obj">
+		<objeto archivo="copo.obj" indiceRefraccion="1.45">
 			<color r="255" g="255" b="255" />
-			<posicion x="0" y="0" z="7" />
+			<posicion x="0" y="-4" z="0" />
 			<coeficientereflexiondifusa r="0.1" g="0.1" b="0.1" />
 			<coeficientereflexionespecular r="0" g="0" b="0" />
 		</objeto>
 		
 		<!-- ESFERAS -->
-		<objeto radio="3" indiceRefraccion="1.45">
+		<!--<objeto radio="3" indiceRefraccion="1.45">
 			<color r="255" g="255" b="255" />
 			<posicion x="5" y="0" z="0" />
 			<coeficienteReflexionDifusa r="0" g="0" b="0" />
@@ -76,6 +76,6 @@
 			<posicion x="-5" y="0" z="0" />
 			<coeficienteReflexionDifusa r="0" g="0" b="0" />
 			<coeficienteReflexionEspecular r="0.7" g="0.7" b="0.7" />
-		</objeto>
+		</objeto>-->
     </elementos>
 </escena>
