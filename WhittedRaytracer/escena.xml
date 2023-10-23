@@ -1,5 +1,5 @@
 <escena cantidadFotonesGlobal="100000" cantidadFotonesCausticas="1000000" generarMapas="true">
-    <pantalla ancho="600" altura="400" />
+    <pantalla ancho="100" altura="100" />
 
     <camara fovHorizontal="90" distanciaMalla="1">
         <posicion x="0" y="0" z="-10" />
@@ -8,11 +8,11 @@
     </camara>
 
     <luces>
-        <luz watts="50">
+        <luz watts="50" tipo="2" radio="3" angulo="40">
             <color r="255" g="255" b="255" />
-			<posicion x="-4" y="7" z="7" />        
+			<posicion x="0" y="9" z="7" />        
 		</luz>
-		<luz watts="50">
+		<!--<luz watts="50">
 			<color r="255" g="255" b="255" />
 			<posicion x="4" y="7" z="7" />
 		</luz>
@@ -23,7 +23,7 @@
 		<luz watts="50">
 			<color r="255" g="255" b="255" />
 			<posicion x="4" y="7" z="-7" />
-		</luz>
+		</luz>-->
 		<!--<luz watts="50">
             <color r="255" g="255" b="255" />
             <posicion x="4" y="7" z="3" />

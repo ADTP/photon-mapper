@@ -38,22 +38,17 @@ class RayTracer {
                     int cantidadDeRayos = 300;
                     bool iluminado = true;
                     for (int i = 0; i < cantidadDeRayos; i++) {
-                        vec3 offsetLuz;
-                        do {
-                            offsetLuz.x = generator2() * 2;
-                            offsetLuz.y = generator2() * 0;
-                            offsetLuz.z = generator2() * 2;
-                        } while (pow(offsetLuz.x, 2) + pow(offsetLuz.y, 2) + pow(offsetLuz.z, 2) > 1);
+                        vec3 puntoAleatorioLuz = luz->getPosicionAleatoria();
 
-                        RTCRayHit rayoSombra = trazarRayo(scene, interseccionRayoIncidente + normalRayoIncidente * 0.1f, luz->posicion + offsetLuz);
+                        RTCRayHit rayoSombra = trazarRayo(scene, interseccionRayoIncidente + normalRayoIncidente * 0.1f, puntoAleatorioLuz);
                         vec3 origenRayoSombra = { rayoSombra.ray.org_x, rayoSombra.ray.org_y, rayoSombra.ray.org_z };
                         vec3 direccionRayoSombra = { rayoSombra.ray.dir_x , rayoSombra.ray.dir_y , rayoSombra.ray.dir_z };
 
                         if (dot(normalRayoIncidente, direccionRayoSombra) > 0) { // Si la luz incide directo sobre el punto de interseccion
-                            float distanciaLuz = length(luz->posicion + offsetLuz - interseccionRayoIncidente);
+                            float distanciaLuz = length(puntoAleatorioLuz - interseccionRayoIncidente);
                             float distanciaInterseccion = length((origenRayoSombra + direccionRayoSombra * rayoSombra.ray.tfar) - origenRayoSombra);
                             
-                            if (distanciaInterseccion > distanciaLuz) { // Si no hay objetos intermedios
+                            if (distanciaInterseccion > distanciaLuz && luz->esDireccionValida(direccionRayoSombra)) { // Si no hay objetos intermedios
                                 float escala = dot(normalize(normalRayoIncidente), normalize(direccionRayoSombra));
 
                                 if (iluminado && i == 10) {

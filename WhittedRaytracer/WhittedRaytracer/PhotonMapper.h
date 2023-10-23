@@ -131,11 +131,11 @@ class PhotonMapper {
             while (fotonesEmitidos < fotonesAEmitir) {
                 do {
                     dirFoton.x = generator2();
-                    dirFoton.y = generator2();
+                    dirFoton.y = escena->luces[i]->tipo == 2 ? -generator1() : generator2();  
                     dirFoton.z = generator2();
-                } while (pow(dirFoton.x, 2) + pow(dirFoton.y, 2) + pow(dirFoton.z, 2) > 1);
+                } while ((pow(dirFoton.x, 2) + pow(dirFoton.y, 2) + pow(dirFoton.z, 2) > 1) && !escena->luces[i]->esDireccionValida(-dirFoton));
                 
-                trazarFoton(escena->luces[i]->color, escena->luces[i]->posicion, dirFoton, mapaGlobal, 0, scene);
+                trazarFoton(escena->luces[i]->color, escena->luces[i]->getPosicionAleatoria(), dirFoton, mapaGlobal, 0, scene);
                 
                 fotonesEmitidos++;
             }
@@ -247,15 +247,17 @@ class PhotonMapper {
             while (fotonesEmitidos < fotonesAEmitir) {
                 do {
                     dirFoton.x = generator2();
-                    dirFoton.y = generator2();
+                    dirFoton.y = escena->luces[i]->tipo == 2 ? -generator1() : generator2();
                     dirFoton.z = generator2();
-                } while (pow(dirFoton.x, 2) + pow(dirFoton.y, 2) + pow(dirFoton.z, 2) > 1);
+                } while ((pow(dirFoton.x, 2) + pow(dirFoton.y, 2) + pow(dirFoton.z, 2) > 1) && !escena->luces[i]->esDireccionValida(-dirFoton));
 
                 // TIRAR RAYO EN LA DIRECCION DEFINIDA Y VER SI INTERSECTA CON UNO DE LOS OBJETOS ESPECULARES GUARDADOS
+                vec3 posicionAleatoriaLuz = escena->luces[i]->getPosicionAleatoria();
+
                 RTCRayHit rayoPrueba;
-                rayoPrueba.ray.org_x = escena->luces[i]->posicion.x;
-                rayoPrueba.ray.org_y = escena->luces[i]->posicion.y;
-                rayoPrueba.ray.org_z = escena->luces[i]->posicion.z;
+                rayoPrueba.ray.org_x = posicionAleatoriaLuz.x;
+                rayoPrueba.ray.org_y = posicionAleatoriaLuz.y;
+                rayoPrueba.ray.org_z = posicionAleatoriaLuz.z;
                 rayoPrueba.ray.dir_x = dirFoton.x;
                 rayoPrueba.ray.dir_y = dirFoton.y;
                 rayoPrueba.ray.dir_z = dirFoton.z;
@@ -343,29 +345,6 @@ class PhotonMapper {
                     colorAcumulado.g = colorAcumulado.g * elementoIntersectado->color.rgbGreen / 255;
                     colorAcumulado.b = colorAcumulado.b * elementoIntersectado->color.rgbBlue / 255;
                     trazarFotonCaustica(rayoReflejado, mapaCausticas, escena, scene, colorAcumulado, 1.0f);
-                    //vec3 direccionReflejada = reflect(direccionRayo, normalInterseccion);
-
-                    //RTCRayHit rayoReflejado;
-                    //rayoReflejado.ray.org_x = interseccionRayo.x;
-                    //rayoReflejado.ray.org_y = interseccionRayo.y;
-                    //rayoReflejado.ray.org_z = interseccionRayo.z;
-                    //rayoReflejado.ray.dir_x = direccionReflejada.x;
-                    //rayoReflejado.ray.dir_y = direccionReflejada.y;
-                    //rayoReflejado.ray.dir_z = direccionReflejada.z;
-                    //rayoReflejado.ray.tnear = 0.f;
-                    //rayoReflejado.ray.tfar = std::numeric_limits<float>::infinity();
-                    //rayoReflejado.hit.geomID = RTC_INVALID_GEOMETRY_ID;
-
-                    //RTCIntersectContext context;
-                    //rtcInitIntersectContext(&context);
-                    //rtcIntersect1(scene, &context, &rayoReflejado);
-
-                    //// LA REFLEXION PERFECTA NO DEBERIA CAMBIAR EL COLOR DE LA LUZ, PERO SI TENER EN CUENTA SI VIENE CAMBIADA POR UN OBJ TRANSPARENTE ANTERIOR
-                    ////colorAcumulado.r += elementoIntersectado->color.rgbRed * elementoIntersectado->coeficienteReflexionEspecular.r;
-                    ////colorAcumulado.g += elementoIntersectado->color.rgbGreen * elementoIntersectado->coeficienteReflexionEspecular.g;
-                    ////colorAcumulado.b += elementoIntersectado->color.rgbBlue * elementoIntersectado->coeficienteReflexionEspecular.b;
-
-                    //trazarFotonCaustica(rayoReflejado, mapaCausticas, escena, scene, colorAcumulado, indiceRefraccionActual);
                 }
             }
         }

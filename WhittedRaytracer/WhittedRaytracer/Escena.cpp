@@ -41,6 +41,9 @@ Escena::Escena() {
 	xml_node_iterator iteradorLuz = nodoLuces.begin();
 	while (iteradorLuz != nodoLuces.end()) {
 		int watts = iteradorLuz->attribute("watts").as_int();
+		int tipo = iteradorLuz->attribute("tipo").as_int();
+		float radio = iteradorLuz->attribute("radio").as_float();
+		float angulo = iteradorLuz->attribute("angulo").as_float();
 
 		xml_node color = iteradorLuz->child("color");
 		RGBQUAD colorLuz;
@@ -51,7 +54,7 @@ Escena::Escena() {
 		xml_node posicion = iteradorLuz->child("posicion");
 		vec3 pos = { posicion.attribute("x").as_float(), posicion.attribute("y").as_float(), posicion.attribute("z").as_float() };
 
-		Luz* luzTecho = new Luz(pos, {}, colorLuz, watts);
+		Luz* luzTecho = new Luz(pos, {}, colorLuz, watts, tipo, radio, angulo);
 		luces.push_back(luzTecho);
 		iteradorLuz++;
 	}
