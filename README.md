@@ -1,2 +1,2 @@
-# raytracer
-Obligatorio 2 - Computacion Grafica
+# Photon Mapper
+Obligatorio 1 - Computacion Grafica Avanzada
