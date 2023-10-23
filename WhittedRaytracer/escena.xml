@@ -1,16 +1,16 @@
-<escena cantidadFotonesGlobal="100000" cantidadFotonesCausticas="1000000" generarMapas="true">
-    <pantalla ancho="100" altura="100" />
+<escena cantidadFotonesGlobal="10000" cantidadFotonesCausticas="1000000" heuristicaSombra="false" generarMapas="true">
+    <pantalla ancho="600" altura="400" />
 
     <camara fovHorizontal="90" distanciaMalla="1">
-        <posicion x="0" y="0" z="-10" />
+        <posicion x="0" y="0" z="-12" />
         <arriba x="0" y="1" z="0" />
         <adelante x="0" y="0" z="1" />
     </camara>
 
     <luces>
-        <luz watts="50" tipo="2" radio="3" angulo="40">
+        <luz watts="50" tipo="2" radio="3" angulo="20">
             <color r="255" g="255" b="255" />
-			<posicion x="0" y="9" z="7" />        
+			<posicion x="0" y="8" z="0" />        
 		</luz>
 		<!--<luz watts="50">
 			<color r="255" g="255" b="255" />
@@ -37,9 +37,9 @@
     <elementos>
 		<!--CORNELL BOX-->
 		<objeto archivo="pared-izquierda.obj">
-			<color r="255" g="0" b="0" />
+			<color r="255" g="255" b="255"/>
 			<posicion x="10" y="0" z="5" />
-			<coeficienteReflexionDifusa r="0.7" g="0" b="0" />
+			<coeficienteReflexionDifusa r="0.3" g="0.3" b="0.3" />
 			<coeficienteReflexionEspecular r="0" g="0" b="0" />
 		</objeto>
         <objeto archivo="pared-adelante.obj">
@@ -49,9 +49,9 @@
             <coeficienteReflexionEspecular r="0" g="0" b="0" />
         </objeto>
         <objeto archivo="pared-derecha.obj">
-            <color r="0" g="255" b="0" />
+            <color r="255" g="255" b="255" />
             <posicion x="-10" y="0" z="5" />
-            <coeficienteReflexionDifusa r="0" g="0.7" b="0" />
+            <coeficienteReflexionDifusa r="0.3" g="0.3" b="0.3" />
             <coeficienteReflexionEspecular r="0" g="0" b="0" />
         </objeto>
 		<objeto archivo="techo.obj">
@@ -69,25 +69,10 @@
 
 		<!-- MODELOS -->
 		<objeto archivo="diablo.obj">
-			<color r="255" g="255" b="255" />
-			<posicion x="0" y="0" z="7" />
-			<coeficienteReflexionDifusa r="0.1" g="0.1" b="0.1" />
-			<coeficienteReflexionEspecular r="0" g="0" b="0" />
-		</objeto>
-		
-		<!-- ESFERAS -->
-		<objeto radio="3" indiceRefraccion="1.45">
-			<color r="255" g="255" b="255" />
-			<posicion x="5" y="0" z="0" />
-			<coeficienteReflexionDifusa r="0" g="0" b="0" />
-			<coeficienteReflexionEspecular r="0" g="0" b="0" />
-		</objeto>
-		
-		<objeto radio="3" >
-			<color r="255" g="255" b="255" />
-			<posicion x="-5" y="0" z="0" />
-			<coeficienteReflexionDifusa r="0" g="0" b="0" />
-			<coeficienteReflexionEspecular r="0.7" g="0.7" b="0.7" />
+			<color r="255" g="0" b="0" />
+			<posicion x="0" y="0" z="0" />
+			<coeficienteReflexionDifusa r="0.1" g="0" b="0" />
+			<coeficienteReflexionEspecular r="0.0" g="0.0" b="0.0" />
 		</objeto>
     </elementos>
 </escena>

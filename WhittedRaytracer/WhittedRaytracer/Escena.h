@@ -25,6 +25,7 @@ class Escena {
 		int cantidadFotonesCausticas;
 		
 		bool generarMapas;
+		bool heuristicaSombra;
 
 		static Escena* getInstance();
 };

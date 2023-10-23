@@ -51,7 +51,7 @@ class RayTracer {
                             if (distanciaInterseccion > distanciaLuz && luz->esDireccionValida(direccionRayoSombra)) { // Si no hay objetos intermedios
                                 float escala = dot(normalize(normalRayoIncidente), normalize(direccionRayoSombra));
 
-                                if (iluminado && i == 10) {
+                                if (escena->heuristicaSombra && iluminado && i == 10) {
                                     distanciaLuz = length(luz->posicion - interseccionRayoIncidente);
                                     escala = dot(normalize(normalRayoIncidente), normalize(luz->posicion - interseccionRayoIncidente));
 

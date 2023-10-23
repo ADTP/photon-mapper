@@ -13,6 +13,7 @@ Escena::Escena() {
 	cantidadFotonesGlobal = escena.attribute("cantidadFotonesGlobal").as_int();
 	cantidadFotonesCausticas = escena.attribute("cantidadFotonesCausticas").as_int();
 	generarMapas = escena.attribute("generarMapas").as_bool();
+	heuristicaSombra = escena.attribute("heuristicaSombra").as_bool();
 
 	// PANTALLA
 	xml_node nodoPantalla = escena.child("pantalla");
